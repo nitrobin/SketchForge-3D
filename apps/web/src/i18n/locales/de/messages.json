@@ -1008,7 +1008,18 @@
       "elevation": "Höhe über der Arbeitsebene",
       "previous": "Zurück",
       "next": "Weiter",
-      "finish": "Fertig"
+      "finish": "Fertig",
+      "coach": {
+        "snapGrid": "Wählen Sie hier {snapGrid}",
+        "shapes": "Öffnen Sie „Formen“",
+        "duplicate": "Klicken Sie auf „Duplizieren“",
+        "lock": "Klicken Sie auf das Schloss",
+        "hole": "Klicken Sie auf „Bohrung“",
+        "align": "Klicken Sie auf „Ausrichten“",
+        "fillet": "Klicken Sie auf „Abrundung“",
+        "group": "Klicken Sie auf „Gruppieren“",
+        "lift": "Klicken Sie auf den Pfeil und geben Sie {elevation} ein"
+      }
     },
     "keyTag": {
       "title": "Schlüsselanhänger",
@@ -1063,7 +1074,6 @@
       "shortTitle": "Namensschild",
       "title": "Persönliches Namensschild",
       "ariaLabel": "Anleitung zur Aufgabe „Persönliches Namensschild“",
-      "clickFillet": "Klicken Sie auf „Abrundung“",
       "intro": {
         "title": "Namensschild bauen",
         "body": "Stellen Sie unten rechts das Fangraster auf 0.5 mm. Erstellen Sie dann eine Grundplatte mit abgerundeten Kanten. Schreiben Sie Ihren Namen mit einem Textobjekt. Fügen Sie zum Schluss beide Teile zu einem druckbaren Modell zusammen.",

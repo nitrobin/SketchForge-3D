@@ -1,9 +1,10 @@
 "use client";
 
-import { ArrowUp, ChevronLeft, ChevronRight } from "lucide-react";
-import { useLayoutEffect, useState } from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useState } from "react";
 import { useTranslations, type MessageKey } from "@/i18n";
 import { snapGridLabel } from "@/lib/measurementUnits";
+import { TUTORIAL_TARGETS, TutorialCoachmarks, tutorialCoachParams, type TutorialTarget } from "@/components/workplane/TutorialCoachmarks";
 import type { GridSize } from "@/types/sketchforge";
 
 const NAMEPLATE_STEP_STORAGE_KEY = "sketchforge:nameplate-tutorial-step";
@@ -22,6 +23,8 @@ type TutorialStep = {
   dimensions?: TutorialDimension[];
   snapGrid?: GridSize;
   calloutKey?: MessageKey;
+  /** Controls framed on screen while the step is open. */
+  targets?: readonly TutorialTarget[];
 };
 
 // Step 0 is the "Before you start" overview; step N is labelled "Step N".
@@ -31,6 +34,7 @@ const STEPS: TutorialStep[] = [
     bodyKey: "panels.nameplate.intro.body",
     altKey: "panels.nameplate.intro.alt",
     image: "/assets/challenges/nameplate/01-finished-target.webp",
+    targets: [TUTORIAL_TARGETS.snapGrid],
     snapGrid: "0.5 mm",
   },
   {
@@ -38,6 +42,7 @@ const STEPS: TutorialStep[] = [
     bodyKey: "panels.nameplate.base.body",
     altKey: "panels.nameplate.base.alt",
     image: "/assets/challenges/nameplate/02-base-box.webp",
+    targets: [TUTORIAL_TARGETS.shapes],
     dimensions: [
       { labelKey: "panels.property.length", millimeters: 24, slider: 24 },
       { labelKey: "panels.property.width", millimeters: 70, slider: 70 },
@@ -49,6 +54,7 @@ const STEPS: TutorialStep[] = [
     bodyKey: "panels.nameplate.round.body",
     altKey: "panels.nameplate.round.alt",
     image: "/assets/challenges/nameplate/03-rounded-base.webp",
+    targets: [TUTORIAL_TARGETS.fillet],
     calloutKey: "panels.nameplate.round.callout",
   },
   {
@@ -56,6 +62,7 @@ const STEPS: TutorialStep[] = [
     bodyKey: "panels.nameplate.text.body",
     altKey: "panels.nameplate.text.alt",
     image: "/assets/challenges/nameplate/04-text-added.webp",
+    targets: [TUTORIAL_TARGETS.shapes],
   },
   {
     titleKey: "panels.nameplate.personalize.title",
@@ -71,6 +78,7 @@ const STEPS: TutorialStep[] = [
     bodyKey: "panels.nameplate.place.body",
     altKey: "panels.nameplate.place.alt",
     image: "/assets/challenges/nameplate/05-text-customized.webp",
+    targets: [TUTORIAL_TARGETS.lift],
     dimensions: [
       { labelKey: "panels.tutorial.elevation", millimeters: 3, slider: 12 },
     ],
@@ -80,6 +88,7 @@ const STEPS: TutorialStep[] = [
     bodyKey: "panels.nameplate.center.body",
     altKey: "panels.nameplate.center.alt",
     image: "/assets/challenges/nameplate/06-text-centered.webp",
+    targets: [TUTORIAL_TARGETS.lock, TUTORIAL_TARGETS.align, TUTORIAL_TARGETS.alignMiddleX, TUTORIAL_TARGETS.alignMiddleZ],
     calloutKey: "panels.nameplate.center.callout",
   },
   {
@@ -87,6 +96,7 @@ const STEPS: TutorialStep[] = [
     bodyKey: "panels.nameplate.group.body",
     altKey: "panels.nameplate.group.alt",
     image: "/assets/challenges/nameplate/07-grouped-nameplate.webp",
+    targets: [TUTORIAL_TARGETS.group],
   },
 ];
 
@@ -94,47 +104,6 @@ function storedStepIndex() {
   if (typeof window === "undefined") return 0;
   const parsed = Number.parseInt(window.localStorage.getItem(NAMEPLATE_STEP_STORAGE_KEY) ?? "0", 10);
   return Number.isFinite(parsed) ? Math.max(0, Math.min(STEPS.length - 1, parsed)) : 0;
-}
-
-function FilletButtonCoachmark() {
-  const t = useTranslations();
-  const [position, setPosition] = useState<{ left: number; top: number } | null>(null);
-
-  useLayoutEffect(() => {
-    const target = document.querySelector<HTMLButtonElement>('button[data-sketchforge-tool="fillet"]');
-    if (!target) return;
-
-    const updatePosition = () => {
-      const rect = target.getBoundingClientRect();
-      setPosition({
-        left: rect.left + rect.width / 2,
-        top: rect.bottom + 42,
-      });
-    };
-
-    target.classList.add("nameplate-fillet-button-target");
-    updatePosition();
-    window.addEventListener("resize", updatePosition);
-    window.addEventListener("scroll", updatePosition, true);
-    const observer = new ResizeObserver(updatePosition);
-    observer.observe(target);
-
-    return () => {
-      target.classList.remove("nameplate-fillet-button-target");
-      window.removeEventListener("resize", updatePosition);
-      window.removeEventListener("scroll", updatePosition, true);
-      observer.disconnect();
-    };
-  }, []);
-
-  if (!position) return null;
-
-  return (
-    <div className="nameplate-fillet-coachmark" style={position} role="status">
-      <ArrowUp size={30} strokeWidth={3} aria-hidden="true" />
-      <strong>{t("panels.nameplate.clickFillet")}</strong>
-    </div>
-  );
 }
 
 export function NameplateTutorialPanel({
@@ -178,7 +147,7 @@ export function NameplateTutorialPanel({
 
   return (
     <>
-      {stepIndex === 2 ? <FilletButtonCoachmark /> : null}
+      {step.targets ? <TutorialCoachmarks targets={step.targets} params={tutorialCoachParams(t, step)} /> : null}
       <aside
         className="key-tag-tutorial-panel"
         aria-label={t("panels.nameplate.ariaLabel")}

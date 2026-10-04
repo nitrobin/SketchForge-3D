@@ -1008,7 +1008,18 @@
       "elevation": "Elevation",
       "previous": "Previous",
       "next": "Next",
-      "finish": "Finish"
+      "finish": "Finish",
+      "coach": {
+        "snapGrid": "Choose {snapGrid} here",
+        "shapes": "Open Shapes",
+        "duplicate": "Click Duplicate",
+        "lock": "Click the padlock",
+        "hole": "Click Hole",
+        "align": "Click Align",
+        "fillet": "Click Fillet",
+        "group": "Click Group",
+        "lift": "Click the arrow, type {elevation}"
+      }
     },
     "keyTag": {
       "title": "Key Tag",
@@ -1063,7 +1074,6 @@
       "shortTitle": "Nameplate",
       "title": "Personalized Nameplate",
       "ariaLabel": "Personalized Nameplate challenge instructions",
-      "clickFillet": "Click Fillet",
       "intro": {
         "title": "Build a Nameplate",
         "body": "Set Snap Grid in the bottom-right corner to 0.5 mm. Then create a rounded base, personalize a Text object, and combine both parts into one printable design.",

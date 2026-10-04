@@ -1008,7 +1008,18 @@
       "elevation": "Hauteur au-dessus du plan de travail",
       "previous": "Précédent",
       "next": "Suivant",
-      "finish": "Terminer"
+      "finish": "Terminer",
+      "coach": {
+        "snapGrid": "Choisissez {snapGrid} ici",
+        "shapes": "Ouvrez « Formes »",
+        "duplicate": "Cliquez sur « Dupliquer »",
+        "lock": "Cliquez sur le cadenas",
+        "hole": "Cliquez sur « Perçage »",
+        "align": "Cliquez sur « Aligner »",
+        "fillet": "Cliquez sur « Arrondi »",
+        "group": "Cliquez sur « Grouper »",
+        "lift": "Cliquez sur la flèche et saisissez {elevation}"
+      }
     },
     "keyTag": {
       "title": "Porte-clés",
@@ -1063,7 +1074,6 @@
       "shortTitle": "Plaque",
       "title": "Plaque nominative personnalisée",
       "ariaLabel": "Instructions du défi « Plaque nominative personnalisée »",
-      "clickFillet": "Cliquez sur « Arrondi »",
       "intro": {
         "title": "Construisez une plaque nominative",
         "body": "En bas à droite, réglez la grille d’accrochage sur 0.5 mm. Créez ensuite une base aux arêtes arrondies, personnalisez un objet « Texte » et combinez les deux parties en un seul modèle imprimable.",

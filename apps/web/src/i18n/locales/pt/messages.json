@@ -1008,7 +1008,18 @@
       "elevation": "Elevação",
       "previous": "Anterior",
       "next": "Próximo",
-      "finish": "Concluir"
+      "finish": "Concluir",
+      "coach": {
+        "snapGrid": "Escolha {snapGrid} aqui",
+        "shapes": "Abra “Formas”",
+        "duplicate": "Clique em “Duplicar”",
+        "lock": "Clique no cadeado",
+        "hole": "Clique em “Orifício”",
+        "align": "Clique em “Alinhar”",
+        "fillet": "Clique em “Arredondar”",
+        "group": "Clique em “Agrupar”",
+        "lift": "Clique na seta e digite {elevation}"
+      }
     },
     "keyTag": {
       "title": "Chaveiro",
@@ -1063,7 +1074,6 @@
       "shortTitle": "Placa com nome",
       "title": "Placa com seu nome",
       "ariaLabel": "Instruções do desafio “Placa com seu nome”",
-      "clickFillet": "Clique em “Arredondar”",
       "intro": {
         "title": "Faça uma placa com nome",
         "body": "No canto inferior direito, defina “Ajuste à grade” como 0.5 mm. Depois, crie uma base arredondada, escreva seu nome com um objeto “Texto” e combine as duas partes em um único modelo para imprimir.",

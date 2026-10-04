@@ -1008,7 +1008,18 @@
       "elevation": "Výška nad pracovní rovinou",
       "previous": "Předchozí",
       "next": "Další",
-      "finish": "Dokončit"
+      "finish": "Dokončit",
+      "coach": {
+        "snapGrid": "Zde zvolte {snapGrid}",
+        "shapes": "Otevřete „Tvary“",
+        "duplicate": "Klikněte na „Duplikovat“",
+        "lock": "Klikněte na zámek",
+        "hole": "Klikněte na „Díra“",
+        "align": "Klikněte na „Zarovnat“",
+        "fillet": "Klikněte na „Zaoblení“",
+        "group": "Klikněte na „Seskupit“",
+        "lift": "Klikněte na šipku a zadejte {elevation}"
+      }
     },
     "keyTag": {
       "title": "Klíčenka",
@@ -1063,7 +1074,6 @@
       "shortTitle": "Jmenovka",
       "title": "Vlastní jmenovka",
       "ariaLabel": "Návod k úloze „Vlastní jmenovka“",
-      "clickFillet": "Klikněte na „Zaoblení“",
       "intro": {
         "title": "Vytvořte jmenovku",
         "body": "V pravém dolním rohu nastavte „Přichycení k mřížce“ na 0.5 mm. Pak vytvořte zaoblenou základnu. Napište na ni své jméno pomocí objektu „Text“. Nakonec obě části spojte do jednoho modelu pro tisk.",

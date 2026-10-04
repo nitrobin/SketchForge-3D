@@ -1008,7 +1008,18 @@
       "elevation": "Altura sobre el plano de trabajo",
       "previous": "Anterior",
       "next": "Siguiente",
-      "finish": "Terminar"
+      "finish": "Terminar",
+      "coach": {
+        "snapGrid": "Elige {snapGrid} aquí",
+        "shapes": "Abre «Formas»",
+        "duplicate": "Haz clic en «Duplicar»",
+        "lock": "Haz clic en el candado",
+        "hole": "Haz clic en «Agujero»",
+        "align": "Haz clic en «Alinear»",
+        "fillet": "Haz clic en «Redondeo»",
+        "group": "Haz clic en «Agrupar»",
+        "lift": "Haz clic en la flecha y escribe {elevation}"
+      }
     },
     "keyTag": {
       "title": "Llavero",
@@ -1063,7 +1074,6 @@
       "shortTitle": "Placa",
       "title": "Placa con nombre",
       "ariaLabel": "Instrucciones del reto «Placa con nombre»",
-      "clickFillet": "Haz clic en «Redondeo»",
       "intro": {
         "title": "Construye una placa con nombre",
         "body": "En la esquina inferior derecha, pon «Ajuste a la rejilla» en 0.5 mm. Después crea una base redondeada, personaliza un objeto «Texto» y combina las dos partes en un solo modelo para imprimir.",

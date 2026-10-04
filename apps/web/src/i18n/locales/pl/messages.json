@@ -1008,7 +1008,18 @@
       "elevation": "Wysokość nad płaszczyzną roboczą",
       "previous": "Wstecz",
       "next": "Dalej",
-      "finish": "Zakończ"
+      "finish": "Zakończ",
+      "coach": {
+        "snapGrid": "Wybierz tutaj {snapGrid}",
+        "shapes": "Otwórz „Kształty”",
+        "duplicate": "Kliknij „Duplikuj”",
+        "lock": "Kliknij kłódkę",
+        "hole": "Kliknij „Otwór”",
+        "align": "Kliknij „Wyrównaj”",
+        "fillet": "Kliknij „Zaokrąglenie”",
+        "group": "Kliknij „Grupuj”",
+        "lift": "Kliknij strzałkę i wpisz {elevation}"
+      }
     },
     "keyTag": {
       "title": "Brelok",
@@ -1063,7 +1074,6 @@
       "shortTitle": "Tabliczka",
       "title": "Tabliczka z imieniem",
       "ariaLabel": "Instrukcja zadania „Tabliczka z imieniem”",
-      "clickFillet": "Kliknij „Zaokrąglenie”",
       "intro": {
         "title": "Zbuduj tabliczkę z imieniem",
         "body": "W prawym dolnym rogu ustaw przyciąganie do siatki na 0.5 mm. Następnie zrób podstawę z zaokrąglonymi krawędziami, wpisz swoje imię w obiekcie „Tekst” i połącz obie części w jeden projekt do druku.",

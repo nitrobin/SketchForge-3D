@@ -8225,20 +8225,24 @@ html[data-theme="dark"] .grid-settings {
   line-height: 1.45;
 }
 
-.nameplate-fillet-button-target {
-  position: relative;
-  z-index: 91;
+.tutorial-target {
   outline: 4px solid #ffbf2f !important;
   outline-offset: 3px;
   box-shadow: 0 0 0 9px rgba(255, 191, 47, 0.28), 0 0 24px rgba(255, 174, 0, 0.72) !important;
-  animation: nameplate-fillet-target-pulse 1.15s ease-in-out infinite alternate;
+  animation: tutorial-target-pulse 1.15s ease-in-out infinite alternate;
 }
 
-.nameplate-fillet-coachmark {
+.tutorial-target-raised {
+  position: relative;
+  z-index: 91;
+}
+
+.tutorial-coachmark {
   position: fixed;
   z-index: 100;
   display: grid;
   min-width: 112px;
+  max-width: 200px;
   place-items: center;
   gap: 1px;
   padding: 8px 12px 9px;
@@ -8251,7 +8255,11 @@ html[data-theme="dark"] .grid-settings {
   transform: translate(-50%, 0);
 }
 
-.nameplate-fillet-coachmark svg {
+.tutorial-coachmark.above {
+  transform: translate(-50%, -100%);
+}
+
+.tutorial-coachmark svg {
   position: absolute;
   bottom: calc(100% + 3px);
   left: 50%;
@@ -8260,14 +8268,19 @@ html[data-theme="dark"] .grid-settings {
   transform: translateX(-50%);
 }
 
-.nameplate-fillet-coachmark strong {
+.tutorial-coachmark.above svg {
+  top: calc(100% + 3px);
+  bottom: auto;
+}
+
+.tutorial-coachmark strong {
   font-size: 13px;
   font-weight: 900;
   letter-spacing: 0.01em;
-  white-space: nowrap;
+  text-align: center;
 }
 
-@keyframes nameplate-fillet-target-pulse {
+@keyframes tutorial-target-pulse {
   from {
     outline-offset: 2px;
   }
@@ -8667,14 +8680,14 @@ html[data-theme="dark"] .nameplate-tutorial-callout {
   border-color: #315677;
 }
 
-html[data-theme="dark"] .nameplate-fillet-coachmark {
+html[data-theme="dark"] .tutorial-coachmark {
   color: #251700;
   background: #ffc83d;
   border-color: #f5a800;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .nameplate-fillet-button-target {
+  .tutorial-target {
     animation: none;
   }
 }

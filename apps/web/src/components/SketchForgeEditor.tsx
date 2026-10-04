@@ -9762,7 +9762,7 @@ function SecondaryToolbar({
       <button
         className={`toolbar-icon ${enabled ? "" : "disabled"} ${active ? "active" : ""}`}
         key={id}
-        data-sketchforge-tool={id === "fillet" ? "fillet" : undefined}
+        data-sketchforge-tool={id}
         aria-label={label}
         title={disabledHint ?? label}
         onClick={action}

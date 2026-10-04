@@ -572,7 +572,8 @@
       "edit": "Editar",
       "editorMode": "Modo del editor",
       "geometry": "Modelo 3D",
-      "sketch": "Boceto"
+      "sketch": "Boceto",
+      "groupBlockedByLock": "«Agrupar» no está disponible: una de las formas seleccionadas está bloqueada. Desbloquéala con el candado del panel de la forma."
     },
     "panel": {
       "import": "Importar",

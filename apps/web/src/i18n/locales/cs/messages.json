@@ -572,7 +572,8 @@
       "edit": "Upravit",
       "editorMode": "Režim editoru",
       "geometry": "3D model",
-      "sketch": "Náčrt"
+      "sketch": "Náčrt",
+      "groupBlockedByLock": "„Seskupit“ není k dispozici: jeden z vybraných tvarů je zamčený. Odemkněte ho zámkem na panelu tvaru."
     },
     "panel": {
       "import": "Import",

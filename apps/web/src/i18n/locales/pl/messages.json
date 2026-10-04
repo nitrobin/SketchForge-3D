@@ -572,7 +572,8 @@
       "edit": "Edytuj",
       "editorMode": "Tryb edytora",
       "geometry": "Model 3D",
-      "sketch": "Szkic"
+      "sketch": "Szkic",
+      "groupBlockedByLock": "Grupowanie jest niedostępne: jeden z zaznaczonych kształtów jest zablokowany. Odblokuj go kłódką w panelu kształtu."
     },
     "panel": {
       "import": "Import",

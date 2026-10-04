@@ -9158,6 +9158,7 @@ export function SketchForgeEditor({
         canUndo={!projectInteractionActive && (historyIndex > 0 || Boolean(edgeModifier))}
         canRedo={!projectInteractionActive && historyIndex < history.length - 1}
         canGroup={selectedShapes.length > 1 && selectedShapes.every((shape) => !shape.locked)}
+        groupBlockedByLock={selectedShapes.length > 1 && selectedShapes.some((shape) => shape.locked)}
         canIntersect={selectedShapes.some((shape) => !shape.locked && !shape.hole) && selectedShapes.some((shape) => !shape.locked && Boolean(shape.hole))}
         canUngroup={selectedShapes.some((shape) => Boolean(shape.groupedShapes?.length))}
         hasClipboard={clipboard.length > 0 || systemClipboardSupported}
@@ -9473,6 +9474,7 @@ function SecondaryToolbar({
   canEdgeModify,
   edgeModifierKind,
   canGroup,
+  groupBlockedByLock,
   canIntersect,
   canRedo,
   canUngroup,
@@ -9528,6 +9530,8 @@ function SecondaryToolbar({
   canEdgeModify: boolean;
   edgeModifierKind: CadModifierKind | null;
   canGroup: boolean;
+  /** Several shapes are selected but one of them is locked, which is why Group is unavailable. */
+  groupBlockedByLock: boolean;
   canIntersect: boolean;
   canRedo: boolean;
   canUngroup: boolean;
@@ -9728,7 +9732,14 @@ function SecondaryToolbar({
     },
   ];
   const combineTools = [
-    { id: "group", label: t("editor.toolbar.group"), icon: ToolbarGroupIcon, action: onGroup, enabled: canGroup },
+    {
+      id: "group",
+      label: t("editor.toolbar.group"),
+      icon: ToolbarGroupIcon,
+      action: onGroup,
+      enabled: canGroup,
+      disabledHint: groupBlockedByLock ? t("editor.toolbar.groupBlockedByLock") : undefined,
+    },
     { id: "ungroup", label: t("editor.toolbar.ungroup"), icon: ToolbarUngroupIcon, action: onUngroup, enabled: canUngroup },
     { id: "intersection", label: t("editor.toolbar.intersection"), icon: ToolbarIntersectionIcon, action: onIntersect, enabled: canIntersect },
   ];
@@ -9745,13 +9756,15 @@ function SecondaryToolbar({
   const renderToolButton = (tool: (typeof leftTools)[number] | (typeof visibilityTools)[number] | (typeof combineTools)[number] | (typeof modifyTools)[number] | (typeof arrangeTools)[number]) => {
     const { id, icon: Icon, action, enabled, label } = tool;
     const active = "active" in tool && Boolean(tool.active);
+    // Why a disabled tool is unavailable, when the reason is not obvious from the selection.
+    const disabledHint = !enabled && "disabledHint" in tool ? tool.disabledHint : undefined;
     return (
       <button
         className={`toolbar-icon ${enabled ? "" : "disabled"} ${active ? "active" : ""}`}
         key={id}
         data-sketchforge-tool={id === "fillet" ? "fillet" : undefined}
         aria-label={label}
-        title={label}
+        title={disabledHint ?? label}
         onClick={action}
         disabled={!enabled}
       >

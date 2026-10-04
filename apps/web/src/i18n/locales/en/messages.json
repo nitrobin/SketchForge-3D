@@ -572,7 +572,8 @@
       "edit": "Edit",
       "editorMode": "Editor mode",
       "geometry": "Geometry",
-      "sketch": "Sketch"
+      "sketch": "Sketch",
+      "groupBlockedByLock": "Group is unavailable: a selected shape is locked. Unlock it with the padlock in the shape panel."
     },
     "panel": {
       "import": "Import",

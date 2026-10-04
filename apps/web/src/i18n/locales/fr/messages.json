@@ -572,7 +572,8 @@
       "edit": "Modifier",
       "editorMode": "Mode de l’éditeur",
       "geometry": "Modèle 3D",
-      "sketch": "Esquisse"
+      "sketch": "Esquisse",
+      "groupBlockedByLock": "« Grouper » est indisponible : une forme sélectionnée est verrouillée. Déverrouillez-la avec le cadenas du panneau de la forme."
     },
     "panel": {
       "import": "Importer",

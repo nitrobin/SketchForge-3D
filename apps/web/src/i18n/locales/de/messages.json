@@ -572,7 +572,8 @@
       "edit": "Bearbeiten",
       "editorMode": "Editormodus",
       "geometry": "3D-Modell",
-      "sketch": "Skizze"
+      "sketch": "Skizze",
+      "groupBlockedByLock": "„Gruppieren“ ist nicht verfügbar: Eine ausgewählte Form ist gesperrt. Entsperren Sie sie mit dem Schloss in den Formeinstellungen."
     },
     "panel": {
       "import": "Import",

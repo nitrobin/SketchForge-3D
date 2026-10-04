@@ -11,13 +11,6 @@ import { LineMaterial } from "three/examples/jsm/lines/LineMaterial.js";
 import { LineSegments2 } from "three/examples/jsm/lines/LineSegments2.js";
 import { LineSegmentsGeometry } from "three/examples/jsm/lines/LineSegmentsGeometry.js";
 import { TextGeometry } from "three/examples/jsm/geometries/TextGeometry.js";
-import { FontLoader, type Font, type FontData } from "three/examples/jsm/loaders/FontLoader.js";
-import droidMonoFontJson from "three/examples/fonts/droid/droid_sans_mono_regular.typeface.json";
-import droidSansBoldFontJson from "three/examples/fonts/droid/droid_sans_bold.typeface.json";
-import droidSerifBoldFontJson from "three/examples/fonts/droid/droid_serif_bold.typeface.json";
-import gentilisBoldFontJson from "three/examples/fonts/gentilis_bold.typeface.json";
-import helvetikerBoldFontJson from "three/examples/fonts/helvetiker_bold.typeface.json";
-import optimerBoldFontJson from "three/examples/fonts/optimer_bold.typeface.json";
 import { AlignOverlay, MirrorOverlay, type AlignOverlayState, type MirrorOverlayState } from "@/components/workplane/ActionOverlays";
 import { MoveDimensionOverlay } from "@/components/workplane/MoveDimensionOverlay";
 import { ShapeInspector, SnapGridControl, type ShapeInspectorUpdateOptions } from "@/components/workplane/ShapeInspector";
@@ -47,6 +40,7 @@ import { canBeginShapeDrag, DEFAULT_SNAP_GRID, DEFAULT_WORKPLANE_WORKSPACE, norm
 import { interiorWorkplaneGridCoordinates, workplaneThemePalette, WORKPLANE_LINE_ELEVATION, WORKPLANE_MAJOR_GRID_INTERVAL } from "@/lib/workplaneGrid";
 import { cleanNearZero, cleanRotationDegrees, fallbackSolidColor, mirroredAxisCount, mirrorSign, preservesEdgeTreatmentSize, proportionalResizeScale, resizedImportedCoordinates, resizedImportedMeshPositions, resizedShapeSize, shapeDepth, shapeHasTaper, shapeOverallFootprintDimensions, shapeTaperDimensions, shapeTaperScaleAt, shapeWidth } from "@/lib/workplaneShapes";
 import { sphereTessellation } from "@/lib/sphereTessellation";
+import { DEFAULT_TEXT_FONT, textFont } from "@/lib/textFonts";
 import type { SketchForgeMcpViewFace } from "@/lib/sketchforgeMcpProtocol";
 import {
   TransformOverlay,
@@ -121,16 +115,6 @@ const SHAPE_KINDS = new Set<ShapeAsset["kind"]>([
   "icosahedron",
   "mesh",
 ]);
-const fontLoader = new FontLoader();
-const textFonts: Record<string, Font> = {
-  Multilanguage: fontLoader.parse(helvetikerBoldFontJson as FontData),
-  Sans: fontLoader.parse(droidSansBoldFontJson as FontData),
-  Serif: fontLoader.parse(droidSerifBoldFontJson as FontData),
-  Script: fontLoader.parse(gentilisBoldFontJson as FontData),
-  Monospace: fontLoader.parse(droidMonoFontJson as FontData),
-  Rounded: fontLoader.parse(optimerBoldFontJson as FontData),
-  Stencil: fontLoader.parse(helvetikerBoldFontJson as FontData),
-};
 const importedGeometryCache = new WeakMap<
   NonNullable<WorkplaneShape["importedMesh"]>,
   { geometry: THREE.BufferGeometry; edges: Map<number, THREE.EdgesGeometry> }
@@ -7771,9 +7755,9 @@ function addTextShape(group: THREE.Group, material: THREE.MeshStandardMaterial, 
   const geometry = sharedShapeGeometry(geometryCacheKey, () => {
     const text = (shape.text ?? "TEXT").trim() || " ";
     const bevel = clamp(shape.bevel ?? 0, 0, 8);
-    const fontName = shape.font ?? "Multilanguage";
+    const fontName = shape.font ?? DEFAULT_TEXT_FONT;
     const next = new TextGeometry(text, {
-      font: textFonts[fontName] ?? textFonts.Multilanguage,
+      font: textFont(fontName),
       size: 20,
       depth: shape.height,
       curveSegments: fontName === "Stencil" ? 1 : 8,

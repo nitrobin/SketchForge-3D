@@ -8,13 +8,6 @@ import { ADDITION, Brush, Evaluator, HOLLOW_INTERSECTION, HOLLOW_SUBTRACTION, IN
 import * as THREE from "three";
 import { TextGeometry } from "three/examples/jsm/geometries/TextGeometry.js";
 import { RoundedBoxGeometry } from "three/examples/jsm/geometries/RoundedBoxGeometry.js";
-import { FontLoader, type Font, type FontData } from "three/examples/jsm/loaders/FontLoader.js";
-import droidMonoFontJson from "three/examples/fonts/droid/droid_sans_mono_regular.typeface.json";
-import droidSansBoldFontJson from "three/examples/fonts/droid/droid_sans_bold.typeface.json";
-import droidSerifBoldFontJson from "three/examples/fonts/droid/droid_serif_bold.typeface.json";
-import gentilisBoldFontJson from "three/examples/fonts/gentilis_bold.typeface.json";
-import helvetikerBoldFontJson from "three/examples/fonts/helvetiker_bold.typeface.json";
-import optimerBoldFontJson from "three/examples/fonts/optimer_bold.typeface.json";
 import { LocalizedError, createTranslator, currentTranslator, errorFromPayload, errorText, unitLabel, useT, type MessageKey, type MessageParams, type Translator } from "@/i18n";
 import type { AppThemePreference, ResolvedAppTheme } from "@/lib/appTheme";
 import type { ChallengeTutorialId } from "@/lib/challenges";
@@ -102,6 +95,7 @@ import { buildSketchRevolveMesh, DEFAULT_SKETCH_REVOLVE_SETTINGS, normalizeSketc
 import { exportSkfProject, SKF_MEDIA_TYPE } from "@/lib/skfProject";
 import { makeShapeFromAsset, sceneShape, toolbarShapeAssets, type ToolbarShapeAsset } from "@/lib/shapeCatalog";
 import { shapeDisplayName } from "@/lib/shapeDisplayNames";
+import { DEFAULT_TEXT_FONT, textFont } from "@/lib/textFonts";
 import { importExtensionSupported } from "@/lib/importExtensions";
 import { importedShapeFromStl } from "@/lib/stlImport";
 import { exportMeshesToStl } from "@/lib/stlExport";
@@ -242,16 +236,6 @@ const COPLANAR_BOOLEAN_RESCUE_DEGREES = 0.02;
 const NORMAL_SELECTION_CAD_EDGE_MIN_ANGLE = 60;
 const MIN_EDGE_MODIFIER_AMOUNT = 0.001;
 const SEPARATE_PARTS_VERTEX_TOLERANCE = 0.0005;
-const booleanFontLoader = new FontLoader();
-const booleanTextFonts: Record<string, Font> = {
-  Multilanguage: booleanFontLoader.parse(helvetikerBoldFontJson as FontData),
-  Sans: booleanFontLoader.parse(droidSansBoldFontJson as FontData),
-  Serif: booleanFontLoader.parse(droidSerifBoldFontJson as FontData),
-  Script: booleanFontLoader.parse(gentilisBoldFontJson as FontData),
-  Monospace: booleanFontLoader.parse(droidMonoFontJson as FontData),
-  Rounded: booleanFontLoader.parse(optimerBoldFontJson as FontData),
-  Stencil: booleanFontLoader.parse(helvetikerBoldFontJson as FontData),
-};
 let manifoldRuntimePromise: Promise<ManifoldToplevel> | null = null;
 
 function emptySketchProfile(): SketchProfile {
@@ -2138,9 +2122,9 @@ function createBooleanHollowCylinderGeometry(width: number, height: number, dept
 function createBooleanTextGeometry(shape: WorkplaneShape) {
   const text = (shape.text ?? "TEXT").trim() || " ";
   const bevel = clampNumber(shape.bevel ?? 0, 0, 8);
-  const fontName = shape.font ?? "Multilanguage";
+  const fontName = shape.font ?? DEFAULT_TEXT_FONT;
   const geometry = new TextGeometry(text, {
-    font: booleanTextFonts[fontName] ?? booleanTextFonts.Multilanguage,
+    font: textFont(fontName),
     size: 20,
     depth: shape.height,
     curveSegments: fontName === "Stencil" ? 1 : 8,

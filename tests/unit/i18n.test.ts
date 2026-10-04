@@ -3,12 +3,14 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 import { formatMessage, messagePlaceholders, type MessageValue } from "@/i18n/format";
 import { LocalizedError, errorFromPayload, localizedErrorPayload, type ErrorKey } from "@/i18n/LocalizedError";
-import { LOCALES, SOURCE_MESSAGES, type MessageKey } from "@/i18n/locales";
+import { LOCALES, SOURCE_MESSAGES, localeCatalog, type MessageKey } from "@/i18n/locales";
 import { normalizeLanguagePreference, readStoredLanguagePreference, resolveLocale, LANGUAGE_STORAGE_KEY } from "@/i18n/store";
 import { createTranslator, errorText, renderRichTemplate } from "@/i18n/translator";
 import enErrors from "@/i18n/locales/en/errors.json";
 
 const sourceKeys = Object.keys(SOURCE_MESSAGES).sort();
+const sourceKeySet = new Set(sourceKeys);
+const untranslatedKeys = (catalog: Partial<Record<string, MessageValue>>) => sourceKeys.filter((key) => catalog[key] === undefined);
 
 describe("message formatting", () => {
   it("interpolates params and leaves unknown placeholders visible", () => {
@@ -50,13 +52,24 @@ describe("language preference", () => {
   });
 });
 
-describe.each(LOCALES.map((locale) => [locale.code, locale.messages] as const))("%s catalog", (code, messages) => {
+describe.each(LOCALES.map((locale) => [locale.code, locale.messages, locale.complete] as const))("%s catalog", (code, messages, complete) => {
   const catalog: Partial<Record<string, MessageValue>> = messages;
   const pluralCategories = new Intl.PluralRules(code).resolvedOptions().pluralCategories;
 
-  it("has exactly the English keys", () => {
-    expect(Object.keys(catalog).sort()).toEqual(sourceKeys);
+  it("has no keys that English lacks", () => {
+    expect(Object.keys(catalog).filter((key) => !sourceKeySet.has(key))).toEqual([]);
   });
+
+  // A language being translated (`complete: false` in locales.ts) may lack strings: they show in English.
+  // They are reported as a todo, which the test summary always counts, instead of a failure.
+  const missing = untranslatedKeys(catalog);
+  if (complete || missing.length === 0) {
+    it("has every English key", () => {
+      expect(missing).toEqual([]);
+    });
+  } else {
+    it.todo(`translate ${missing.length} of ${sourceKeys.length} strings, shown in English until then: ${missing.slice(0, 20).join(", ")}${missing.length > 20 ? ", …" : ""}`);
+  }
 
   it("uses the same placeholders as English", () => {
     const mismatches = sourceKeys.filter((key) => {
@@ -77,6 +90,7 @@ describe.each(LOCALES.map((locale) => [locale.code, locale.messages] as const))(
   it("has no empty messages", () => {
     const empty = sourceKeys.filter((key) => {
       const value = catalog[key];
+      if (value === undefined) return false;
       const forms = typeof value === "object" ? Object.values(value) : [value];
       return forms.some((form) => typeof form !== "string" || form.trim() === "");
     });
@@ -99,6 +113,26 @@ describe("rich messages", () => {
 
   it("keeps unknown tags and placeholders as plain text", () => {
     expect(html(renderRichTemplate("<x>bold</x> {missing}", {}))).toBe("<p>bold {missing}</p>");
+  });
+});
+
+describe("missing translations", () => {
+  it("are listed per key", () => {
+    const partial = { [sourceKeys[0]]: "x" };
+    expect(untranslatedKeys(partial)).toEqual(sourceKeys.slice(1));
+  });
+
+  it("show in English", () => {
+    const ru: Partial<Record<string, MessageValue>> = localeCatalog("ru");
+    const key = "common.language.label";
+    const translated = ru[key];
+    delete ru[key];
+    try {
+      expect(createTranslator("ru")(key)).toBe("Language");
+    } finally {
+      ru[key] = translated;
+    }
+    expect(createTranslator("ru")(key)).toBe("Язык");
   });
 });
 

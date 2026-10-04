@@ -212,7 +212,7 @@
   "panels.keyTag.unlockCircle.body": "Select the left solid circle again and click the padlock icon to unlock it.",
   "panels.keyTag.unlockCircle.alt": "The left solid cylinder selected again after the hole has been aligned",
   "panels.keyTag.group.title": "Group the Key Tag",
-  "panels.keyTag.group.body": "Select the box, both solid circles and the hole: hold Shift and click each one, or drag a frame around them. Press Group in the Combine section at the top.",
+  "panels.keyTag.group.body": "Select the box, both solid circles and the hole: hold Shift and click each one, or drag a frame around them. Press Group in the Combine section at the top. If Group stays grey, a shape is still locked: unlock the left circle first.",
   "panels.keyTag.group.alt": "The finished grouped Key Tag selected in SketchForge",
   "panels.nameplate.shortTitle": "Nameplate",
   "panels.nameplate.title": "Personalized Nameplate",

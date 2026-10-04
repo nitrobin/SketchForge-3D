@@ -243,6 +243,7 @@
   "editor.toolbar.visibilityHelpAll": "all",
   "editor.toolbar.combine": "Combine",
   "editor.toolbar.group": "Group",
+  "editor.toolbar.groupBlockedByLock": "Group is unavailable: a selected shape is locked. Unlock it with the padlock in the shape panel.",
   "editor.toolbar.ungroup": "Ungroup",
   "editor.toolbar.intersection": "Boolean Intersection",
   "editor.toolbar.modify": "Modify",

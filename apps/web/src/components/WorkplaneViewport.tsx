@@ -70,6 +70,7 @@ import {
 import type { AlignAxis, AlignHandleStatus, AlignTarget, GridSize, MeasurementAccuracy, ShapeAsset, WorkplaneShape, WorkplaneWorkspaceSettings } from "@/types/sketchforge";
 import type { CadModifierEdge } from "@/lib/cadModifierTypes";
 import { useTranslations } from "@/i18n";
+import { easeInOutCubic, orthographicFocusZoom, perspectiveFocusDistance } from "@/lib/cameraFocus";
 
 const WORKPLANE_WIDTH = 200;
 const WORKPLANE_DEPTH = 140;
@@ -207,7 +208,13 @@ type WorkplaneViewportProps = {
   themePreference?: AppThemePreference;
   resolvedTheme?: ResolvedAppTheme;
   onThemePreferenceChange?: (preference: AppThemePreference) => void;
+  /** Shapes to outline, hidden ones included, e.g. while the pointer is over their row in the Objects panel. */
+  highlightedShapeIds?: readonly string[];
+  /** Each new `serial` moves the camera to show these shapes. */
+  focusRequest?: CameraFocusRequest | null;
 };
+
+export type CameraFocusRequest = { ids: readonly string[]; serial: number };
 
 type WorkspaceSettings = WorkplaneWorkspaceSettings;
 type ViewCubeFace = "top" | "bottom" | "front" | "back" | "right" | "left";
@@ -1621,10 +1628,11 @@ function importedShapeProjectionBounds(
 
 function selectionFrameForShapes(
   shapes: WorkplaneShape[],
-  selectedIds: string[],
+  selectedIds: readonly string[],
   workplane?: PlacementWorkplane,
+  includeHidden = false,
 ): SelectionFrame | null {
-  const selected = selectedIds.map((id) => shapes.find((shape) => shape.id === id)).filter((shape): shape is WorkplaneShape => Boolean(shape && !shape.hidden));
+  const selected = selectedIds.map((id) => shapes.find((shape) => shape.id === id)).filter((shape): shape is WorkplaneShape => Boolean(shape && (includeHidden || !shape.hidden)));
   if (selected.length === 0) {
     return null;
   }
@@ -2377,6 +2385,8 @@ export function WorkplaneViewport({
   themePreference = "system",
   resolvedTheme = "light",
   onThemePreferenceChange,
+  highlightedShapeIds = NO_HIGHLIGHTED_SHAPES,
+  focusRequest = null,
 }: WorkplaneViewportProps) {
   // Used only in the returned JSX; never list it in scene effect deps (a locale change must not rebuild the scene).
   const t = useTranslations();
@@ -2681,6 +2691,27 @@ export function WorkplaneViewport({
   }, [shapes]);
 
   useEffect(() => {
+    const state = threeRef.current;
+    if (state) syncOutlineHighlight(state, shapes, highlightedShapeIds, resolvedTheme);
+  }, [highlightedShapeIds, resolvedTheme, shapes]);
+
+  const cancelCameraFocusRef = useRef<(() => void) | null>(null);
+  useEffect(() => {
+    const state = threeRef.current;
+    const frame = state && focusRequest ? selectionFrameForShapes(shapesRef.current, focusRequest.ids, undefined, true) : null;
+    if (!state || !frame) return;
+    // The shape panel and the tutorial cover the right side of the canvas; the camera stays centred on the
+    // shape, so it fits the part of the canvas that is equally far from the centre on both sides.
+    const canvas = state.renderer.domElement.getBoundingClientRect();
+    const covered = Array.from(hostRef.current?.closest(".workplane-stage")?.querySelectorAll<HTMLElement>(".shape-inspector, .key-tag-tutorial-panel") ?? [])
+      .reduce((widest, panel) => Math.max(widest, canvas.right - panel.getBoundingClientRect().left), 0);
+    const visibleWidth = Math.max(canvas.width * 0.3, canvas.width - 2 * Math.min(covered, canvas.width / 2));
+    cancelCameraFocusRef.current?.();
+    cancelCameraFocusRef.current = animateCameraFocus(state, frame, visibleWidth);
+  }, [focusRequest]);
+  useEffect(() => () => cancelCameraFocusRef.current?.(), []);
+
+  useEffect(() => {
     alignReferenceShapesRef.current = alignReferenceShapes;
     if (threeRef.current) {
       syncAlignOverlay(threeRef.current, alignReferenceShapes, selectedIdsRef.current, alignModeRef.current, alignAnchorIdRef.current, alignHandlesRef.current, alignOverlayRef, setAlignOverlay);
@@ -2901,12 +2932,12 @@ export function WorkplaneViewport({
     rebuildWorkplane(state, workspaceRef.current, resolvedThemeRef.current, placementWorkplaneRef.current);
     window.sketchforgeCaptureCanvas = () => {
       state.camera.updateMatrixWorld();
-      state.renderer.render(state.scene, state.camera);
+      renderWithoutOutlineHighlight(state);
       return state.renderer.domElement.toDataURL("image/png");
     };
     window.sketchforgeCaptureCanvasAsync = () => {
       state.camera.updateMatrixWorld();
-      state.renderer.render(state.scene, state.camera);
+      renderWithoutOutlineHighlight(state);
       return thumbnailPngDataUrl(state.renderer.domElement);
     };
     window.sketchforgeCaptureView = (face = "current") => {
@@ -2917,7 +2948,7 @@ export function WorkplaneViewport({
       }
       syncViewCube(state, viewCubeRef.current);
       state.camera.updateMatrixWorld();
-      state.renderer.render(state.scene, state.camera);
+      renderWithoutOutlineHighlight(state);
       return state.renderer.domElement.toDataURL("image/png");
     };
     perfRef.current.lastSample = performance.now();
@@ -2988,10 +3019,14 @@ export function WorkplaneViewport({
 
     animate();
     window.addEventListener("resize", state.resize);
+    // The stage also changes width without a window resize, e.g. when the Objects panel opens or is resized.
+    const hostResizeObserver = typeof ResizeObserver === "undefined" ? null : new ResizeObserver(() => state.resize());
+    hostResizeObserver?.observe(host);
 
     return () => {
       window.cancelAnimationFrame(state.animationId);
       window.removeEventListener("resize", state.resize);
+      hostResizeObserver?.disconnect();
       state.disposeInteractionListeners();
       state.controls.dispose();
       disposeChildren(state.workplaneLayer);
@@ -3004,6 +3039,8 @@ export function WorkplaneViewport({
       disposeChildren(state.transformGuideLayer);
       disposeChildren(state.moveDimensionLayer);
       disposeChildren(state.modifierLayer);
+      const outlineHighlight = state.scene.getObjectByName(OUTLINE_HIGHLIGHT_LAYER_NAME);
+      if (outlineHighlight instanceof THREE.Group) disposeChildren(outlineHighlight);
       state.renderer.dispose();
       host.replaceChildren();
       if (window.sketchforgeCaptureCanvas) {
@@ -5489,6 +5526,124 @@ function toggleCameraProjection(state: ThreeState) {
   state.controls.object = next;
   state.controls.update();
   state.needsRender = true;
+}
+
+const NO_HIGHLIGHTED_SHAPES: readonly string[] = [];
+const OUTLINE_HIGHLIGHT_LAYER_NAME = "ShapeListHighlight";
+const CAMERA_FOCUS_DURATION_MS = 320;
+const CAMERA_FOCUS_MIN_RADIUS = 6;
+
+/** Box outlines around the highlighted shapes, drawn over everything so a shape inside another one still shows. Hidden shapes get a dashed outline. */
+function syncOutlineHighlight(state: ThreeState, shapes: WorkplaneShape[], ids: readonly string[], theme: ResolvedAppTheme) {
+  let layer = state.scene.getObjectByName(OUTLINE_HIGHLIGHT_LAYER_NAME);
+  if (!(layer instanceof THREE.Group)) {
+    if (ids.length === 0) return;
+    layer = new THREE.Group();
+    layer.name = OUTLINE_HIGHLIGHT_LAYER_NAME;
+    state.scene.add(layer);
+  }
+  const group = layer as THREE.Group;
+  disposeChildren(group);
+  const rect = state.renderer.domElement.getBoundingClientRect();
+  ids.forEach((id) => {
+    const shape = shapes.find((entry) => entry.id === id);
+    const frame = shape ? selectionFrameForShapes(shapes, [id], undefined, true) : null;
+    if (!shape || !frame) return;
+    const corner = (x: number, y: number, z: number) => frame.center.clone()
+      .addScaledVector(frame.xAxis, (x * frame.width) / 2)
+      .addScaledVector(frame.yAxis, (y * frame.height) / 2)
+      .addScaledVector(frame.zAxis, (z * frame.depth) / 2);
+    const positions: number[] = [];
+    const edge = (from: THREE.Vector3, to: THREE.Vector3) => positions.push(from.x, from.y, from.z, to.x, to.y, to.z);
+    [-1, 1].forEach((a) => [-1, 1].forEach((b) => {
+      edge(corner(-1, a, b), corner(1, a, b));
+      edge(corner(a, -1, b), corner(a, 1, b));
+      edge(corner(a, b, -1), corner(a, b, 1));
+    }));
+    const geometry = new LineSegmentsGeometry();
+    geometry.setPositions(positions);
+    const dash = Math.max(frame.width, frame.height, frame.depth) / 24;
+    const material = new LineMaterial({
+      color: shape.hidden ? (theme === "dark" ? "#a9bccb" : "#5d7283") : theme === "dark" ? "#5fd4ff" : "#008fc7",
+      linewidth: 2,
+      worldUnits: false,
+      dashed: Boolean(shape.hidden),
+      dashSize: dash,
+      gapSize: dash * 0.7,
+      transparent: true,
+      opacity: 0.95,
+      depthTest: false,
+      depthWrite: false,
+      alphaToCoverage: false,
+    });
+    material.toneMapped = false;
+    material.resolution.set(Math.max(1, rect.width), Math.max(1, rect.height));
+    const lines = new LineSegments2(geometry, material);
+    if (shape.hidden) lines.computeLineDistances();
+    lines.renderOrder = 998;
+    lines.frustumCulled = false;
+    setObjectRenderLayer(lines, RENDER_LAYER_HELPERS);
+    group.add(lines);
+  });
+  state.needsRender = true;
+}
+
+/** Project thumbnails and MCP views show the design, not what the pointer is over in the Objects panel. */
+function renderWithoutOutlineHighlight(state: ThreeState) {
+  const highlight = state.scene.getObjectByName(OUTLINE_HIGHLIGHT_LAYER_NAME);
+  const visible = highlight?.visible ?? false;
+  if (highlight) highlight.visible = false;
+  state.renderer.render(state.scene, state.camera);
+  if (highlight) highlight.visible = visible;
+}
+
+/**
+ * Moves the camera, keeping its viewing direction, until the frame fills `visibleWidth` pixels around the
+ * canvas centre. Returns a function that stops the move; orbiting stops it too.
+ */
+function animateCameraFocus(state: ThreeState, frame: SelectionFrame, visibleWidth: number) {
+  const radius = Math.max(CAMERA_FOCUS_MIN_RADIUS, Math.hypot(frame.width, frame.height, frame.depth) / 2);
+  const canvas = state.renderer.domElement;
+  const camera = state.camera;
+  const startTarget = state.controls.target.clone();
+  const startPosition = camera.position.clone();
+  const startZoom = camera.zoom;
+  const direction = startPosition.clone().sub(startTarget);
+  if (direction.lengthSq() < 1e-9) direction.copy(CAMERA_HOME).sub(CAMERA_TARGET);
+  const distance = camera instanceof THREE.PerspectiveCamera
+    ? clamp(perspectiveFocusDistance(radius, camera.fov, visibleWidth / Math.max(1, canvas.clientHeight)), 22, 4200)
+    : direction.length();
+  const endTarget = frame.center.clone();
+  const endPosition = endTarget.clone().add(direction.setLength(distance));
+  const endZoom = camera instanceof THREE.OrthographicCamera
+    ? clamp(orthographicFocusZoom(radius, ((camera.right - camera.left) * visibleWidth) / Math.max(1, canvas.clientWidth), camera.top - camera.bottom), 0.02, 100)
+    : startZoom;
+  const reduceMotion = typeof window.matchMedia === "function" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const duration = reduceMotion ? 0 : CAMERA_FOCUS_DURATION_MS;
+  const startedAt = performance.now();
+  let frameId = 0;
+  let stopped = false;
+  const stop = () => {
+    stopped = true;
+    window.cancelAnimationFrame(frameId);
+    state.controls.removeEventListener("start", stop);
+  };
+  const step = () => {
+    if (stopped) return;
+    const progress = duration === 0 ? 1 : (performance.now() - startedAt) / duration;
+    const eased = easeInOutCubic(progress);
+    state.controls.target.lerpVectors(startTarget, endTarget, eased);
+    camera.position.lerpVectors(startPosition, endPosition, eased);
+    camera.zoom = startZoom + (endZoom - startZoom) * eased;
+    camera.updateProjectionMatrix();
+    state.controls.update();
+    state.needsRender = true;
+    if (progress < 1) frameId = window.requestAnimationFrame(step);
+    else stop();
+  };
+  state.controls.addEventListener("start", stop);
+  step();
+  return stop;
 }
 
 function setCameraToViewFace(state: ThreeState, face: ViewCubeFace) {

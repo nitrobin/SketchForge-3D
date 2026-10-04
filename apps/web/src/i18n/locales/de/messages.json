@@ -275,7 +275,8 @@
       "newEmptyDesign": "Neues leeres Projekt",
       "savedDesign": "{count, plural, one {Projekt mit {count} Form gespeichert} other {Projekt mit {count} Formen gespeichert}}",
       "nothingToCopy": "Noch nichts zum Kopieren",
-      "madeCopy": "Kopie des Projekts erstellt"
+      "madeCopy": "Kopie des Projekts erstellt",
+      "renamed": "Umbenannt in „{name}“"
     },
     "workplane": {
       "toolActive": "Arbeitsebene: Klicken Sie auf eine Fläche oder auf eine leere Stelle im Raster. Halten Sie Shift gedrückt, um die Ebene umzudrehen",
@@ -573,7 +574,8 @@
       "editorMode": "Editormodus",
       "geometry": "3D-Modell",
       "sketch": "Skizze",
-      "groupBlockedByLock": "„Gruppieren“ ist nicht verfügbar: Eine ausgewählte Form ist gesperrt. Entsperren Sie sie mit dem Schloss in den Formeinstellungen."
+      "groupBlockedByLock": "„Gruppieren“ ist nicht verfügbar: Eine ausgewählte Form ist gesperrt. Entsperren Sie sie mit dem Schloss in den Formeinstellungen.",
+      "shapeList": "Objekte"
     },
     "panel": {
       "import": "Import",
@@ -1115,6 +1117,45 @@
         "title": "Namensschild gruppieren",
         "body": "Wählen Sie die Grundplatte und das Textobjekt aus. Halten Sie dazu Shift gedrückt und klicken Sie auf beide, oder ziehen Sie einen Rahmen um beide. Klicken Sie oben im Bereich „Kombinieren“ auf „Gruppieren“. So entsteht ein fertiges druckbares Modell. Wenn „Gruppieren“ grau bleibt, ist die Grundplatte noch gesperrt: Entsperren Sie sie zuerst mit dem Schloss in den Formeinstellungen.",
         "alt": "Fertig gruppiertes blaues Namensschild ALEX"
+      }
+    },
+    "outline": {
+      "title": "Objekte",
+      "count": "{count, plural, one {{count} Objekt} other {{count} Objekte}}",
+      "close": "Objektliste schließen",
+      "search": "Objekte suchen",
+      "searchPlaceholder": "Nach Name oder Typ suchen",
+      "clearSearch": "Suche löschen",
+      "empty": "Noch keine Objekte. Fügen Sie eine Form über „Formen“ in der Werkzeugleiste hinzu.",
+      "noMatches": "Keine Treffer für „{query}“",
+      "tree": "Objekte im Projekt",
+      "resize": "Breite der Objektliste",
+      "expand": "„{name}“ aufklappen",
+      "collapse": "„{name}“ zuklappen",
+      "lock": "„{name}“ sperren",
+      "unlock": "„{name}“ entsperren",
+      "hide": "„{name}“ ausblenden",
+      "show": "„{name}“ einblenden",
+      "state": {
+        "hole": "Bohrung",
+        "hidden": "ausgeblendet",
+        "locked": "gesperrt"
+      },
+      "type": {
+        "imported": "Importiertes {format}-Modell"
+      },
+      "partHint": "Teil einer Gruppe: Ein Klick wählt die ganze Gruppe aus. Um diesen Teil zu ändern, heben Sie zuerst die Gruppierung auf.",
+      "renameInput": "Neuer Name für „{name}“",
+      "busy": "Wenden Sie die Abrundung oder Fase an oder brechen Sie sie ab, um die Objektliste zu verwenden",
+      "menu": {
+        "label": "Menü für „{name}“",
+        "rename": "Umbenennen",
+        "zoomTo": "Auf Auswahl zoomen",
+        "lock": "Auswahl sperren",
+        "unlock": "Auswahl entsperren",
+        "makeSolid": "In Volumenkörper umwandeln",
+        "makeHole": "In Bohrung umwandeln",
+        "unlockFirst": "Entsperren Sie zuerst die ausgewählten Formen"
       }
     }
   },

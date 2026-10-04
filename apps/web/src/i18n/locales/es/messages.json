@@ -275,7 +275,8 @@
       "newEmptyDesign": "Proyecto nuevo vacío",
       "savedDesign": "{count, plural, one {Se guardó el proyecto con {count} forma} many {Se guardó el proyecto con {count} de formas} other {Se guardó el proyecto con {count} formas}}",
       "nothingToCopy": "Aún no hay nada que copiar",
-      "madeCopy": "Se creó una copia del proyecto"
+      "madeCopy": "Se creó una copia del proyecto",
+      "renamed": "Nuevo nombre: «{name}»"
     },
     "workplane": {
       "toolActive": "Plano de trabajo: haz clic en una cara o en una zona vacía de la rejilla. Mantén presionada la tecla Shift para invertirlo",
@@ -573,7 +574,8 @@
       "editorMode": "Modo del editor",
       "geometry": "Modelo 3D",
       "sketch": "Boceto",
-      "groupBlockedByLock": "«Agrupar» no está disponible: una de las formas seleccionadas está bloqueada. Desbloquéala con el candado del panel de la forma."
+      "groupBlockedByLock": "«Agrupar» no está disponible: una de las formas seleccionadas está bloqueada. Desbloquéala con el candado del panel de la forma.",
+      "shapeList": "Objetos"
     },
     "panel": {
       "import": "Importar",
@@ -1115,6 +1117,45 @@
         "title": "Agrupa la placa",
         "body": "Selecciona la base y el objeto «Texto»: mantén presionada la tecla Shift y haz clic en los dos, o arrastra un recuadro a su alrededor. Haz clic en «Agrupar» en la sección «Combinar» de la parte superior para obtener un solo modelo terminado para imprimir. Si «Agrupar» sigue en gris, la base sigue bloqueada: primero desbloquéala con el candado del panel de la forma.",
         "alt": "Placa azul ALEX terminada y agrupada"
+      }
+    },
+    "outline": {
+      "title": "Objetos",
+      "count": "{count, plural, one {{count} objeto} many {{count} de objetos} other {{count} objetos}}",
+      "close": "Cerrar la lista de objetos",
+      "search": "Buscar objetos",
+      "searchPlaceholder": "Buscar por nombre o tipo",
+      "clearSearch": "Borrar la búsqueda",
+      "empty": "Aún no hay objetos. Agrega una forma desde «Formas» en la barra de herramientas.",
+      "noMatches": "Nada coincide con «{query}»",
+      "tree": "Objetos del proyecto",
+      "resize": "Ancho de la lista de objetos",
+      "expand": "Expandir «{name}»",
+      "collapse": "Contraer «{name}»",
+      "lock": "Bloquear «{name}»",
+      "unlock": "Desbloquear «{name}»",
+      "hide": "Ocultar «{name}»",
+      "show": "Mostrar «{name}»",
+      "state": {
+        "hole": "agujero",
+        "hidden": "oculto",
+        "locked": "bloqueado"
+      },
+      "type": {
+        "imported": "Modelo {format} importado"
+      },
+      "partHint": "Parte de un grupo: un clic selecciona todo el grupo. Para cambiar esta parte, primero desagrupa.",
+      "renameInput": "Nuevo nombre de «{name}»",
+      "busy": "Aplica o cancela el redondeo o chaflán para usar la lista de objetos",
+      "menu": {
+        "label": "Acciones de «{name}»",
+        "rename": "Cambiar nombre",
+        "zoomTo": "Acercar a la selección",
+        "lock": "Bloquear los objetos seleccionados",
+        "unlock": "Desbloquear los objetos seleccionados",
+        "makeSolid": "Convertir en sólido",
+        "makeHole": "Convertir en agujero",
+        "unlockFirst": "Primero desbloquea las formas seleccionadas"
       }
     }
   },

@@ -275,7 +275,8 @@
       "newEmptyDesign": "New empty design",
       "savedDesign": "{count, plural, one {Saved design with {count} shape} other {Saved design with {count} shapes}}",
       "nothingToCopy": "Nothing to copy yet",
-      "madeCopy": "Made a copy of the design"
+      "madeCopy": "Made a copy of the design",
+      "renamed": "Renamed to {name}"
     },
     "workplane": {
       "toolActive": "Workplane tool: click a face or empty grid; hold Shift to reverse",
@@ -573,7 +574,8 @@
       "editorMode": "Editor mode",
       "geometry": "Geometry",
       "sketch": "Sketch",
-      "groupBlockedByLock": "Group is unavailable: a selected shape is locked. Unlock it with the padlock in the shape panel."
+      "groupBlockedByLock": "Group is unavailable: a selected shape is locked. Unlock it with the padlock in the shape panel.",
+      "shapeList": "Objects"
     },
     "panel": {
       "import": "Import",
@@ -1115,6 +1117,45 @@
         "title": "Group the Nameplate",
         "body": "Select the base and the Text object: hold Shift and click both, or drag a frame around them. Press Group in the Combine section at the top to make one finished printable model. If Group stays grey, the base is still locked: unlock it with the padlock in the shape panel first.",
         "alt": "Finished grouped blue ALEX nameplate"
+      }
+    },
+    "outline": {
+      "title": "Objects",
+      "count": "{count, plural, one {{count} object} other {{count} objects}}",
+      "close": "Close object list",
+      "search": "Find objects",
+      "searchPlaceholder": "Find by name or type",
+      "clearSearch": "Clear search",
+      "empty": "No objects yet. Add a shape from Shapes on the toolbar.",
+      "noMatches": "Nothing matches {query}",
+      "tree": "Objects in the design",
+      "resize": "Object list width",
+      "expand": "Expand {name}",
+      "collapse": "Collapse {name}",
+      "lock": "Lock {name}",
+      "unlock": "Unlock {name}",
+      "hide": "Hide {name}",
+      "show": "Show {name}",
+      "state": {
+        "hole": "hole",
+        "hidden": "hidden",
+        "locked": "locked"
+      },
+      "type": {
+        "imported": "Imported {format} model"
+      },
+      "partHint": "Part of a group: a click selects the whole group. To change this part, ungroup first.",
+      "renameInput": "New name for {name}",
+      "busy": "Apply or cancel the fillet or chamfer to use the object list",
+      "menu": {
+        "label": "Actions for {name}",
+        "rename": "Rename",
+        "zoomTo": "Zoom to selection",
+        "lock": "Lock selected",
+        "unlock": "Unlock selected",
+        "makeSolid": "Make solid",
+        "makeHole": "Make hole",
+        "unlockFirst": "Unlock the selected shapes first"
       }
     }
   },

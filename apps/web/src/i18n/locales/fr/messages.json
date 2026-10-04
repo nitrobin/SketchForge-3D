@@ -275,7 +275,8 @@
       "newEmptyDesign": "Nouveau projet vide",
       "savedDesign": "{count, plural, one {Projet enregistré : {count} forme} many {Projet enregistré : {count} de formes} other {Projet enregistré : {count} formes}}",
       "nothingToCopy": "Rien à copier pour l’instant",
-      "madeCopy": "Copie du projet créée"
+      "madeCopy": "Copie du projet créée",
+      "renamed": "Renommé en « {name} »"
     },
     "workplane": {
       "toolActive": "Plan de travail : cliquez sur une face ou sur la grille vide. Maintenez Shift pour l’inverser",
@@ -573,7 +574,8 @@
       "editorMode": "Mode de l’éditeur",
       "geometry": "Modèle 3D",
       "sketch": "Esquisse",
-      "groupBlockedByLock": "« Grouper » est indisponible : une forme sélectionnée est verrouillée. Déverrouillez-la avec le cadenas du panneau de la forme."
+      "groupBlockedByLock": "« Grouper » est indisponible : une forme sélectionnée est verrouillée. Déverrouillez-la avec le cadenas du panneau de la forme.",
+      "shapeList": "Objets"
     },
     "panel": {
       "import": "Importer",
@@ -1115,6 +1117,45 @@
         "title": "Groupez la plaque",
         "body": "Sélectionnez la base et l’objet « Texte » : maintenez Shift et cliquez sur les deux, ou tracez un cadre autour. Cliquez sur « Grouper » dans la section « Combiner » en haut pour obtenir un seul modèle imprimable terminé. Si « Grouper » reste grisé, la base est encore verrouillée : déverrouillez-la d’abord avec le cadenas du panneau de la forme.",
         "alt": "Plaque nominative bleue ALEX terminée et groupée"
+      }
+    },
+    "outline": {
+      "title": "Objets",
+      "count": "{count, plural, one {{count} objet} many {{count} d’objets} other {{count} objets}}",
+      "close": "Fermer la liste des objets",
+      "search": "Rechercher des objets",
+      "searchPlaceholder": "Rechercher par nom ou par type",
+      "clearSearch": "Effacer la recherche",
+      "empty": "Aucun objet pour l’instant. Ajoutez une forme depuis « Formes » dans la barre d’outils.",
+      "noMatches": "Aucun résultat pour « {query} »",
+      "tree": "Objets du projet",
+      "resize": "Largeur de la liste des objets",
+      "expand": "Développer « {name} »",
+      "collapse": "Réduire « {name} »",
+      "lock": "Verrouiller « {name} »",
+      "unlock": "Déverrouiller « {name} »",
+      "hide": "Masquer « {name} »",
+      "show": "Afficher « {name} »",
+      "state": {
+        "hole": "perçage",
+        "hidden": "masqué",
+        "locked": "verrouillé"
+      },
+      "type": {
+        "imported": "Modèle {format} importé"
+      },
+      "partHint": "Partie d’un groupe : un clic sélectionne tout le groupe. Pour modifier cette partie, dissociez d’abord le groupe.",
+      "renameInput": "Nouveau nom pour « {name} »",
+      "busy": "Appliquez ou annulez l’arrondi ou le chanfrein pour utiliser la liste des objets",
+      "menu": {
+        "label": "Actions pour « {name} »",
+        "rename": "Renommer",
+        "zoomTo": "Zoomer sur la sélection",
+        "lock": "Verrouiller la sélection",
+        "unlock": "Déverrouiller la sélection",
+        "makeSolid": "Transformer en solide",
+        "makeHole": "Transformer en perçage",
+        "unlockFirst": "Déverrouillez d’abord les formes sélectionnées"
       }
     }
   },

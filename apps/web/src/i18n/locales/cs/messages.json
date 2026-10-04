@@ -275,7 +275,8 @@
       "newEmptyDesign": "Nový prázdný projekt",
       "savedDesign": "{count, plural, one {Projekt uložen: {count} tvar} few {Projekt uložen: {count} tvary} many {Projekt uložen: {count} tvaru} other {Projekt uložen: {count} tvarů}}",
       "nothingToCopy": "Zatím není co kopírovat",
-      "madeCopy": "Vytvořena kopie projektu"
+      "madeCopy": "Vytvořena kopie projektu",
+      "renamed": "Přejmenováno na „{name}“"
     },
     "workplane": {
       "toolActive": "Pracovní rovina: klikněte na plochu nebo na prázdné místo mřížky. Podržením Shift rovinu obrátíte",
@@ -573,7 +574,8 @@
       "editorMode": "Režim editoru",
       "geometry": "3D model",
       "sketch": "Náčrt",
-      "groupBlockedByLock": "„Seskupit“ není k dispozici: jeden z vybraných tvarů je zamčený. Odemkněte ho zámkem na panelu tvaru."
+      "groupBlockedByLock": "„Seskupit“ není k dispozici: jeden z vybraných tvarů je zamčený. Odemkněte ho zámkem na panelu tvaru.",
+      "shapeList": "Objekty"
     },
     "panel": {
       "import": "Import",
@@ -1115,6 +1117,45 @@
         "title": "Seskupte jmenovku",
         "body": "Vyberte základnu a text: podržte Shift a klikněte na oba, nebo je ohraničte tažením rámečku. Nahoře v části „Kombinace“ klikněte na „Seskupit“. Vznikne jeden hotový model pro tisk. Pokud tlačítko „Seskupit“ zůstává šedé, je základna ještě zamčená: nejprve ji odemkněte zámkem na panelu tvaru.",
         "alt": "Hotová seskupená modrá jmenovka ALEX"
+      }
+    },
+    "outline": {
+      "title": "Objekty",
+      "count": "{count, plural, one {{count} objekt} few {{count} objekty} many {{count} objektu} other {{count} objektů}}",
+      "close": "Zavřít seznam objektů",
+      "search": "Hledat objekty",
+      "searchPlaceholder": "Hledat podle názvu nebo typu",
+      "clearSearch": "Vymazat hledání",
+      "empty": "Zatím žádné objekty. Přidejte tvar z nabídky „Tvary“ na panelu nástrojů.",
+      "noMatches": "Hledání „{query}“ nic nenašlo",
+      "tree": "Objekty v projektu",
+      "resize": "Šířka seznamu objektů",
+      "expand": "Rozbalit „{name}“",
+      "collapse": "Sbalit „{name}“",
+      "lock": "Zamknout „{name}“",
+      "unlock": "Odemknout „{name}“",
+      "hide": "Skrýt „{name}“",
+      "show": "Zobrazit „{name}“",
+      "state": {
+        "hole": "díra",
+        "hidden": "skrytý",
+        "locked": "zamčený"
+      },
+      "type": {
+        "imported": "Importovaný model {format}"
+      },
+      "partHint": "Část skupiny: kliknutím vyberete celou skupinu. Chcete-li změnit tuto část, nejprve zrušte seskupení.",
+      "renameInput": "Nový název pro „{name}“",
+      "busy": "Seznam objektů bude k dispozici, až zaoblení nebo zkosení použijete nebo zrušíte",
+      "menu": {
+        "label": "Příkazy pro „{name}“",
+        "rename": "Přejmenovat",
+        "zoomTo": "Přiblížit k vybraným objektům",
+        "lock": "Zamknout vybrané",
+        "unlock": "Odemknout vybrané",
+        "makeSolid": "Změnit na těleso",
+        "makeHole": "Změnit na díru",
+        "unlockFirst": "Nejprve odemkněte vybrané tvary"
       }
     }
   },

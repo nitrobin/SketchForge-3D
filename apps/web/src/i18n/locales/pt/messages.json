@@ -275,7 +275,8 @@
       "newEmptyDesign": "Novo projeto vazio",
       "savedDesign": "{count, plural, one {Projeto salvo com {count} forma} many {Projeto salvo com {count} de formas} other {Projeto salvo com {count} formas}}",
       "nothingToCopy": "Ainda não há nada para copiar",
-      "madeCopy": "Cópia do projeto criada"
+      "madeCopy": "Cópia do projeto criada",
+      "renamed": "Nome alterado para “{name}”"
     },
     "workplane": {
       "toolActive": "Plano de trabalho: clique em uma face ou em uma área vazia da grade; segure Shift para inverter o plano",
@@ -573,7 +574,8 @@
       "editorMode": "Modo do editor",
       "geometry": "Modelo 3D",
       "sketch": "Esboço",
-      "groupBlockedByLock": "“Agrupar” não está disponível: uma forma selecionada está bloqueada. Desbloqueie-a com o cadeado no painel da forma."
+      "groupBlockedByLock": "“Agrupar” não está disponível: uma forma selecionada está bloqueada. Desbloqueie-a com o cadeado no painel da forma.",
+      "shapeList": "Objetos"
     },
     "panel": {
       "import": "Importar",
@@ -1115,6 +1117,45 @@
         "title": "Agrupe a placa",
         "body": "Selecione a base e o objeto “Texto”: segure Shift e clique nos dois, ou arraste um retângulo de seleção em volta deles. Clique em “Agrupar” na seção “Combinar”, no topo, para obter um único modelo pronto para imprimir. Se “Agrupar” continuar cinza, a base ainda está bloqueada: primeiro desbloqueie-a com o cadeado no painel da forma.",
         "alt": "Placa azul ALEX pronta e agrupada"
+      }
+    },
+    "outline": {
+      "title": "Objetos",
+      "count": "{count, plural, one {{count} objeto} many {{count} de objetos} other {{count} objetos}}",
+      "close": "Fechar a lista de objetos",
+      "search": "Localizar objetos",
+      "searchPlaceholder": "Localizar por nome ou tipo",
+      "clearSearch": "Limpar a pesquisa",
+      "empty": "Nenhum objeto ainda. Adicione uma forma em “Formas”, na barra de ferramentas.",
+      "noMatches": "Nada corresponde a “{query}”",
+      "tree": "Objetos do projeto",
+      "resize": "Largura da lista de objetos",
+      "expand": "Expandir “{name}”",
+      "collapse": "Recolher “{name}”",
+      "lock": "Bloquear “{name}”",
+      "unlock": "Desbloquear “{name}”",
+      "hide": "Ocultar “{name}”",
+      "show": "Mostrar “{name}”",
+      "state": {
+        "hole": "orifício",
+        "hidden": "oculto",
+        "locked": "bloqueado"
+      },
+      "type": {
+        "imported": "Modelo {format} importado"
+      },
+      "partHint": "Parte de um grupo: um clique seleciona o grupo inteiro. Para alterar esta parte, desagrupe primeiro.",
+      "renameInput": "Novo nome para “{name}”",
+      "busy": "Aplique ou cancele o arredondamento ou chanfro para usar a lista de objetos",
+      "menu": {
+        "label": "Ações de “{name}”",
+        "rename": "Renomear",
+        "zoomTo": "Aproximar dos objetos selecionados",
+        "lock": "Bloquear objetos selecionados",
+        "unlock": "Desbloquear objetos selecionados",
+        "makeSolid": "Transformar em sólido",
+        "makeHole": "Transformar em orifício",
+        "unlockFirst": "Desbloqueie primeiro as formas selecionadas"
       }
     }
   },

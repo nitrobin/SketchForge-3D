@@ -275,7 +275,8 @@
       "newEmptyDesign": "Nowy pusty projekt",
       "savedDesign": "{count, plural, one {Zapisano projekt ({count} kształt)} few {Zapisano projekt ({count} kształty)} many {Zapisano projekt ({count} kształtów)} other {Zapisano projekt ({count} kształtu)}}",
       "nothingToCopy": "Na razie nie ma czego kopiować",
-      "madeCopy": "Utworzono kopię projektu"
+      "madeCopy": "Utworzono kopię projektu",
+      "renamed": "Zmieniono nazwę na „{name}”"
     },
     "workplane": {
       "toolActive": "Płaszczyzna robocza: kliknij ścianę lub puste miejsce na siatce. Przytrzymaj Shift, aby ją odwrócić",
@@ -573,7 +574,8 @@
       "editorMode": "Tryb edytora",
       "geometry": "Model 3D",
       "sketch": "Szkic",
-      "groupBlockedByLock": "Grupowanie jest niedostępne: jeden z zaznaczonych kształtów jest zablokowany. Odblokuj go kłódką w panelu kształtu."
+      "groupBlockedByLock": "Grupowanie jest niedostępne: jeden z zaznaczonych kształtów jest zablokowany. Odblokuj go kłódką w panelu kształtu.",
+      "shapeList": "Obiekty"
     },
     "panel": {
       "import": "Import",
@@ -1115,6 +1117,45 @@
         "title": "Zgrupuj tabliczkę",
         "body": "Zaznacz podstawę i obiekt „Tekst”: przytrzymaj Shift i kliknij oba albo przeciągnij wokół nich ramkę. Kliknij „Grupuj” w sekcji „Łączenie” u góry, aby powstał jeden gotowy model do druku. Jeśli przycisk „Grupuj” jest szary, podstawa jest nadal zablokowana: najpierw odblokuj ją kłódką w panelu kształtu.",
         "alt": "Gotowa zgrupowana niebieska tabliczka ALEX"
+      }
+    },
+    "outline": {
+      "title": "Obiekty",
+      "count": "{count, plural, one {{count} obiekt} few {{count} obiekty} many {{count} obiektów} other {{count} obiektu}}",
+      "close": "Zamknij listę obiektów",
+      "search": "Znajdź obiekty",
+      "searchPlaceholder": "Szukaj według nazwy lub typu",
+      "clearSearch": "Wyczyść wyszukiwanie",
+      "empty": "Brak obiektów. Dodaj kształt z menu „Kształty” na pasku narzędzi.",
+      "noMatches": "Brak wyników dla: {query}",
+      "tree": "Obiekty w projekcie",
+      "resize": "Szerokość listy obiektów",
+      "expand": "Rozwiń „{name}”",
+      "collapse": "Zwiń „{name}”",
+      "lock": "Zablokuj „{name}”",
+      "unlock": "Odblokuj „{name}”",
+      "hide": "Ukryj „{name}”",
+      "show": "Pokaż „{name}”",
+      "state": {
+        "hole": "otwór",
+        "hidden": "ukryty",
+        "locked": "zablokowany"
+      },
+      "type": {
+        "imported": "Zaimportowany model {format}"
+      },
+      "partHint": "Część grupy: kliknięcie zaznacza całą grupę. Aby zmienić tę część, najpierw rozgrupuj.",
+      "renameInput": "Nowa nazwa dla „{name}”",
+      "busy": "Aby korzystać z listy obiektów, zastosuj lub anuluj zaokrąglenie albo fazkę",
+      "menu": {
+        "label": "Opcje obiektu „{name}”",
+        "rename": "Zmień nazwę",
+        "zoomTo": "Przybliż do zaznaczonych",
+        "lock": "Zablokuj zaznaczone",
+        "unlock": "Odblokuj zaznaczone",
+        "makeSolid": "Zmień w bryłę",
+        "makeHole": "Zmień w otwór",
+        "unlockFirst": "Najpierw odblokuj zaznaczone kształty"
       }
     }
   },

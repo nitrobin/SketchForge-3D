@@ -523,7 +523,7 @@ export function ShapeInspector({
         </button>
         <strong>{shapeDisplayName(t, shape.name)}</strong>
         <div className="inspector-header-actions">
-          <button className={locked ? "inspector-header-icon active" : "inspector-header-icon"} aria-label={locked ? t("panels.inspector.unlock") : t("panels.inspector.lock")} onClick={() => onUpdate({ locked: !locked })}>
+          <button className={locked ? "inspector-header-icon active" : "inspector-header-icon"} data-sketchforge-tool="lock" aria-label={locked ? t("panels.inspector.unlock") : t("panels.inspector.lock")} onClick={() => onUpdate({ locked: !locked })}>
             {locked ? <LockKeyhole size={31} strokeWidth={2.4} /> : <LockKeyholeOpen size={31} strokeWidth={2.4} />}
           </button>
           <button className={shape.hidden ? "inspector-header-icon active" : "inspector-header-icon"} aria-label={shape.hidden ? t("panels.inspector.show") : t("panels.inspector.hide")} onClick={() => onUpdate({ hidden: !shape.hidden })}>

@@ -23,6 +23,9 @@ dashboard or in the editor's Appearance settings. The choice is stored per brows
    ```
 
 4. Run `npm test`. `tests/unit/i18n.test.ts` lists missing or extra keys, changed placeholders and missing plural forms.
+5. Check the layout: `cd tools/i18n-screens && npm install && npm run report -- --languages en,<code>` screenshots
+   every screen in both languages and marks clipped text, extra line wraps and untranslated strings
+   ([tools/i18n-screens/README.md](../tools/i18n-screens/README.md)).
 
 The desktop app picks up `<code>/desktop.json` automatically; `apps/desktop/electron-builder.yml` already packages every
 language's `desktop.json`.

@@ -1,0 +1,20 @@
+{
+  "desktop.tray.open": "Открыть SketchForge",
+  "desktop.tray.checkForUpdates": "Проверить обновления",
+  "desktop.tray.quit": "Выйти из SketchForge",
+  "desktop.tray.downloadingUpdate": "SketchForge — загрузка обновления {percent}%",
+  "desktop.tray.updateReady": "SketchForge {version} готов к установке",
+  "desktop.updates.title": "Обновления SketchForge",
+  "desktop.updates.availableTitle": "Обновление SketchForge",
+  "desktop.updates.available": "Доступна версия SketchForge {version}.",
+  "desktop.updates.availableDetail": "Откройте «Настройки» и нажмите кнопку обновления, чтобы установить её.",
+  "desktop.updates.upToDate": "Установлена последняя версия SketchForge.",
+  "desktop.updates.devBuild": "Автообновление работает только в установленном приложении SketchForge.",
+  "desktop.updates.packagedOnly": "Обновление доступно только в установленном приложении SketchForge.",
+  "desktop.updates.checkFailed": "Не удалось проверить обновления",
+  "desktop.updates.installFailed": "Не удалось обновить SketchForge",
+  "desktop.startup.failed": "Не удалось запустить SketchForge",
+  "desktop.startup.webProcessExited": "Внутренний веб-процесс SketchForge завершился с кодом {code}.",
+  "desktop.startup.webProcessTimeout": "SketchForge не дождался запуска своего внутреннего веб-процесса.",
+  "desktop.startup.webBundleMissing": "Не найдены файлы веб-интерфейса: {path}"
+}

@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
 
+// The page renders <title> itself so it follows the UI language.
 export const metadata: Metadata = {
-  title: "SketchForge 3D editor",
   description: "Browser-based SketchForge editor workspace",
   icons: {
     icon: "assets/sketchforge/sketchforge-logo.png",

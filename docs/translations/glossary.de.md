@@ -133,7 +133,7 @@ Binding for the German catalogs. General rules and audience: [../TRANSLATIONS.md
 | feature (project file) | Operation | |
 | state (project file) | Zustand | |
 | corrupted project file (error prefix) | Projektdatei beschädigt: | |
-| settings | Einstellungen | |
+| settings | Einstellungen | the dashboard menu item and the title of the panel it opens: „Optionen“ (the menu is about 75 px wide) |
 | workspace | Arbeitsbereich | Fusion |
 | toolbar | Werkzeugleiste | |
 | appearance / theme | Darstellung / Farbschema | |

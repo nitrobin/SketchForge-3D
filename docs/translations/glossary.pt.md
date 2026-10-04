@@ -106,7 +106,7 @@ desktop app only supports plain language codes. General rules and audience:
 | thumbnail / snapshot (project card) | miniatura | |
 | asset / resource (project file) | recurso | |
 | feature (project file) | operação | |
-| settings | configurações | |
+| settings | configurações | the dashboard menu item and the title of the panel it opens: “Ajustes” (the menu is about 75 px wide) |
 | workspace | espaço de trabalho | not “área de trabalho”: that is the Windows desktop |
 | shape panel (inspector) | painel da forma | |
 | preview | pré-visualização | |

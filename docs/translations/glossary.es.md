@@ -107,7 +107,7 @@ Binding for the Spanish catalogs. General rules and audience: [../TRANSLATIONS.m
 | grid view / list view (projects) | mosaico / lista | not «cuadrícula» or «rejilla»: that is the workplane grid |
 | asset / resource (project file) | recurso | |
 | feature (project file) | operación | |
-| settings | configuración | as Microsoft / Google |
+| settings | configuración | as Microsoft / Google; the dashboard menu item and the title of the panel it opens: «Ajustes» (the menu is about 75 px wide) |
 | default | predeterminado | not «por defecto» |
 | refresh / reload | recargar / volver a cargar | «actualizar» is reserved for software updates |
 | update | actualización / actualizar | |

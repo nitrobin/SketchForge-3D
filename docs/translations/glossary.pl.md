@@ -100,13 +100,13 @@ Binding for the Polish catalogs. General rules and audience: [../TRANSLATIONS.md
 | import / export | importuj / eksportuj; noun import / eksport | |
 | project, design | projekt | |
 | local project | projekt w tej przeglądarce | |
-| dashboard / home page | strona główna | editor toolbar section label: „Start” (one icon below it) |
+| dashboard / home page | strona główna | editor toolbar section label and dashboard menu item: „Start” (narrow places) |
 | thumbnail / snapshot (project card) | miniatura | Windows PL |
 | asset / resource (project file) | zasób | |
 | feature (project file) | operacja | as Inventor |
 | storage (browser, Docker) | magazyn | Windows PL „Magazyn” |
 | shared projects | wspólne projekty | |
-| settings / workspace | ustawienia / obszar roboczy | |
+| settings / workspace | ustawienia / obszar roboczy | the dashboard menu item and the title of the panel it opens: „Opcje” (the menu is about 75 px wide) |
 | update | aktualizacja / aktualizuj | |
 | loading / download | wczytywanie / pobieranie | |
 | lock / unlock; padlock | zablokuj / odblokuj; kłódka | |

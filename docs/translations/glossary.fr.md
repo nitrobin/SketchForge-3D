@@ -121,7 +121,7 @@ Binding for the French catalogs. General rules and audience: [../TRANSLATIONS.md
 | asset / resource (project file) | ressource | |
 | feature (project file) | opération | |
 | node (project file) | élément | not «nœud»: vulgar slang among students |
-| settings | paramètres | not «réglages» |
+| settings | paramètres | not «réglages»; the dashboard menu item and the title of the panel it opens: «Options» (the menu is about 75 px wide) |
 | shape panel (inspector) | panneau de la forme | |
 | lock / unlock / padlock | verrouiller / déverrouiller / cadenas | Tinkercad |
 | drop to workplane | poser sur le plan de travail | |

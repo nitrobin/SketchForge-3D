@@ -3,7 +3,7 @@
 import { Check, Circle as CircleIcon, CloudUpload, Download, Eye, FolderOpen, Hexagon as HexagonIcon, Square as SquareIcon, Triangle as TriangleIcon, X } from "lucide-react";
 import type manifoldModule from "manifold-3d";
 import type { ManifoldToplevel } from "manifold-3d";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import { ADDITION, Brush, Evaluator, HOLLOW_INTERSECTION, HOLLOW_SUBTRACTION, INTERSECTION, SUBTRACTION, type CSGOperation } from "three-bvh-csg";
 import * as THREE from "three";
 import { TextGeometry } from "three/examples/jsm/geometries/TextGeometry.js";
@@ -36,14 +36,16 @@ import {
   ToolbarSnapGridIcon,
   ToolbarSettingsIcon,
   ToolbarShapeAddIcon,
+  ToolbarShapeListIcon,
   ToolbarTrashIcon,
   ToolbarUngroupIcon,
   ToolbarUndoIcon,
   ToolbarVectorExportIcon,
 } from "./icons";
-import { WorkplaneViewport } from "./WorkplaneViewport";
+import { WorkplaneViewport, type CameraFocusRequest } from "./WorkplaneViewport";
 import { SketchWorkspace, type SketchMeasurement, type SketchPrimitive, type SketchSelection, type SketchTool } from "./SketchWorkspace";
 import { EdgeModifierPanel } from "./workplane/EdgeModifierPanel";
+import { SCENE_OUTLINE_DEFAULT_WIDTH, SCENE_OUTLINE_MAX_WIDTH, SCENE_OUTLINE_MIN_WIDTH, SceneOutlinePanel, type SceneOutlineCommands } from "./workplane/SceneOutlinePanel";
 import {
   canonicalizeShape,
   cloneWorkplaneShapeTreeWithFreshIds,
@@ -95,6 +97,7 @@ import { buildSketchRevolveMesh, DEFAULT_SKETCH_REVOLVE_SETTINGS, normalizeSketc
 import { exportSkfProject, SKF_MEDIA_TYPE } from "@/lib/skfProject";
 import { makeShapeFromAsset, sceneShape, toolbarShapeAssets, type ToolbarShapeAsset } from "@/lib/shapeCatalog";
 import { shapeDisplayName } from "@/lib/shapeDisplayNames";
+import { renameShapeInTree } from "@/lib/sceneOutline";
 import { DEFAULT_TEXT_FONT, textFont } from "@/lib/textFonts";
 import { importExtensionSupported } from "@/lib/importExtensions";
 import { importedShapeFromStl } from "@/lib/stlImport";
@@ -208,6 +211,28 @@ type BooleanAutomationResult = {
 const DOWNLOAD_MODE_STORAGE_KEY = "sketchForge.downloadMode";
 const DOWNLOAD_FOLDER_STORAGE_KEY = "sketchForge.downloadFolder";
 const SHARED_CLIPBOARD_STORAGE_KEY = "sketchForge.clipboard";
+const SHAPE_LIST_STORAGE_KEY = "sketchForge.editor.shapeList";
+const NO_SHAPE_IDS: readonly string[] = [];
+
+/** Whether the Objects panel was open and how wide, as the user left it; closed by default. */
+function readShapeListPreference(): { open: boolean; width: number } {
+  if (typeof window === "undefined") return { open: false, width: SCENE_OUTLINE_DEFAULT_WIDTH };
+  try {
+    const stored: unknown = JSON.parse(window.localStorage.getItem(SHAPE_LIST_STORAGE_KEY) ?? "null");
+    if (stored && typeof stored === "object") {
+      const { open, width } = stored as { open?: unknown; width?: unknown };
+      return {
+        open: open === true,
+        width: typeof width === "number" && Number.isFinite(width)
+          ? Math.min(SCENE_OUTLINE_MAX_WIDTH, Math.max(SCENE_OUTLINE_MIN_WIDTH, Math.round(width)))
+          : SCENE_OUTLINE_DEFAULT_WIDTH,
+      };
+    }
+  } catch {
+    // Browser storage can be unavailable; the list then starts closed.
+  }
+  return { open: false, width: SCENE_OUTLINE_DEFAULT_WIDTH };
+}
 const SYSTEM_CLIPBOARD_PREFIX = "SKETCHFORGE3D/1\n";
 const STATIC_EXPORT_BUILD = process.env.NEXT_PUBLIC_STATIC_EXPORT === "true";
 /** English texts for the MCP bridge and automation results, which stay English whatever the UI language. */
@@ -8885,6 +8910,62 @@ export function SketchForgeEditor({
     });
   }, []);
 
+  const canGroupSelection = selectedShapes.length > 1 && selectedShapes.every((shape) => !shape.locked);
+  const canUngroupSelection = selectedShapes.some((shape) => Boolean(shape.groupedShapes?.length));
+  // The editor is only rendered in the browser, so the stored preference can be read while creating the state.
+  const [initialShapeListPreference] = useState(readShapeListPreference);
+  const [shapeListOpen, setShapeListOpen] = useState(initialShapeListPreference.open);
+  const [shapeListWidth, setShapeListWidth] = useState(initialShapeListPreference.width);
+  const [shapeListHighlightIds, setShapeListHighlightIds] = useState<readonly string[]>(NO_SHAPE_IDS);
+  const [cameraFocusRequest, setCameraFocusRequest] = useState<CameraFocusRequest | null>(null);
+  useEffect(() => {
+    try {
+      window.localStorage.setItem(SHAPE_LIST_STORAGE_KEY, JSON.stringify({ open: shapeListOpen, width: shapeListWidth }));
+    } catch {
+      // Not remembered when browser storage is unavailable.
+    }
+  }, [shapeListOpen, shapeListWidth]);
+
+  const highlightShapesFromList = useCallback((ids: readonly string[]) => {
+    setShapeListHighlightIds((current) => (current.length === ids.length && current.every((id, index) => id === ids[index]) ? current : ids.length ? [...ids] : NO_SHAPE_IDS));
+  }, []);
+
+  const focusCameraOnShapes = useCallback((ids: readonly string[]) => {
+    if (ids.length) setCameraFocusRequest((current) => ({ ids: [...ids], serial: (current?.serial ?? 0) + 1 }));
+  }, []);
+
+  const toggleShapeHiddenFromList = useCallback((id: string) => {
+    const shape = shapes.find((entry) => entry.id === id);
+    if (shape) updateShape(id, { hidden: !shape.hidden });
+  }, [shapes, updateShape]);
+
+  const toggleShapeLockedFromList = useCallback((id: string) => {
+    const shape = shapes.find((entry) => entry.id === id);
+    if (shape) updateShape(id, { locked: !shape.locked });
+  }, [shapes, updateShape]);
+
+  const renameShape = useCallback((id: string, name: string) => {
+    const next = renameShapeInTree(shapes, id, name);
+    if (next) commitShapes(next, selectedIds, t("editor.notice.renamed", { name }));
+  }, [commitShapes, selectedIds, shapes, t]);
+
+  const shapeListCommands = useMemo<SceneOutlineCommands>(() => ({
+    canGroup: canGroupSelection,
+    canUngroup: canUngroupSelection,
+    selectionHidden: selectedShapes.length > 0 && selectedShapes.every((shape) => shape.hidden),
+    selectionLocked: selectedShapes.length > 0 && selectedShapes.every((shape) => shape.locked),
+    selectionHoles: selectedShapes.length > 0 && selectedShapes.every((shape) => shape.hole),
+    onDuplicate: duplicateSelected,
+    onDelete: deleteSelected,
+    onToggleHidden: toggleHidden,
+    onToggleLocked: toggleLocked,
+    onSetHole: setSelectionHoleMode,
+    onGroup: () => {
+      void groupSelected();
+    },
+    onUngroup: ungroupSelected,
+  }), [canGroupSelection, canUngroupSelection, deleteSelected, duplicateSelected, groupSelected, selectedShapes, setSelectionHoleMode, toggleHidden, toggleLocked, ungroupSelected]);
+
   const rotateSelectedBy = useCallback((angleDegrees: number) => {
     if (!hasSelection) {
       return;
@@ -9116,8 +9197,13 @@ export function SketchForgeEditor({
     ungroupSelected,
   ]);
 
+  const shapeListShown = shapeListOpen && !(toolbarMode === "sketch" && sketchActive);
+
   return (
-    <div className="sketchforge-editor">
+    <div
+      className={`sketchforge-editor ${shapeListShown ? "shape-list-open" : ""}`}
+      style={shapeListShown ? ({ "--shape-list-width": `${shapeListWidth}px` } as CSSProperties) : undefined}
+    >
       <SecondaryToolbar
         toolbarMode={toolbarMode}
         projectName={projectName}
@@ -9131,14 +9217,16 @@ export function SketchForgeEditor({
         }}
         canUndo={!projectInteractionActive && (historyIndex > 0 || Boolean(edgeModifier))}
         canRedo={!projectInteractionActive && historyIndex < history.length - 1}
-        canGroup={selectedShapes.length > 1 && selectedShapes.every((shape) => !shape.locked)}
+        canGroup={canGroupSelection}
         groupBlockedByLock={selectedShapes.length > 1 && selectedShapes.some((shape) => shape.locked)}
         canIntersect={selectedShapes.some((shape) => !shape.locked && !shape.hole) && selectedShapes.some((shape) => !shape.locked && Boolean(shape.hole))}
-        canUngroup={selectedShapes.some((shape) => Boolean(shape.groupedShapes?.length))}
+        canUngroup={canUngroupSelection}
         hasClipboard={clipboard.length > 0 || systemClipboardSupported}
         hasSelection={hasSelection}
         hiddenShapeCount={shapes.filter((shape) => shape.hidden).length}
         selectionHidden={hasSelection && selectedShapes.every((shape) => shape.hidden)}
+        shapeListOpen={shapeListOpen}
+        onToggleShapeList={() => setShapeListOpen((open) => !open)}
         alignMode={alignMode}
         canAlign={selectedShapes.length > 1}
         canEdgeModify={selectedShapes.length === 1 && Boolean(selectedShape && !selectedShape.locked && !selectedShape.hole)}
@@ -9194,6 +9282,24 @@ export function SketchForgeEditor({
         }}
       />
       <div className="editor-body">
+        {shapeListShown ? (
+          <SceneOutlinePanel
+            shapes={shapes}
+            selectedIds={selectedIds}
+            width={shapeListWidth}
+            busyMessage={edgeModifier ? t("panels.outline.busy") : null}
+            commands={shapeListCommands}
+            onWidthChange={setShapeListWidth}
+            onClose={() => setShapeListOpen(false)}
+            onSelect={selectShape}
+            onHighlight={highlightShapesFromList}
+            onToggleShapeHidden={toggleShapeHiddenFromList}
+            onToggleShapeLocked={toggleShapeLockedFromList}
+            onRename={renameShape}
+            onShowAllHidden={showHidden}
+            onFocusShapes={focusCameraOnShapes}
+          />
+        ) : null}
         {toolbarMode === "sketch" && sketchActive ? (
           <SketchWorkspace
             profile={sketchProfile}
@@ -9281,6 +9387,8 @@ export function SketchForgeEditor({
           themePreference={themePreference}
           resolvedTheme={resolvedTheme}
           onThemePreferenceChange={onThemePreferenceChange}
+          highlightedShapeIds={shapeListShown ? shapeListHighlightIds : NO_SHAPE_IDS}
+          focusRequest={cameraFocusRequest}
           />
         )}
       </div>
@@ -9457,6 +9565,8 @@ function SecondaryToolbar({
   hasSelection,
   hiddenShapeCount,
   selectionHidden,
+  shapeListOpen,
+  onToggleShapeList,
   mirrorMode,
   sketchActive,
   sketchOperation,
@@ -9514,6 +9624,8 @@ function SecondaryToolbar({
   hasSelection: boolean;
   hiddenShapeCount: number;
   selectionHidden: boolean;
+  shapeListOpen: boolean;
+  onToggleShapeList: () => void;
   mirrorMode: boolean;
   sketchActive: boolean;
   sketchOperation: SketchOperation;
@@ -9904,6 +10016,20 @@ function SecondaryToolbar({
               onClick={toggleVisibilityMenu}
             >
               <ToolbarCaretDownIcon />
+            </button>
+            <button
+              className={`toolbar-icon shape-list-toggle ${shapeListOpen ? "active" : ""}`}
+              type="button"
+              data-sketchforge-tool="shape-list"
+              aria-label={t("editor.toolbar.shapeList")}
+              title={t("editor.toolbar.shapeList")}
+              aria-pressed={shapeListOpen}
+              onClick={() => {
+                setVisibilityOpen(false);
+                onToggleShapeList();
+              }}
+            >
+              <ToolbarShapeListIcon />
             </button>
           </div>
           {visibilityOpen ? (

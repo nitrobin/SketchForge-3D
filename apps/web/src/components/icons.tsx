@@ -122,6 +122,22 @@ export function ToolbarCaretDownIcon(props: IconProps) {
   );
 }
 
+export function ToolbarShapeListIcon(props: IconProps) {
+  return (
+    <svg viewBox="0 0 48 48" aria-hidden="true" {...props}>
+      <g fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="10" y="10" width="7" height="7" rx="1.4" />
+        <path d="M21 13.5h17" />
+        <path d="M13.5 17v18.5M13.5 25h5M13.5 35.5h5" />
+        <rect x="19" y="21.5" width="7" height="7" rx="1.4" />
+        <path d="M30 25h8" />
+        <rect x="19" y="32" width="7" height="7" rx="1.4" />
+        <path d="M30 35.5h8" />
+      </g>
+    </svg>
+  );
+}
+
 export function ToolbarGroupIcon() {
   return <ToolbarCommandImage file="toolbar-group.png" />;
 }

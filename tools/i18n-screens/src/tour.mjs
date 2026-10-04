@@ -109,6 +109,39 @@ export const tour = [
     },
   },
   {
+    id: "shape-list",
+    screens: ["shape-list"],
+    run: async (ui) => {
+      await openEditor(ui);
+      await addShape(ui, "box.png");
+      await addShape(ui, "cylinder.png");
+      await addShape(ui, "text.png");
+      await ui.page.evaluate(() => (document.activeElement instanceof HTMLElement ? document.activeElement.blur() : undefined));
+      await ui.page.locator('[data-sketchforge-tool="shape-list"]').click();
+      const rows = ui.page.locator(".scene-outline-row");
+      await rows.first().waitFor();
+      // A group with its parts open, a hidden and locked shape: every kind of row and the hidden-shapes button.
+      await rows.nth(0).click();
+      await rows.nth(1).click({ modifiers: ["ControlOrMeta"] });
+      await ui.page.keyboard.press("ControlOrMeta+G");
+      await ui.page.locator(".scene-outline-chevron").first().waitFor();
+      await ui.page.locator(".scene-outline-chevron").first().click();
+      const text = rows.first();
+      await text.hover();
+      await text.locator('[data-action="toggle-hidden"]').click();
+      await text.locator('[data-action="toggle-locked"]').click();
+      await ui.settle();
+      await ui.capture("shape-list", "Objects panel", { scope: ".scene-outline" });
+      await rows.last().click({ button: "right" });
+      await ui.settle();
+      await ui.capture("shape-list-menu", "Objects panel: right-click menu", { scope: ".scene-outline-menu" });
+      await ui.page.keyboard.press("Escape");
+      await ui.page.locator(".scene-outline-search input").fill("zzzz");
+      await ui.settle();
+      await ui.capture("shape-list-no-matches", "Objects panel: nothing found", { scope: ".scene-outline" });
+    },
+  },
+  {
     id: "workspace-settings",
     screens: ["settings-"],
     run: async (ui) => {

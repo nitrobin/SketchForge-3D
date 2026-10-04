@@ -6,11 +6,15 @@ import type { MessageValue } from "./format";
 export type MessageKey = keyof typeof en & string;
 export type MessageCatalog = Partial<Record<MessageKey, MessageValue>>;
 
-/** To add a language: copy locales/en to locales/<code>, translate the JSON files and register it here. */
+/**
+ * To add a language: copy locales/en to locales/<code>, translate the JSON files and register it here.
+ * `complete: false` while it is being translated: missing strings show in English and the catalog test
+ * reports them as a todo. With `complete: true` a missing string fails the test.
+ */
 export const LOCALES = [
-  { code: "en", nativeName: "English", messages: en },
-  { code: "ru", nativeName: "Русский", messages: ru },
-] as const satisfies readonly { code: string; nativeName: string; messages: MessageCatalog }[];
+  { code: "en", nativeName: "English", messages: en, complete: true },
+  { code: "ru", nativeName: "Русский", messages: ru, complete: true },
+] as const satisfies readonly { code: string; nativeName: string; messages: MessageCatalog; complete: boolean }[];
 
 export type Locale = (typeof LOCALES)[number]["code"];
 

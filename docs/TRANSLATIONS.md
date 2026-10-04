@@ -19,10 +19,14 @@ dashboard or in the editor's Appearance settings. The choice is stored per brows
    ```ts
    import de from "./locales/de";
    // …
-   { code: "de", nativeName: "Deutsch", messages: de },
+   { code: "de", nativeName: "Deutsch", messages: de, complete: false },
    ```
 
-4. Run `npm test`. `tests/unit/i18n.test.ts` lists missing or extra keys, changed placeholders and missing plural forms.
+   While `complete: false`, strings that are not translated yet show in English and `npm test` counts them as one
+   todo instead of failing. Set `complete: true` when the language is done: from then on a missing string fails.
+4. Run `npm test`. `tests/unit/i18n.test.ts` reports missing strings (a todo while the language is in progress; list
+   them with `npx vitest run --config tests/vitest.config.ts tests/unit/i18n.test.ts --reporter=verbose`), and fails
+   on keys English does not have, changed placeholders and missing plural forms.
 5. Check the layout: `cd tools/i18n-screens && npm install && npm run report -- --languages en,<code>` screenshots
    every screen in both languages and marks clipped text, extra line wraps and untranslated strings
    ([tools/i18n-screens/README.md](../tools/i18n-screens/README.md)).

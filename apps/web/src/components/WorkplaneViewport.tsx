@@ -75,6 +75,7 @@ import {
 } from "@/components/workplane/TransformOverlay";
 import type { AlignAxis, AlignHandleStatus, AlignTarget, GridSize, MeasurementAccuracy, ShapeAsset, WorkplaneShape, WorkplaneWorkspaceSettings } from "@/types/sketchforge";
 import type { CadModifierEdge } from "@/lib/cadModifierTypes";
+import { useT } from "@/i18n";
 
 const WORKPLANE_WIDTH = 200;
 const WORKPLANE_DEPTH = 140;
@@ -1492,8 +1493,9 @@ function RulerOverlay({
   onPointPointerUp: (event: ReactPointerEvent<SVGCircleElement>, pointId: string) => void;
   onSegmentPointerDown: (event: ReactPointerEvent<SVGElement>, segmentId: string) => void;
 }) {
+  const t = useT();
   return (
-    <div className={`ruler-overlay ${active ? "active" : ""} ${deleteMode ? "delete-mode" : ""} ${moveMode ? "move-mode" : ""}`} aria-label="Ruler measurements">
+    <div className={`ruler-overlay ${active ? "active" : ""} ${deleteMode ? "delete-mode" : ""} ${moveMode ? "move-mode" : ""}`} aria-label={t("workspace.ruler.measurements")}>
       <svg className="ruler-guides" width="100%" height="100%" aria-hidden="true">
         {overlay.segments.map((segment) => (
           <g key={segment.id} className="ruler-segment-group">
@@ -2392,6 +2394,8 @@ export function WorkplaneViewport({
   resolvedTheme = "light",
   onThemePreferenceChange,
 }: WorkplaneViewportProps) {
+  // Used only in the returned JSX; never list it in scene effect deps (a locale change must not rebuild the scene).
+  const t = useT();
   const [snapOpen, setSnapOpen] = useState(false);
   const [snap, setSnap] = useState<GridSize>(() => normalizeSnapGrid(initialSnap, DEFAULT_SNAP_GRID));
   const [settingsOpen, setSettingsOpen] = useState(false);
@@ -5043,41 +5047,41 @@ export function WorkplaneViewport({
 
   return (
     <main className={`workplane-stage ${challengeTutorial ? `key-tag-tutorial-active ${challengeTutorialCollapsed ? "key-tag-tutorial-collapsed" : ""}` : ""}`}>
-      <div className="view-cube" aria-label="View orientation cube" onPointerDown={(event) => event.stopPropagation()}>
+      <div className="view-cube" aria-label={t("workspace.viewCube.label")} onPointerDown={(event) => event.stopPropagation()}>
         <div className="view-cube-inner" ref={viewCubeRef}>
-          <button type="button" className="cube-face cube-top" aria-label="Bottom view" aria-keyshortcuts="6" title="Bottom view (6)" onClick={() => setViewCubeFace("bottom")}>BOTTOM</button>
-          <button type="button" className="cube-face cube-bottom" aria-label="Top view" aria-keyshortcuts="5" title="Top view (5)" onClick={() => setViewCubeFace("top")}>TOP</button>
-          <button type="button" className="cube-face cube-front" aria-label="Front view" aria-keyshortcuts="1" title="Front view (1)" onClick={() => setViewCubeFace("front")}>FRONT</button>
-          <button type="button" className="cube-face cube-back" aria-label="Back view" aria-keyshortcuts="2" title="Back view (2)" onClick={() => setViewCubeFace("back")}>BACK</button>
-          <button type="button" className="cube-face cube-right" aria-label="Right view" aria-keyshortcuts="4" title="Right view (4)" onClick={() => setViewCubeFace("right")}>RIGHT</button>
-          <button type="button" className="cube-face cube-left" aria-label="Left view" aria-keyshortcuts="3" title="Left view (3)" onClick={() => setViewCubeFace("left")}>LEFT</button>
+          <button type="button" className="cube-face cube-top" aria-label={t("workspace.viewCube.view.bottom")} aria-keyshortcuts="6" title={t("workspace.shortcutHint", { label: t("workspace.viewCube.view.bottom"), key: "6" })} onClick={() => setViewCubeFace("bottom")}>{t("workspace.viewCube.face.bottom")}</button>
+          <button type="button" className="cube-face cube-bottom" aria-label={t("workspace.viewCube.view.top")} aria-keyshortcuts="5" title={t("workspace.shortcutHint", { label: t("workspace.viewCube.view.top"), key: "5" })} onClick={() => setViewCubeFace("top")}>{t("workspace.viewCube.face.top")}</button>
+          <button type="button" className="cube-face cube-front" aria-label={t("workspace.viewCube.view.front")} aria-keyshortcuts="1" title={t("workspace.shortcutHint", { label: t("workspace.viewCube.view.front"), key: "1" })} onClick={() => setViewCubeFace("front")}>{t("workspace.viewCube.face.front")}</button>
+          <button type="button" className="cube-face cube-back" aria-label={t("workspace.viewCube.view.back")} aria-keyshortcuts="2" title={t("workspace.shortcutHint", { label: t("workspace.viewCube.view.back"), key: "2" })} onClick={() => setViewCubeFace("back")}>{t("workspace.viewCube.face.back")}</button>
+          <button type="button" className="cube-face cube-right" aria-label={t("workspace.viewCube.view.right")} aria-keyshortcuts="4" title={t("workspace.shortcutHint", { label: t("workspace.viewCube.view.right"), key: "4" })} onClick={() => setViewCubeFace("right")}>{t("workspace.viewCube.face.right")}</button>
+          <button type="button" className="cube-face cube-left" aria-label={t("workspace.viewCube.view.left")} aria-keyshortcuts="3" title={t("workspace.shortcutHint", { label: t("workspace.viewCube.view.left"), key: "3" })} onClick={() => setViewCubeFace("left")}>{t("workspace.viewCube.face.left")}</button>
         </div>
       </div>
 
-      <div className={`camera-controls ${cameraControlsCollapsed ? "collapsed" : ""}`} aria-label="Camera controls">
+      <div className={`camera-controls ${cameraControlsCollapsed ? "collapsed" : ""}`} aria-label={t("workspace.camera.controls")}>
         {cameraControlsCollapsed ? (
-          <button className="camera-controls-toggle" aria-label="Show camera controls" title="Show controls" aria-expanded={false} onClick={() => setCameraControlsCollapsed(false)}>
+          <button className="camera-controls-toggle" aria-label={t("workspace.camera.showControlsLabel")} title={t("workspace.camera.showControls")} aria-expanded={false} onClick={() => setCameraControlsCollapsed(false)}>
             <ChevronRight size={24} strokeWidth={2.25} aria-hidden="true" />
           </button>
         ) : (
           <>
-            <button className="camera-controls-toggle" aria-label="Hide camera controls" title="Hide controls" aria-expanded={true} onClick={collapseCameraControls}>
+            <button className="camera-controls-toggle" aria-label={t("workspace.camera.hideControlsLabel")} title={t("workspace.camera.hideControls")} aria-expanded={true} onClick={collapseCameraControls}>
               <ChevronLeft size={24} strokeWidth={2.25} aria-hidden="true" />
             </button>
-            <button aria-label="Home" onClick={resetView}>
+            <button aria-label={t("workspace.camera.home")} onClick={resetView}>
               <Home size={24} strokeWidth={2.25} />
             </button>
-            <button aria-label="Zoom in" onClick={() => zoomCamera(0.7)}>
+            <button aria-label={t("workspace.camera.zoomIn")} onClick={() => zoomCamera(0.7)}>
               <Plus size={28} strokeWidth={2.15} />
             </button>
-            <button aria-label="Zoom out" onClick={() => zoomCamera(1.35)}>
+            <button aria-label={t("workspace.camera.zoomOut")} onClick={() => zoomCamera(1.35)}>
               <Minus size={28} strokeWidth={2.15} />
             </button>
             <div className="workplane-control-group">
               <button
                 className={workplaneMode ? "active" : ""}
-                aria-label="Place workplane"
-                title="Place workplane (W)"
+                aria-label={t("workspace.workplane.place")}
+                title={t("workspace.shortcutHint", { label: t("workspace.workplane.place"), key: "W" })}
                 aria-pressed={workplaneMode}
                 onClick={togglePlacementWorkplane}
               >
@@ -5087,8 +5091,8 @@ export function WorkplaneViewport({
             <div className="ruler-control-group">
               <button
                 className={`ruler-trigger ${rulerToolsOpen ? "active" : ""}`}
-                aria-label="Ruler tools"
-                title="Ruler tools"
+                aria-label={t("workspace.ruler.tools")}
+                title={t("workspace.ruler.tools")}
                 aria-expanded={rulerToolsOpen}
                 aria-controls="ruler-tool-popover"
                 onClick={toggleRulerTools}
@@ -5096,14 +5100,14 @@ export function WorkplaneViewport({
                 <Ruler size={26} strokeWidth={2.2} aria-hidden="true" />
               </button>
               {rulerToolsOpen ? (
-                <div id="ruler-tool-popover" className="ruler-tool-popover" aria-label="Ruler actions">
-                  <button className={rulerMode ? "active" : ""} aria-label="Add measurement" title="Add measurement" aria-pressed={rulerMode} onClick={activateRulerAdd}>
+                <div id="ruler-tool-popover" className="ruler-tool-popover" aria-label={t("workspace.ruler.actions")}>
+                  <button className={rulerMode ? "active" : ""} aria-label={t("workspace.ruler.add")} title={t("workspace.ruler.add")} aria-pressed={rulerMode} onClick={activateRulerAdd}>
                     <Plus size={21} strokeWidth={2.4} aria-hidden="true" />
                   </button>
-                  <button className={rulerMoveMode ? "active" : ""} aria-label="Move measurement points" title="Move measurement points" aria-pressed={rulerMoveMode} onClick={activateRulerMove}>
+                  <button className={rulerMoveMode ? "active" : ""} aria-label={t("workspace.ruler.movePoints")} title={t("workspace.ruler.movePoints")} aria-pressed={rulerMoveMode} onClick={activateRulerMove}>
                     <MousePointer2 size={20} strokeWidth={2.25} aria-hidden="true" />
                   </button>
-                  <button className={`ruler-delete-button ${rulerDeleteMode ? "active" : ""}`} aria-label="Delete measurement part" title="Delete measurement part" aria-pressed={rulerDeleteMode} onClick={activateRulerDelete}>
+                  <button className={`ruler-delete-button ${rulerDeleteMode ? "active" : ""}`} aria-label={t("workspace.ruler.deletePart")} title={t("workspace.ruler.deletePart")} aria-pressed={rulerDeleteMode} onClick={activateRulerDelete}>
                     <X size={20} strokeWidth={2.4} aria-hidden="true" />
                   </button>
                 </div>
@@ -5113,7 +5117,7 @@ export function WorkplaneViewport({
         )}
       </div>
 
-      <section className={`workplane-wrap ${workplaneMode ? "placing-workplane" : ""} ${rulerMode ? "ruler-mode" : ""} ${rulerDeleteMode ? "ruler-delete-mode" : ""} ${rulerMoveMode ? "ruler-move-mode" : ""} ${modifierActive ? "modifier-edge-pick" : ""}`} aria-label="Workplane">
+      <section className={`workplane-wrap ${workplaneMode ? "placing-workplane" : ""} ${rulerMode ? "ruler-mode" : ""} ${rulerDeleteMode ? "ruler-delete-mode" : ""} ${rulerMoveMode ? "ruler-move-mode" : ""} ${modifierActive ? "modifier-edge-pick" : ""}`} aria-label={t("workspace.workplane.label")}>
         <div className="workplane-plane">
           <div
             className="three-workplane-host"
@@ -6668,16 +6672,16 @@ function syncTransformOverlay(
   };
 
   const handles = [
-    { point: bottom.nearLeft, handle: { key: "near-left", className: "corner", kind: "scale" as const, x: bottom.nearLeft.x, y: bottom.nearLeft.y, title: "Resize" } },
-    { point: bottom.nearRight, handle: { key: "near-right", className: "corner", kind: "scale" as const, x: bottom.nearRight.x, y: bottom.nearRight.y, title: "Resize" } },
-    { point: bottom.farRight, handle: { key: "far-right", className: "corner", kind: "scale" as const, x: bottom.farRight.x, y: bottom.farRight.y, title: "Resize" } },
-    { point: bottom.farLeft, handle: { key: "far-left", className: "corner", kind: "scale" as const, x: bottom.farLeft.x, y: bottom.farLeft.y, title: "Resize" } },
-    { point: mid.near, handle: { key: "near-mid", className: "edge dark", kind: "scale" as const, x: mid.near.x, y: mid.near.y, title: "Resize" } },
-    { point: mid.right, handle: { key: "right-mid", className: "edge dark", kind: "scale" as const, x: mid.right.x, y: mid.right.y, title: "Resize" } },
-    { point: mid.far, handle: { key: "far-mid", className: "edge dark", kind: "scale" as const, x: mid.far.x, y: mid.far.y, title: "Resize" } },
-    { point: mid.left, handle: { key: "left-mid", className: "edge dark", kind: "scale" as const, x: mid.left.x, y: mid.left.y, title: "Resize" } },
-    { point: heightPoint, handle: { key: heightHandleKey, className: "height-top", kind: "height" as const, x: heightPoint.x, y: heightPoint.y, title: "Height" } },
-    { point: liftPoint, handle: { key: liftHandleKey, className: showLowerHandles ? "height-lift lower" : "height-lift", kind: "lift" as const, x: liftPoint.x, y: liftPoint.y, title: "Lift", angle: liftHandleAngle } },
+    { point: bottom.nearLeft, handle: { key: "near-left", className: "corner", kind: "scale" as const, x: bottom.nearLeft.x, y: bottom.nearLeft.y } },
+    { point: bottom.nearRight, handle: { key: "near-right", className: "corner", kind: "scale" as const, x: bottom.nearRight.x, y: bottom.nearRight.y } },
+    { point: bottom.farRight, handle: { key: "far-right", className: "corner", kind: "scale" as const, x: bottom.farRight.x, y: bottom.farRight.y } },
+    { point: bottom.farLeft, handle: { key: "far-left", className: "corner", kind: "scale" as const, x: bottom.farLeft.x, y: bottom.farLeft.y } },
+    { point: mid.near, handle: { key: "near-mid", className: "edge dark", kind: "scale" as const, x: mid.near.x, y: mid.near.y } },
+    { point: mid.right, handle: { key: "right-mid", className: "edge dark", kind: "scale" as const, x: mid.right.x, y: mid.right.y } },
+    { point: mid.far, handle: { key: "far-mid", className: "edge dark", kind: "scale" as const, x: mid.far.x, y: mid.far.y } },
+    { point: mid.left, handle: { key: "left-mid", className: "edge dark", kind: "scale" as const, x: mid.left.x, y: mid.left.y } },
+    { point: heightPoint, handle: { key: heightHandleKey, className: "height-top", kind: "height" as const, x: heightPoint.x, y: heightPoint.y } },
+    { point: liftPoint, handle: { key: liftHandleKey, className: showLowerHandles ? "height-lift lower" : "height-lift", kind: "lift" as const, x: liftPoint.x, y: liftPoint.y, angle: liftHandleAngle } },
   ].filter(({ point }) => point.visible).map(({ handle }) => handle);
   const rotationChromeVisible = !cameraInsideSelection && centerPoint.visible;
   const rotateHandles = rotationChromeVisible ? [
@@ -6916,7 +6920,6 @@ function syncMirrorOverlay(
         x: xScreen.x,
         y: xScreen.y,
         angle: screenAngle(xWorld.clone().add(new THREE.Vector3(-step, 0, 0)), xWorld.clone().add(new THREE.Vector3(step, 0, 0))),
-        title: "Mirror left-right",
       },
       {
         axis: "z" as const,
@@ -6924,7 +6927,6 @@ function syncMirrorOverlay(
         x: zScreen.x,
         y: zScreen.y,
         angle: screenAngle(zWorld.clone().add(new THREE.Vector3(0, 0, -step)), zWorld.clone().add(new THREE.Vector3(0, 0, step))),
-        title: "Mirror front-back",
       },
       {
         axis: "y" as const,
@@ -6932,7 +6934,6 @@ function syncMirrorOverlay(
         x: yScreen.x,
         y: yScreen.y,
         angle: screenAngle(yWorld.clone().add(new THREE.Vector3(0, -step, 0)), yWorld.clone().add(new THREE.Vector3(0, step, 0))),
-        title: "Mirror top-bottom",
       },
     ],
   };

@@ -214,7 +214,7 @@ const SHARED_CLIPBOARD_STORAGE_KEY = "sketchForge.clipboard";
 const SHAPE_LIST_STORAGE_KEY = "sketchForge.editor.shapeList";
 const NO_SHAPE_IDS: readonly string[] = [];
 
-/** Whether the shape list was open and how wide, as the user left it; closed by default. */
+/** Whether the Objects panel was open and how wide, as the user left it; closed by default. */
 function readShapeListPreference(): { open: boolean; width: number } {
   if (typeof window === "undefined") return { open: false, width: SCENE_OUTLINE_DEFAULT_WIDTH };
   try {

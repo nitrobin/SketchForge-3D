@@ -208,7 +208,7 @@ type WorkplaneViewportProps = {
   themePreference?: AppThemePreference;
   resolvedTheme?: ResolvedAppTheme;
   onThemePreferenceChange?: (preference: AppThemePreference) => void;
-  /** Shapes to outline, hidden ones included, e.g. while the pointer is over their row in the shape list. */
+  /** Shapes to outline, hidden ones included, e.g. while the pointer is over their row in the Objects panel. */
   highlightedShapeIds?: readonly string[];
   /** Each new `serial` moves the camera to show these shapes. */
   focusRequest?: CameraFocusRequest | null;
@@ -3019,7 +3019,7 @@ export function WorkplaneViewport({
 
     animate();
     window.addEventListener("resize", state.resize);
-    // The stage also changes width without a window resize, e.g. when the shape list opens or is resized.
+    // The stage also changes width without a window resize, e.g. when the Objects panel opens or is resized.
     const hostResizeObserver = typeof ResizeObserver === "undefined" ? null : new ResizeObserver(() => state.resize());
     hostResizeObserver?.observe(host);
 
@@ -5588,7 +5588,7 @@ function syncOutlineHighlight(state: ThreeState, shapes: WorkplaneShape[], ids: 
   state.needsRender = true;
 }
 
-/** Project thumbnails and MCP views show the design, not what the pointer is over in the shape list. */
+/** Project thumbnails and MCP views show the design, not what the pointer is over in the Objects panel. */
 function renderWithoutOutlineHighlight(state: ThreeState) {
   const highlight = state.scene.getObjectByName(OUTLINE_HIGHLIGHT_LAYER_NAME);
   const visible = highlight?.visible ?? false;

@@ -238,7 +238,7 @@
   "editor.toolbar.showSelected": "Показать выделенные объекты",
   "editor.toolbar.hideSelected": "Скрыть выделенные объекты",
   "editor.toolbar.visibilityOptions": "Параметры видимости",
-  "editor.toolbar.shapeList": "Список фигур",
+  "editor.toolbar.shapeList": "Объекты",
   "editor.toolbar.nothingHidden": "Скрытых объектов нет",
   "editor.toolbar.showAllHidden": "Показать все скрытые ({count})",
   "editor.toolbar.visibilityHelpSelected": "Кнопка с глазом: выделенные объекты",

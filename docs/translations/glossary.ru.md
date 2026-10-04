@@ -70,7 +70,7 @@ Binding for the Russian catalogs. General rules and audience: [../TRANSLATIONS.m
 | pan | сдвиг вида / сдвинуть вид | Autodesk «панорамирование» is unclear to the audience |
 | fit / zoom to fit | показать всё | |
 | zoom to selection | приблизить к выделенным объектам | not «показать»: it means unhide here |
-| shape list (panel with every shape of the design) | список фигур | not «аутлайнер», «дерево сцены»: unclear to the audience |
+| Objects (panel listing every object of the design) | объекты; the list in it — список объектов | not «сцена», «структура», «аутлайнер», «дерево сцены»: unclear to the audience; matches «выделенные объекты» |
 | rename | переименовать | |
 | home view (camera) | исходный вид | «главный вид» is the front view in GOST 2.305 |
 | wireframe | каркас | |

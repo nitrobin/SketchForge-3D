@@ -8692,7 +8692,7 @@ html[data-theme="dark"] .tutorial-coachmark {
   }
 }
 
-/* Shape list: every shape of the design as a tree, docked left of the 3D view. */
+/* Objects panel: every object of the design as a tree, docked left of the 3D view. */
 .scene-outline {
   position: relative;
   z-index: 9;

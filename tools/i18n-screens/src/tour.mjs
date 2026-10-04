@@ -131,14 +131,14 @@ export const tour = [
       await text.locator('[data-action="toggle-hidden"]').click();
       await text.locator('[data-action="toggle-locked"]').click();
       await ui.settle();
-      await ui.capture("shape-list", "Shape list", { scope: ".scene-outline" });
+      await ui.capture("shape-list", "Objects panel", { scope: ".scene-outline" });
       await rows.last().click({ button: "right" });
       await ui.settle();
-      await ui.capture("shape-list-menu", "Shape list: right-click menu", { scope: ".scene-outline-menu" });
+      await ui.capture("shape-list-menu", "Objects panel: right-click menu", { scope: ".scene-outline-menu" });
       await ui.page.keyboard.press("Escape");
       await ui.page.locator(".scene-outline-search input").fill("zzzz");
       await ui.settle();
-      await ui.capture("shape-list-no-matches", "Shape list: nothing found", { scope: ".scene-outline" });
+      await ui.capture("shape-list-no-matches", "Objects panel: nothing found", { scope: ".scene-outline" });
     },
   },
   {

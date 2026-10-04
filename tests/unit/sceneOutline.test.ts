@@ -44,7 +44,7 @@ const design = (): WorkplaneShape[] => [
 
 const summary = (rows: ReturnType<typeof buildOutlineRows>) => rows.map((row) => `${"  ".repeat(row.level - 1)}${row.id}`);
 
-describe("shape list rows", () => {
+describe("Objects panel rows", () => {
   it("lists top-level shapes and keeps groups closed until opened", () => {
     const rows = buildOutlineRows(design(), new Set());
     expect(summary(rows)).toEqual(["box", "group", "label"]);
@@ -75,7 +75,7 @@ describe("shape list rows", () => {
   });
 });
 
-describe("shape list search", () => {
+describe("Objects panel search", () => {
   it("is off for an empty query", () => {
     expect(outlineSearchMatcher(en, "   ")).toBeUndefined();
   });
@@ -97,7 +97,7 @@ describe("shape list search", () => {
   });
 });
 
-describe("shape list types", () => {
+describe("Objects panel types", () => {
   it("names how a shape was made", () => {
     expect(outlineItemType(design()[1])).toBe("group");
     expect(outlineItemType(shape("i", { kind: "mesh", groupOperation: "intersection", groupedShapes: [shape("a")] }))).toBe("intersection");
@@ -120,7 +120,7 @@ describe("shape list types", () => {
   });
 });
 
-describe("shape list selection range", () => {
+describe("Objects panel selection range", () => {
   const rows = buildOutlineRows(design(), new Set(["group"]));
 
   it("takes the top-level shapes between the two rows, in list order", () => {
@@ -134,7 +134,7 @@ describe("shape list selection range", () => {
   });
 });
 
-describe("renaming from the shape list", () => {
+describe("renaming from the Objects panel", () => {
   it("renames a top-level shape and keeps the other shapes as they are", () => {
     const shapes = design();
     const next = renameShapeInTree(shapes, "box", "Base")!;

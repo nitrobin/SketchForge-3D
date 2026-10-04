@@ -2,7 +2,7 @@ import type { Translator } from "@/i18n";
 import { shapeDisplayName } from "@/lib/shapeDisplayNames";
 import type { ShapeKind, WorkplaneShape } from "@/types/sketchforge";
 
-/** What a row in the shape list shows the object as: its primitive kind, or how it was made. */
+/** What a row in the Objects panel shows the object as: its primitive kind, or how it was made. */
 export type OutlineItemType = ShapeKind | "group" | "intersection" | "sketchExtrusion" | "sketchRevolve" | "image" | "imported";
 
 export function outlineItemType(shape: WorkplaneShape): OutlineItemType {

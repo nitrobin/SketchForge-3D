@@ -370,7 +370,7 @@ Read [.github/CONTRIBUTING.md](.github/CONTRIBUTING.md) before opening a pull re
 
 ### Translations
 
-The interface is localizable: the language follows the system and can be changed in Settings. To add a language, follow [docs/TRANSLATIONS.md](docs/TRANSLATIONS.md).
+The interface is available in English, Čeština, Deutsch, Español, Français, Polski, Português (Brasil) and Русский; the language follows the system and can be changed in Settings. To add a language, follow [docs/TRANSLATIONS.md](docs/TRANSLATIONS.md).
 
 ## Security
 

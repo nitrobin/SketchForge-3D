@@ -19,6 +19,8 @@ describe("desktop main-process i18n", () => {
     const i18n = createDesktopI18n();
     expect(i18n.resolveLocale(["ru-RU", "en-US"])).toBe("ru");
     expect(i18n.resolveLocale(["ja-JP"])).toBe("en");
+    expect(i18n.resolveLocale(["pt-BR"])).toBe("pt");
+    expect(i18n.resolveLocale(["cs-CZ", "en"])).toBe("cs");
     expect(i18n.setLocale("ru")).toBe(true);
     expect(i18n.t("desktop.tray.quit")).toBe(ruDesktop["desktop.tray.quit"]);
     expect(i18n.t("desktop.updates.available", { version: "2.0.0" })).toContain("2.0.0");

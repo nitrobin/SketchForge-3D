@@ -2,7 +2,9 @@
 
 import { ArrowDown, ArrowUp } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useT, type MessageKey } from "@/i18n";
+import { useT, type MessageKey, type MessageParams, type Translator } from "@/i18n";
+import { snapGridLabel } from "@/lib/measurementUnits";
+import type { GridSize } from "@/types/sketchforge";
 
 /** A control a tutorial step points at: framed, and labelled when `labelKey` is set. */
 export type TutorialTarget = {
@@ -27,6 +29,20 @@ export const TUTORIAL_TARGETS = {
 } as const satisfies Record<string, TutorialTarget>;
 
 type Mark = { key: string; left: number; top: number; above: boolean; labelKey: MessageKey };
+
+type StepValues = {
+  snapGrid?: GridSize;
+  dimensions?: readonly { labelKey: MessageKey; millimeters: number }[];
+};
+
+/** Values the labels show ({snapGrid}, {elevation}), taken from the step so label and step data agree. */
+export function tutorialCoachParams(t: Translator, step: StepValues): MessageParams {
+  const elevation = step.dimensions?.find((dimension) => dimension.labelKey === "panels.tutorial.elevation");
+  return {
+    snapGrid: step.snapGrid ? snapGridLabel(t, step.snapGrid) : "",
+    elevation: elevation ? String(elevation.millimeters) : "",
+  };
+}
 
 const LABEL_GAP = 42;
 const LABEL_HEIGHT = 48;
@@ -57,7 +73,7 @@ function unframe(element: HTMLElement) {
  * animation frame because some appear only later (align dots, the lift arrow of a selected shape)
  * or move with the camera; state changes only when a frame or label moves.
  */
-export function TutorialCoachmarks({ targets }: { targets: readonly TutorialTarget[] }) {
+export function TutorialCoachmarks({ targets, params }: { targets: readonly TutorialTarget[]; params?: MessageParams }) {
   const t = useT();
   const [marks, setMarks] = useState<Mark[]>([]);
 
@@ -105,7 +121,7 @@ export function TutorialCoachmarks({ targets }: { targets: readonly TutorialTarg
       {marks.map((mark) => (
         <div key={mark.key} className={`tutorial-coachmark${mark.above ? " above" : ""}`} style={{ left: mark.left, top: mark.top }} role="status">
           {mark.above ? <ArrowDown size={30} strokeWidth={3} aria-hidden="true" /> : <ArrowUp size={30} strokeWidth={3} aria-hidden="true" />}
-          <strong>{t(mark.labelKey)}</strong>
+          <strong>{t(mark.labelKey, params)}</strong>
         </div>
       ))}
     </>

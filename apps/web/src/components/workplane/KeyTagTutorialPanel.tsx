@@ -4,7 +4,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useState } from "react";
 import { useT, type MessageKey } from "@/i18n";
 import { snapGridLabel } from "@/lib/measurementUnits";
-import { TUTORIAL_TARGETS, TutorialCoachmarks, type TutorialTarget } from "@/components/workplane/TutorialCoachmarks";
+import { TUTORIAL_TARGETS, TutorialCoachmarks, tutorialCoachParams, type TutorialTarget } from "@/components/workplane/TutorialCoachmarks";
 import type { GridSize } from "@/types/sketchforge";
 
 const KEY_TAG_STEP_STORAGE_KEY = "sketchforge:key-tag-tutorial-step";
@@ -156,7 +156,7 @@ export function KeyTagTutorialPanel({
 
   return (
     <>
-    {step.targets ? <TutorialCoachmarks targets={step.targets} /> : null}
+    {step.targets ? <TutorialCoachmarks targets={step.targets} params={tutorialCoachParams(t, step)} /> : null}
     <aside
       className="key-tag-tutorial-panel"
       aria-label={t("panels.keyTag.ariaLabel")}

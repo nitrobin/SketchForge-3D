@@ -1,10 +1,17 @@
 import en from "./locales/en";
-import ru from "./locales/ru";
 import type { MessageValue } from "./format";
 
 /** English is the source catalog: every key must exist here, other locales fall back to it. */
 export type MessageKey = keyof typeof en & string;
 export type MessageCatalog = Partial<Record<MessageKey, MessageValue>>;
+
+type LocaleDefinition = {
+  code: string;
+  nativeName: string;
+  complete: boolean;
+  /** English is built in; every other language is a separate file the browser fetches when it is chosen. */
+  load: () => Promise<{ default: MessageCatalog }>;
+};
 
 /**
  * To add a language: copy locales/en to locales/<code>, translate the JSON files and register it here.
@@ -12,21 +19,44 @@ export type MessageCatalog = Partial<Record<MessageKey, MessageValue>>;
  * reports them as a todo. With `complete: true` a missing string fails the test.
  */
 export const LOCALES = [
-  { code: "en", nativeName: "English", messages: en, complete: true },
-  { code: "ru", nativeName: "Русский", messages: ru, complete: true },
-] as const satisfies readonly { code: string; nativeName: string; messages: MessageCatalog; complete: boolean }[];
+  { code: "en", nativeName: "English", complete: true, load: async () => ({ default: en }) },
+  { code: "ru", nativeName: "Русский", complete: true, load: () => import("./locales/ru") },
+] as const satisfies readonly LocaleDefinition[];
 
 export type Locale = (typeof LOCALES)[number]["code"];
 
 export const DEFAULT_LOCALE: Locale = "en";
 export const SOURCE_MESSAGES: Record<MessageKey, MessageValue> = en;
 
-const catalogsByLocale = new Map<string, MessageCatalog>(LOCALES.map((locale) => [locale.code, locale.messages]));
+const loadedCatalogs = new Map<string, MessageCatalog>([[DEFAULT_LOCALE, SOURCE_MESSAGES]]);
+const pendingLoads = new Map<string, Promise<MessageCatalog>>();
 
 export function isLocale(value: unknown): value is Locale {
-  return typeof value === "string" && catalogsByLocale.has(value);
+  return typeof value === "string" && LOCALES.some((locale) => locale.code === value);
 }
 
+export function isLocaleCatalogLoaded(locale: Locale): boolean {
+  return loadedCatalogs.has(locale);
+}
+
+/** Fetches a language's catalog once; a failed fetch is tried again on the next call. */
+export function loadLocaleCatalog(locale: Locale): Promise<MessageCatalog> {
+  const loaded = loadedCatalogs.get(locale);
+  if (loaded) return Promise.resolve(loaded);
+  const pending = pendingLoads.get(locale);
+  if (pending) return pending;
+  const definition = LOCALES.find((entry) => entry.code === locale) ?? LOCALES[0];
+  const request = definition.load()
+    .then(({ default: catalog }) => {
+      loadedCatalogs.set(locale, catalog);
+      return catalog;
+    })
+    .finally(() => pendingLoads.delete(locale));
+  pendingLoads.set(locale, request);
+  return request;
+}
+
+/** The catalog of a loaded language; English until it has loaded. */
 export function localeCatalog(locale: Locale): MessageCatalog {
-  return catalogsByLocale.get(locale) ?? SOURCE_MESSAGES;
+  return loadedCatalogs.get(locale) ?? SOURCE_MESSAGES;
 }

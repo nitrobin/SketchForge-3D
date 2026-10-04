@@ -37,6 +37,7 @@ No login. No server project storage. No heavyweight CAD install just to make a u
 
 - **Local-first projects** - designs live in browser storage with generated project thumbnails.
 - **Real 3D workplane** - grid, camera controls, snap settings, transform handles, outlines, and inspector controls.
+- **Shape list** - every shape of the design as a tree, with the parts of each group and the hidden and locked shapes: select, rename, hide, lock, search by name or type, right-click commands, and zoom to the selection.
 - **Primitive shape library** - boxes, cylinders, spheres, cones, pyramids, wedges, text, roofs, half spheres, torus shapes, tubes, and more.
 - **Solid and hole workflow** - turn shapes into cutters and group them into final geometry.
 - **Boolean Intersection** - keep only the geometry where selected solid and hole shapes overlap.
@@ -49,6 +50,12 @@ No login. No server project storage. No heavyweight CAD install just to make a u
 ### Camera projection shortcut
 
 Press **O** in the editor to switch between perspective and orthographic projection. The current view direction and framing are preserved when switching.
+
+### Shape list
+
+The list button in the toolbar's **Visibility** section opens the shape list on the left; it stays open in later sessions until closed. Click a row to select the shape, Ctrl/Cmd+click to add or remove it, Shift+click to select a range; double-click or **F2** renames it. Pointing at a row outlines the shape in the 3D view, also a hidden one or one inside another shape. Clicking with the mouse leaves the arrow keys to move the shape.
+
+From the keyboard (Tab into the list): **↑/↓** select, **Shift+↑/↓** extend the selection, **Ctrl/Cmd+↑/↓** and **Ctrl/Cmd+Space** move and pick without replacing the selection, **←/→** close and open a group, **Shift+F10** opens the menu. Delete, Ctrl/Cmd+D, Ctrl/Cmd+H and the other editor shortcuts act on the selection as usual.
 
 ## Demo
 

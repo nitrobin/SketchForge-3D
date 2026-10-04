@@ -688,7 +688,10 @@
       "hideControlsLabel": "Ocultar os controles da câmera",
       "home": "Vista inicial",
       "zoomIn": "Aproximar",
-      "zoomOut": "Afastar"
+      "zoomOut": "Afastar",
+      "orthographic": "Vista ortográfica",
+      "toOrthographic": "Alternar para vista ortográfica",
+      "toPerspective": "Alternar para vista em perspectiva"
     },
     "workplane": {
       "label": "Plano de trabalho",

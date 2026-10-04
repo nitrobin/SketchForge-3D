@@ -688,7 +688,10 @@
       "hideControlsLabel": "Kamerasteuerung ausblenden",
       "home": "Startansicht",
       "zoomIn": "Hineinzoomen",
-      "zoomOut": "Herauszoomen"
+      "zoomOut": "Herauszoomen",
+      "orthographic": "Orthogonale Ansicht",
+      "toOrthographic": "Zur orthogonalen Ansicht wechseln",
+      "toPerspective": "Zur perspektivischen Ansicht wechseln"
     },
     "workplane": {
       "label": "Arbeitsebene",

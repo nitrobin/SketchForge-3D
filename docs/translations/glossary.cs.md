@@ -99,6 +99,7 @@ Binding for the Czech catalogs. General rules and audience: [../TRANSLATIONS.md]
 | views | pohled shora / zdola / zepředu / zezadu / zprava / zleva | technical drawing (ČSN 01 3121) |
 | view cube faces | SHORA / ZDOLA / ZEPŘEDU / ZEZADU / ZPRAVA / ZLEVA | same words as the views |
 | home view (camera) | výchozí pohled | |
+| orthographic / perspective view | ortogonální / perspektivní pohled | as Fusion |
 | preview | náhled | PrusaSlicer |
 | thumbnail / snapshot (project card) | obrázek projektu | „náhled“ is preview |
 | wireframe | drátěný model | PrusaSlicer |

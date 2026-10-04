@@ -88,6 +88,7 @@ Binding for the Polish catalogs. General rules and audience: [../TRANSLATIONS.md
 | show / hide | pokaż / ukryj | „pokaż” only for unhiding |
 | rename | zmień nazwę | |
 | home view (camera) | widok początkowy | „widok główny” is the front view in technical drawing |
+| orthographic / perspective view | widok ortogonalny / widok perspektywiczny | as Fusion |
 | view cube faces | GÓRA, DÓŁ, PRZÓD, TYŁ, LEWO, PRAWO | Inventor PL ViewCube |
 | top / front / left view | widok z góry / z przodu / z lewej | |
 | wireframe | szkielet | AutoCAD PL |

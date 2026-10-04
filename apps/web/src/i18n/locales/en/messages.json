@@ -688,7 +688,10 @@
       "hideControlsLabel": "Hide camera controls",
       "home": "Home",
       "zoomIn": "Zoom in",
-      "zoomOut": "Zoom out"
+      "zoomOut": "Zoom out",
+      "orthographic": "Orthographic view",
+      "toOrthographic": "Switch to orthographic view",
+      "toPerspective": "Switch to perspective view"
     },
     "workplane": {
       "label": "Workplane",

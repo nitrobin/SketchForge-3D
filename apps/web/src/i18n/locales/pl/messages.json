@@ -688,7 +688,10 @@
       "hideControlsLabel": "Ukryj sterowanie kamerą",
       "home": "Widok początkowy",
       "zoomIn": "Przybliż",
-      "zoomOut": "Oddal"
+      "zoomOut": "Oddal",
+      "orthographic": "Widok ortogonalny",
+      "toOrthographic": "Przełącz na widok ortogonalny",
+      "toPerspective": "Przełącz na widok perspektywiczny"
     },
     "workplane": {
       "label": "Płaszczyzna robocza",

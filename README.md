@@ -47,9 +47,9 @@ No login. No server project storage. No heavyweight CAD install just to make a u
 - **STL, OBJ, and STEP workflows** - export selected objects or the whole scene, and round-trip exact STEP/B-Rep geometry.
 - **Fast browser stack** - Next.js, React, TypeScript, Three.js, and Manifold/CSG geometry tooling.
 
-### Camera projection shortcut
+### Camera projection
 
-Press **O** in the editor to switch between perspective and orthographic projection. The current view direction and framing are preserved when switching.
+Press **O**, or the cube button in the camera controls on the left, to switch between perspective and orthographic projection. The cube shows the current projection, and the button stays highlighted while the view is orthographic. The current view direction and framing are preserved when switching.
 
 ### Objects panel
 

@@ -688,7 +688,10 @@
       "hideControlsLabel": "Skrýt ovládání kamery",
       "home": "Výchozí pohled",
       "zoomIn": "Přiblížit",
-      "zoomOut": "Oddálit"
+      "zoomOut": "Oddálit",
+      "orthographic": "Ortogonální pohled",
+      "toOrthographic": "Přepnout na ortogonální pohled",
+      "toPerspective": "Přepnout na perspektivní pohled"
     },
     "workplane": {
       "label": "Pracovní rovina",

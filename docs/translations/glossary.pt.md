@@ -91,6 +91,7 @@ desktop app only supports plain language codes. General rules and audience:
 | fit / zoom to fit | enquadrar tudo | not “mostrar”: it means unhide here |
 | rename | renomear | |
 | home view (camera) | vista inicial | |
+| orthographic / perspective view | vista ortográfica / vista em perspectiva | as Fusion |
 | views / view cube faces | vista superior / inferior / frontal / traseira / lateral direita / lateral esquerda; faces SUP. / INF. / FRONTAL / TRAS. / DIREITA / ESQ. | NBR 10067 says “posterior”; “traseira” because POSTERIOR does not fit on the cube face. Faces are shortened where the word does not fit the 54 px inside a face at 10 px; tooltips and screen readers get the full view names |
 | wireframe | aramado | |
 | units | unidades | |

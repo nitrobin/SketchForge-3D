@@ -688,7 +688,10 @@
       "hideControlsLabel": "Masquer les commandes de la caméra",
       "home": "Vue initiale",
       "zoomIn": "Zoom avant",
-      "zoomOut": "Zoom arrière"
+      "zoomOut": "Zoom arrière",
+      "orthographic": "Vue orthographique",
+      "toOrthographic": "Passer en vue orthographique",
+      "toPerspective": "Passer en vue en perspective"
     },
     "workplane": {
       "label": "Plan de travail",

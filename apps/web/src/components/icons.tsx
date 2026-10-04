@@ -122,6 +122,48 @@ export function ToolbarCaretDownIcon(props: IconProps) {
   );
 }
 
+type LineIconProps = IconProps & { size?: number };
+
+/** Drawn on lucide's 24-unit grid with round joins, so these sit with the lucide icons of the camera controls. */
+function LineIcon({ size = 24, strokeWidth = 2, children, ...props }: LineIconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" {...props}>
+      {children}
+    </svg>
+  );
+}
+
+/** A cube whose receding edges converge: the view is in perspective. */
+export function PerspectiveViewIcon(props: LineIconProps) {
+  return (
+    <LineIcon {...props}>
+      <path d="M2 8h14v14H2Z" />
+      <path d="M2 8l9-6h9v9l-4 11M16 8l4-6" />
+    </LineIcon>
+  );
+}
+
+/** A cube whose receding edges stay parallel: the view is orthographic. */
+export function OrthographicViewIcon(props: LineIconProps) {
+  return (
+    <LineIcon {...props}>
+      <path d="M2 9h13v13H2Z" />
+      <path d="M2 9l7-7h13v13l-7 7M15 9l7-7" />
+    </LineIcon>
+  );
+}
+
+/** A grid plane at an angle with its normal, as the workplane preview looks in the 3D view. */
+export function PlaceWorkplaneIcon(props: LineIconProps) {
+  return (
+    <LineIcon {...props}>
+      <path d="M2 16.2 12 21l10-4.8L12 11.4Z" />
+      <path d="M7 13.8 17 18.6M7 18.6 17 13.8" />
+      <path d="M12 16.2V3M8.6 6.4 12 3l3.4 3.4" />
+    </LineIcon>
+  );
+}
+
 export function ToolbarShapeListIcon(props: IconProps) {
   return (
     <svg viewBox="0 0 48 48" aria-hidden="true" {...props}>

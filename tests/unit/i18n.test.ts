@@ -6,9 +6,9 @@ import { LocalizedError, errorFromPayload, localizedErrorPayload, type ErrorKey 
 import { LOCALES, SOURCE_MESSAGES, localeCatalog, type MessageKey } from "@/i18n/locales";
 import { normalizeLanguagePreference, readStoredLanguagePreference, resolveLocale, LANGUAGE_STORAGE_KEY } from "@/i18n/store";
 import { createTranslator, errorText, renderRichTemplate } from "@/i18n/translator";
-import enErrors from "@/i18n/locales/en/errors.json";
 
 const sourceKeys = Object.keys(SOURCE_MESSAGES).sort();
+const firstErrorKey = sourceKeys.find((key): key is ErrorKey => key.startsWith("errors."));
 const sourceKeySet = new Set(sourceKeys);
 const untranslatedKeys = (catalog: Partial<Record<string, MessageValue>>) => sourceKeys.filter((key) => catalog[key] === undefined);
 
@@ -144,7 +144,7 @@ describe("translator", () => {
   });
 
   it("renders localized errors in the UI language and keeps foreign messages", () => {
-    const errorKey = Object.keys(enErrors)[0] as ErrorKey | undefined;
+    const errorKey = firstErrorKey;
     const ru = createTranslator("ru");
     if (errorKey) expect(errorText(ru, new LocalizedError(errorKey), "common.language.label")).toBe(ru(errorKey));
     expect(errorText(ru, new Error("socket hang up"), "common.language.label")).toBe("socket hang up");
@@ -154,7 +154,7 @@ describe("translator", () => {
 
 describe("LocalizedError", () => {
   it("keeps an English message and survives a worker round trip", () => {
-    const errorKey = Object.keys(enErrors)[0] as ErrorKey | undefined;
+    const errorKey = firstErrorKey;
     if (!errorKey) return;
     const error = new LocalizedError(errorKey);
     expect(error.message).toBe(createTranslator("en")(errorKey));

@@ -12,8 +12,9 @@ dashboard or in the editor's Appearance settings. The choice is stored per brows
 1. Copy `apps/web/src/i18n/locales/en/` to `apps/web/src/i18n/locales/<code>/` (`<code>` is a two- or three-letter
    ISO 639 code, for example `de`).
 2. Write the language guide `docs/translations/glossary.<code>.md`: the glossary (start from the English column of an
-   existing guide), the typography and the form of address. Then translate every value in the JSON files following the
-   guide and the requirements below. Keep keys and `{placeholders}` unchanged.
+   existing guide), the typography and the form of address. Then translate every value in `messages.json` (the web
+   app) and `desktop.json` (the desktop tray menu and update dialogs) following the guide and the requirements below.
+   Keep keys and `{placeholders}` unchanged.
 3. Register it in `apps/web/src/i18n/locales.ts`:
 
    ```ts
@@ -62,7 +63,9 @@ terms, with the surrounding text saying what they do.
 
 ## Catalog format
 
-- One flat key per message, prefixed by its namespace file: `dashboard.settings.saveMethod` lives in `dashboard.json`.
+- Two files per language: `messages.json` for the web app and `desktop.json`, which the desktop app's main process
+  reads on its own. One flat key per message, prefixed by the part of the interface it belongs to (`dashboard.`,
+  `editor.`, `panels.`, `errors.`…), so related messages stay together in the file.
 - `{name}` is replaced by a parameter.
 - Plurals are objects keyed by [CLDR plural category](https://cldr.unicode.org/index/cldr-spec/plural-rules), chosen by
   the `count` parameter. Each language lists the categories it needs (English `one`/`other`; others may add `zero`,

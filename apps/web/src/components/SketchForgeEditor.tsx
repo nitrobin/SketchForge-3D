@@ -8681,7 +8681,7 @@ export function SketchForgeEditor({
       const exportedNotice = result.mode === "folder"
         ? t("editor.export.stepSaved", { count: exportedCount, path: result.path })
         : t("editor.export.stepExported", { count: exportedCount });
-      setNotice(skipped.length > 0 ? `${exportedNotice}; ${t("editor.export.stepSkipped", { count: skipped.length })}` : exportedNotice);
+      setNotice(skipped.length > 0 ? t("editor.notice.withDetail", { message: exportedNotice, detail: t("editor.export.stepSkipped", { count: skipped.length }) }) : exportedNotice);
     } catch (error: unknown) {
       setNotice(errorText(t, error, "editor.export.failed", { format: "STEP" }));
     } finally {
@@ -10055,7 +10055,12 @@ function SecondaryToolbar({
               <div className="visibility-dropdown-help">
                 <span>{t("editor.toolbar.visibilityHelpSelected")}</span>
                 <span aria-hidden="true">·</span>
-                <span><kbd>Ctrl/Cmd</kbd> + <kbd>Shift</kbd> + <kbd>H</kbd>: {t("editor.toolbar.visibilityHelpAll")}</span>
+                <span>
+                  {t.rich("editor.toolbar.visibilityHelpShortcut", {
+                    keys: <><kbd>Ctrl/Cmd</kbd> + <kbd>Shift</kbd> + <kbd>H</kbd></>,
+                    action: t("editor.toolbar.visibilityHelpAll"),
+                  })}
+                </span>
               </div>
             </div>
           ) : null}

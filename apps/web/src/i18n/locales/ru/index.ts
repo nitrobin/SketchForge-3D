@@ -1,17 +1,5 @@
-import common from "./common.json";
-import dashboard from "./dashboard.json";
 import desktop from "./desktop.json";
-import editor from "./editor.json";
-import errors from "./errors.json";
-import panels from "./panels.json";
-import workspace from "./workspace.json";
+import messages from "./messages.json";
 
-export default {
-  ...common,
-  ...dashboard,
-  ...editor,
-  ...workspace,
-  ...panels,
-  ...errors,
-  ...desktop,
-};
+/** Everything in the web app is in messages.json; the desktop app's main process reads desktop.json on its own. */
+export default { ...messages, ...desktop };

@@ -56,7 +56,7 @@ export function createKeyFinder(catalogs, localesDir, repoRoot) {
     }
     return indexes.get(lang);
   };
-  const fileFor = (lang, key) => path.relative(repoRoot, path.join(localesDir, lang, `${key.split(".")[0]}.json`));
+  const fileFor = (lang, key) => path.relative(repoRoot, path.join(localesDir, lang, key.startsWith("desktop.") ? "desktop.json" : "messages.json"));
 
   return (lang, text, limit = 3) => {
     const { exact, patterns } = indexFor(lang);

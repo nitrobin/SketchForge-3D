@@ -1,6 +1,6 @@
 import { useCallback, useSyncExternalStore } from "react";
 import type { MessageParams } from "./format";
-import { DEFAULT_LOCALE, LOCALES, isLocale, type Locale, type MessageKey } from "./locales";
+import { DEFAULT_LOCALE, LOCALES, isLocale, isLocaleCatalogLoaded, loadLocaleCatalog, type Locale, type MessageKey } from "./locales";
 import { createTranslator, type Translator } from "./translator";
 
 export const LANGUAGE_STORAGE_KEY = "sketchForge.language";
@@ -52,6 +52,7 @@ type LanguageState = { preference: LanguagePreference; locale: Locale };
 const SERVER_STATE: LanguageState = { preference: "system", locale: DEFAULT_LOCALE };
 let state: LanguageState = SERVER_STATE;
 let systemLanguageListenerAttached = false;
+let languageRequest = 0;
 const listeners = new Set<() => void>();
 
 function systemLanguages(): readonly string[] {
@@ -59,8 +60,7 @@ function systemLanguages(): readonly string[] {
   return navigator.languages?.length ? navigator.languages : [navigator.language];
 }
 
-function applyLanguage(preference: LanguagePreference) {
-  const locale = resolveLocale(preference, systemLanguages());
+function commitLanguage(preference: LanguagePreference, locale: Locale) {
   if (state.preference === preference && state.locale === locale) return;
   const localeChanged = state.locale !== locale;
   state = { preference, locale };
@@ -69,6 +69,40 @@ function applyLanguage(preference: LanguagePreference) {
     if (typeof window !== "undefined") window.sketchforgeDesktop?.setLanguage(locale);
   }
   listeners.forEach((listener) => listener());
+}
+
+/**
+ * Switches once the language's catalog is loaded. Until then the interface stays in the current language
+ * (not English keys or half-translated screens) and the language menu already shows the new choice.
+ */
+function applyLanguage(preference: LanguagePreference) {
+  const locale = resolveLocale(preference, systemLanguages());
+  const request = ++languageRequest;
+  if (isLocaleCatalogLoaded(locale)) {
+    commitLanguage(preference, locale);
+    return;
+  }
+  commitLanguage(preference, state.locale);
+  loadLocaleCatalog(locale).then(
+    () => {
+      // A later choice wins over a slower earlier download.
+      if (request === languageRequest) commitLanguage(preference, locale);
+    },
+    (error: unknown) => console.warn(`The ${locale} interface language could not be loaded; it is tried again on the next start.`, error),
+  );
+}
+
+function storedPreferenceOrSystem(): LanguagePreference {
+  try {
+    return readStoredLanguagePreference(window.localStorage);
+  } catch {
+    return "system";
+  }
+}
+
+// Start fetching the stored or system language while the page script loads, before the first render asks for it.
+if (typeof window !== "undefined") {
+  loadLocaleCatalog(resolveLocale(storedPreferenceOrSystem(), systemLanguages())).catch(() => undefined);
 }
 
 /** Reads the stored preference. Call once on the client before the first translated render. */
@@ -80,9 +114,10 @@ export function initLanguage() {
       if (state.preference === "system") applyLanguage("system");
     });
   }
-  applyLanguage(readStoredLanguagePreference(window.localStorage));
-  // Main process starts with the OS language; tell it the resolved one even when it did not change.
-  window.sketchforgeDesktop?.setLanguage(state.locale);
+  applyLanguage(storedPreferenceOrSystem());
+  // Main process starts with the OS language; tell it the chosen one even when it did not change.
+  // It reads its own catalog, so it need not wait for this page's download.
+  window.sketchforgeDesktop?.setLanguage(resolveLocale(state.preference, systemLanguages()));
 }
 
 export function setLanguagePreference(preference: LanguagePreference) {
@@ -92,6 +127,11 @@ export function setLanguagePreference(preference: LanguagePreference) {
 
 export function getLocale(): Locale {
   return state.locale;
+}
+
+/** The language chosen in the menu; it can be ahead of `getLocale()` while that language downloads. */
+export function getLanguagePreference(): LanguagePreference {
+  return state.preference;
 }
 
 /**

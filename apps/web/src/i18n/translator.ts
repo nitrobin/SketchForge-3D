@@ -1,7 +1,7 @@
 import { Fragment, createElement, type ReactNode } from "react";
 import { formatMessage, interpolateMessage, selectMessageTemplate, type MessageParams } from "./format";
 import { LocalizedError } from "./LocalizedError";
-import { SOURCE_MESSAGES, localeCatalog, type Locale, type MessageKey } from "./locales";
+import { SOURCE_MESSAGES, isLocaleCatalogLoaded, localeCatalog, type Locale, type MessageKey } from "./locales";
 
 export type RichParams = Record<string, string | number | ReactNode | ((chunks: ReactNode) => ReactNode)>;
 
@@ -48,9 +48,9 @@ export function renderRichTemplate(template: string, params: RichParams): ReactN
 export function createTranslator(locale: Locale): Translator {
   const cached = translatorsByLocale.get(locale);
   if (cached) return cached;
-  const catalog = localeCatalog(locale);
+  // Read at call time: a translator made before its language finished loading starts translating once it has.
   const lookup = (key: MessageKey) => {
-    const localized = catalog[key];
+    const localized = isLocaleCatalogLoaded(locale) ? localeCatalog(locale)[key] : undefined;
     return localized !== undefined ? { value: localized, locale } : { value: SOURCE_MESSAGES[key], locale: "en" };
   };
   const translate = ((key: MessageKey, params?: MessageParams) => {

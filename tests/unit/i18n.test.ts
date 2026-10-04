@@ -1,6 +1,6 @@
 import { createElement, type ReactNode } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { formatMessage, messagePlaceholders, type MessageValue } from "@/i18n/format";
 import { LocalizedError, errorFromPayload, localizedErrorPayload, type ErrorKey } from "@/i18n/LocalizedError";
 import { LOCALES, SOURCE_MESSAGES, localeCatalog, type MessageKey } from "@/i18n/locales";
@@ -52,7 +52,7 @@ describe("language preference", () => {
   });
 });
 
-describe.each(LOCALES.map((locale) => [locale.code, locale.messages, locale.complete] as const))("%s catalog", (code, messages, complete) => {
+describe.each(LOCALES.map((locale) => [locale.code, localeCatalog(locale.code), locale.complete] as const))("%s catalog", (code, messages, complete) => {
   const catalog: Partial<Record<string, MessageValue>> = messages;
   const pluralCategories = new Intl.PluralRules(code).resolvedOptions().pluralCategories;
 
@@ -133,6 +133,22 @@ describe("missing translations", () => {
       ru[key] = translated;
     }
     expect(createTranslator("ru")(key)).toBe("Язык");
+  });
+});
+
+describe("languages loaded on demand", () => {
+  it("translate with a translator made before the language loaded, once it has", async () => {
+    vi.resetModules();
+    const fresh = await import("@/i18n/translator");
+    const locales = await import("@/i18n/locales");
+    expect(locales.isLocaleCatalogLoaded("ru")).toBe(false);
+    const ru = fresh.createTranslator("ru");
+    // English text with English plural rules until Russian arrives, never a key.
+    expect(ru("common.language.label")).toBe("Language");
+    expect(ru("panels.outline.count", { count: 3 })).toBe("3 objects");
+    await locales.loadLocaleCatalog("ru");
+    expect(ru("common.language.label")).toBe("Язык");
+    expect(ru("panels.outline.count", { count: 3 })).toBe("3 объекта");
   });
 });
 

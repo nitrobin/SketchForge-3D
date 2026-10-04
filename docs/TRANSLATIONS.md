@@ -18,10 +18,11 @@ dashboard or in the editor's Appearance settings. The choice is stored per brows
 3. Register it in `apps/web/src/i18n/locales.ts`:
 
    ```ts
-   import de from "./locales/de";
-   // …
-   { code: "de", nativeName: "Deutsch", messages: de, complete: false },
+   { code: "de", nativeName: "Deutsch", complete: false, load: () => import("./locales/de") },
    ```
+
+   Every language except English is a separate file the browser downloads only when that language is chosen, so a
+   new language does not make the app larger for everyone else. English stays built in as the fallback.
 
    While `complete: false`, strings that are not translated yet show in English and `npm test` counts them as one
    todo instead of failing. Set `complete: true` when the language is done: from then on a missing string fails.

@@ -63,9 +63,10 @@ describe("language store", () => {
     const browser = installBrowser(["ru-RU", "en-US"]);
     const store = await loadStore();
     store.initLanguage();
-    expect(store.getLocale()).toBe("ru");
-    expect(browser.document.documentElement.lang).toBe("ru");
+    // The desktop main process is told at once; the page switches when the Russian catalog has loaded.
     expect(browser.setLanguage).toHaveBeenLastCalledWith("ru");
+    await vi.waitFor(() => expect(store.getLocale()).toBe("ru"));
+    expect(browser.document.documentElement.lang).toBe("ru");
     expect(store.translate("common.language.label")).toBe("Язык");
   });
 
@@ -84,7 +85,7 @@ describe("language store", () => {
     store.initLanguage();
     store.setLanguagePreference("ru");
     expect(browser.storage.get(LANGUAGE_STORAGE_KEY)).toBe("ru");
-    expect(store.getLocale()).toBe("ru");
+    await vi.waitFor(() => expect(store.getLocale()).toBe("ru"));
     expect(browser.document.documentElement.lang).toBe("ru");
     expect(browser.setLanguage).toHaveBeenLastCalledWith("ru");
     store.setLanguagePreference("system");
@@ -98,11 +99,48 @@ describe("language store", () => {
     store.initLanguage();
     browser.navigator.languages = ["ru-RU"];
     browser.fireLanguageChange();
-    expect(store.getLocale()).toBe("ru");
+    await vi.waitFor(() => expect(store.getLocale()).toBe("ru"));
 
     store.setLanguagePreference("en");
     browser.navigator.languages = ["ru-RU"];
     browser.fireLanguageChange();
+    expect(store.getLocale()).toBe("en");
+  });
+
+  it("keeps the current language until the chosen one has loaded", async () => {
+    installBrowser(["en-US"]);
+    const store = await loadStore();
+    const locales = await import("@/i18n/locales");
+    store.initLanguage();
+    expect(locales.isLocaleCatalogLoaded("ru")).toBe(false);
+    store.setLanguagePreference("ru");
+    // The menu shows the choice at once; the text stays English, not keys, while Russian downloads.
+    expect(store.getLanguagePreference()).toBe("ru");
+    expect(store.getLocale()).toBe("en");
+    expect(store.translate("common.language.label")).toBe("Language");
+    await vi.waitFor(() => expect(store.getLocale()).toBe("ru"));
+    expect(store.translate("common.language.label")).toBe("Язык");
+  });
+
+  it("lets a later choice win over a slower download", async () => {
+    installBrowser(["en-US"]);
+    const store = await loadStore();
+    store.initLanguage();
+    store.setLanguagePreference("ru");
+    store.setLanguagePreference("en");
+    const locales = await import("@/i18n/locales");
+    await locales.loadLocaleCatalog("ru");
+    await Promise.resolve();
+    expect(store.getLocale()).toBe("en");
+    expect(store.getLanguagePreference()).toBe("en");
+  });
+
+  it("starts downloading the stored language as soon as the page script runs", async () => {
+    installBrowser(["en-US"], "ru");
+    const store = await loadStore();
+    const locales = await import("@/i18n/locales");
+    // Without initLanguage(): loading started when the module ran.
+    await vi.waitFor(() => expect(locales.isLocaleCatalogLoaded("ru")).toBe(true));
     expect(store.getLocale()).toBe("en");
   });
 

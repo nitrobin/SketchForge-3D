@@ -225,6 +225,8 @@ async function main() {
           try {
             await page.goto(baseUrl);
             await page.locator(".dashboard-settings-button").waitFor();
+            // Languages other than English are downloaded after the page starts; <html lang> changes once one is shown.
+            await page.waitForFunction((code) => document.documentElement.lang === code, lang);
             await chapter.run(ui);
           } catch (error) {
             // Playwright puts the step it was waiting for on the following lines.

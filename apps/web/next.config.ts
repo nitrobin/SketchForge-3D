@@ -3,6 +3,7 @@ import path from "node:path";
 
 const isStaticExport = process.env.STATIC_EXPORT === "true";
 const isDockerBuild = process.env.SKETCHFORGE_DOCKER_BUILD === "true";
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 const extraAllowedDevOrigins = (process.env.SKETCHFORGE_ALLOWED_DEV_ORIGINS ?? "")
   .split(",")
   .map((origin) => origin.trim())
@@ -11,6 +12,7 @@ const extraAllowedDevOrigins = (process.env.SKETCHFORGE_ALLOWED_DEV_ORIGINS ?? "
 const nextConfig: NextConfig = {
   outputFileTracingRoot: path.resolve(process.cwd()),
   devIndicators: false,
+  basePath,
   // Keep the live development compiler isolated from `next build`. Sharing
   // `.next` lets a production verification build invalidate chunks used by a
   // running dev server, which also breaks API routes such as project snapshots.

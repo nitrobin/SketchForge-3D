@@ -4,6 +4,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useState } from "react";
 import { useTranslations, type MessageKey } from "@/i18n";
 import { snapGridLabel } from "@/lib/measurementUnits";
+import { publicPath } from "@/lib/publicPath";
 import { TUTORIAL_TARGETS, TutorialCoachmarks, tutorialCoachParams, type TutorialTarget } from "@/components/workplane/TutorialCoachmarks";
 import type { GridSize } from "@/types/sketchforge";
 
@@ -32,7 +33,7 @@ const STEPS: TutorialStep[] = [
     titleKey: "panels.keyTag.intro.title",
     bodyKey: "panels.keyTag.intro.body",
     altKey: "panels.keyTag.intro.alt",
-    image: "/assets/challenges/key-tag/01-finished-target.png",
+    image: publicPath("/assets/challenges/key-tag/01-finished-target.png"),
     targets: [TUTORIAL_TARGETS.snapGrid],
     snapGrid: "0.5 mm",
   },
@@ -40,7 +41,7 @@ const STEPS: TutorialStep[] = [
     titleKey: "panels.keyTag.middle.title",
     bodyKey: "panels.keyTag.middle.body",
     altKey: "panels.keyTag.middle.alt",
-    image: "/assets/challenges/key-tag/02-middle-box.png",
+    image: publicPath("/assets/challenges/key-tag/02-middle-box.png"),
     targets: [TUTORIAL_TARGETS.shapes],
     dimensions: [
       { labelKey: "panels.property.length", millimeters: 25.5, slider: 38 },
@@ -52,7 +53,7 @@ const STEPS: TutorialStep[] = [
     titleKey: "panels.keyTag.leftEnd.title",
     bodyKey: "panels.keyTag.leftEnd.body",
     altKey: "panels.keyTag.leftEnd.alt",
-    image: "/assets/challenges/key-tag/03-left-round-end.png",
+    image: publicPath("/assets/challenges/key-tag/03-left-round-end.png"),
     targets: [TUTORIAL_TARGETS.shapes],
     dimensions: [
       { labelKey: "panels.property.length", millimeters: 11.5, slider: 20 },
@@ -64,21 +65,21 @@ const STEPS: TutorialStep[] = [
     titleKey: "panels.keyTag.rightEnd.title",
     bodyKey: "panels.keyTag.rightEnd.body",
     altKey: "panels.keyTag.rightEnd.alt",
-    image: "/assets/challenges/key-tag/04-right-round-end.png",
+    image: publicPath("/assets/challenges/key-tag/04-right-round-end.png"),
     targets: [TUTORIAL_TARGETS.duplicate],
   },
   {
     titleKey: "panels.keyTag.lockCircle.title",
     bodyKey: "panels.keyTag.lockCircle.body",
     altKey: "panels.keyTag.lockCircle.alt",
-    image: "/assets/challenges/key-tag/05-select-left-circle.png",
+    image: publicPath("/assets/challenges/key-tag/05-select-left-circle.png"),
     targets: [TUTORIAL_TARGETS.lock],
   },
   {
     titleKey: "panels.keyTag.hole.title",
     bodyKey: "panels.keyTag.hole.body",
     altKey: "panels.keyTag.hole.alt",
-    image: "/assets/challenges/key-tag/06-hole-cylinder.png",
+    image: publicPath("/assets/challenges/key-tag/06-hole-cylinder.png"),
     targets: [TUTORIAL_TARGETS.shapes, TUTORIAL_TARGETS.hole],
     dimensions: [
       { labelKey: "panels.property.length", millimeters: 3, slider: 8 },
@@ -90,21 +91,21 @@ const STEPS: TutorialStep[] = [
     titleKey: "panels.keyTag.alignHole.title",
     bodyKey: "panels.keyTag.alignHole.body",
     altKey: "panels.keyTag.alignHole.alt",
-    image: "/assets/challenges/key-tag/07-align-hole.png",
+    image: publicPath("/assets/challenges/key-tag/07-align-hole.png"),
     targets: [TUTORIAL_TARGETS.align, TUTORIAL_TARGETS.alignMiddleX, TUTORIAL_TARGETS.alignMiddleZ],
   },
   {
     titleKey: "panels.keyTag.unlockCircle.title",
     bodyKey: "panels.keyTag.unlockCircle.body",
     altKey: "panels.keyTag.unlockCircle.alt",
-    image: "/assets/challenges/key-tag/08-unlock-left-circle.png",
+    image: publicPath("/assets/challenges/key-tag/08-unlock-left-circle.png"),
     targets: [TUTORIAL_TARGETS.lock],
   },
   {
     titleKey: "panels.keyTag.group.title",
     bodyKey: "panels.keyTag.group.body",
     altKey: "panels.keyTag.group.alt",
-    image: "/assets/challenges/key-tag/09-grouped-key-tag.png",
+    image: publicPath("/assets/challenges/key-tag/09-grouped-key-tag.png"),
     targets: [TUTORIAL_TARGETS.group],
   },
 ];

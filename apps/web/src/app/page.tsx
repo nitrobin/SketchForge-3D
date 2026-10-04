@@ -37,6 +37,7 @@ import {
 } from "@/lib/placementWorkplane";
 import { attachProjectAsset, dedupeProjectAssets, projectAssetFromBytes, sourceFormatForFileName } from "@/lib/projectAssets";
 import { hydrateProjectShapeState, reconcileLoadedProjectShapeCacheEntry, type ImportedMeshResource } from "@/lib/projectShapePersistence";
+import { publicPath } from "@/lib/publicPath";
 import { exportSkfProject, importSkfProject, SKF_CREATED_WITH_VERSION } from "@/lib/skfProject";
 import { importExtensionSupported } from "@/lib/importExtensions";
 import { DEFAULT_SNAP_GRID, DEFAULT_WORKPLANE_WORKSPACE, normalizeSnapGrid, normalizeWorkspaceSettings, workplaneSettingsFingerprint } from "@/lib/workplaneSettings";
@@ -672,7 +673,7 @@ export default function Home() {
     setActiveProjectId(null);
     setView("dashboard");
     if (typeof window !== "undefined") {
-      window.history.replaceState(null, "", "/");
+      window.history.replaceState(null, "", publicPath("/"));
     }
   }, [activeProjectId, projects]);
 
@@ -774,7 +775,7 @@ export default function Home() {
         setProjects(storedProjects);
         setActiveProjectId(null);
         setView("dashboard");
-        window.history.replaceState(null, "", "/");
+        window.history.replaceState(null, "", publicPath("/"));
         return;
       }
       setProjects(storedProjects.map((project) => (project.id === projectId ? { ...project, updatedAt: Date.now() } : project)));
@@ -805,7 +806,7 @@ export default function Home() {
     setEditorStarted(true);
     setView("editor");
     if (typeof window !== "undefined") {
-      const nextUrl = projectId ? `/?editor=1&project=${encodeURIComponent(projectId)}` : "/?editor=1";
+      const nextUrl = publicPath(projectId ? `/?editor=1&project=${encodeURIComponent(projectId)}` : "/?editor=1");
       window.history.replaceState(null, "", nextUrl);
     }
   };
@@ -1203,7 +1204,7 @@ export default function Home() {
     setEditorLoading(false);
     setView("dashboard");
     if (typeof window !== "undefined") {
-      window.history.replaceState(null, "", "/");
+      window.history.replaceState(null, "", publicPath("/"));
     }
   };
 
@@ -1739,7 +1740,7 @@ function Dashboard({
     <main className="dashboard-shell">
       <header className="dashboard-topbar">
         <a className="dashboard-brand" href="./" aria-label={t("dashboard.topbar.homeLink")}>
-          <img src="/assets/sketchforge/sketchforge-logo-white.png" alt="" />
+          <img src={publicPath("/assets/sketchforge/sketchforge-logo-white.png")} alt="" />
           <span>SketchForge</span>
         </a>
         <div className="dashboard-search">

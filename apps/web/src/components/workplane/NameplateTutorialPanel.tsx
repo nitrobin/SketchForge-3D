@@ -4,6 +4,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useState } from "react";
 import { useTranslations, type MessageKey } from "@/i18n";
 import { snapGridLabel } from "@/lib/measurementUnits";
+import { publicPath } from "@/lib/publicPath";
 import { TUTORIAL_TARGETS, TutorialCoachmarks, tutorialCoachParams, type TutorialTarget } from "@/components/workplane/TutorialCoachmarks";
 import type { GridSize } from "@/types/sketchforge";
 
@@ -33,7 +34,7 @@ const STEPS: TutorialStep[] = [
     titleKey: "panels.nameplate.intro.title",
     bodyKey: "panels.nameplate.intro.body",
     altKey: "panels.nameplate.intro.alt",
-    image: "/assets/challenges/nameplate/01-finished-target.webp",
+    image: publicPath("/assets/challenges/nameplate/01-finished-target.webp"),
     targets: [TUTORIAL_TARGETS.snapGrid],
     snapGrid: "0.5 mm",
   },
@@ -41,7 +42,7 @@ const STEPS: TutorialStep[] = [
     titleKey: "panels.nameplate.base.title",
     bodyKey: "panels.nameplate.base.body",
     altKey: "panels.nameplate.base.alt",
-    image: "/assets/challenges/nameplate/02-base-box.webp",
+    image: publicPath("/assets/challenges/nameplate/02-base-box.webp"),
     targets: [TUTORIAL_TARGETS.shapes],
     dimensions: [
       { labelKey: "panels.property.length", millimeters: 24, slider: 24 },
@@ -53,7 +54,7 @@ const STEPS: TutorialStep[] = [
     titleKey: "panels.nameplate.round.title",
     bodyKey: "panels.nameplate.round.body",
     altKey: "panels.nameplate.round.alt",
-    image: "/assets/challenges/nameplate/03-rounded-base.webp",
+    image: publicPath("/assets/challenges/nameplate/03-rounded-base.webp"),
     targets: [TUTORIAL_TARGETS.fillet],
     calloutKey: "panels.nameplate.round.callout",
   },
@@ -61,14 +62,14 @@ const STEPS: TutorialStep[] = [
     titleKey: "panels.nameplate.text.title",
     bodyKey: "panels.nameplate.text.body",
     altKey: "panels.nameplate.text.alt",
-    image: "/assets/challenges/nameplate/04-text-added.webp",
+    image: publicPath("/assets/challenges/nameplate/04-text-added.webp"),
     targets: [TUTORIAL_TARGETS.shapes],
   },
   {
     titleKey: "panels.nameplate.personalize.title",
     bodyKey: "panels.nameplate.personalize.body",
     altKey: "panels.nameplate.personalize.alt",
-    image: "/assets/challenges/nameplate/05-text-customized.webp",
+    image: publicPath("/assets/challenges/nameplate/05-text-customized.webp"),
     dimensions: [
       { labelKey: "panels.property.height", millimeters: 2, slider: 9 },
     ],
@@ -77,7 +78,7 @@ const STEPS: TutorialStep[] = [
     titleKey: "panels.nameplate.place.title",
     bodyKey: "panels.nameplate.place.body",
     altKey: "panels.nameplate.place.alt",
-    image: "/assets/challenges/nameplate/05-text-customized.webp",
+    image: publicPath("/assets/challenges/nameplate/05-text-customized.webp"),
     targets: [TUTORIAL_TARGETS.lift],
     dimensions: [
       { labelKey: "panels.tutorial.elevation", millimeters: 3, slider: 12 },
@@ -87,7 +88,7 @@ const STEPS: TutorialStep[] = [
     titleKey: "panels.nameplate.center.title",
     bodyKey: "panels.nameplate.center.body",
     altKey: "panels.nameplate.center.alt",
-    image: "/assets/challenges/nameplate/06-text-centered.webp",
+    image: publicPath("/assets/challenges/nameplate/06-text-centered.webp"),
     targets: [TUTORIAL_TARGETS.lock, TUTORIAL_TARGETS.align, TUTORIAL_TARGETS.alignMiddleX, TUTORIAL_TARGETS.alignMiddleZ],
     calloutKey: "panels.nameplate.center.callout",
   },
@@ -95,7 +96,7 @@ const STEPS: TutorialStep[] = [
     titleKey: "panels.nameplate.group.title",
     bodyKey: "panels.nameplate.group.body",
     altKey: "panels.nameplate.group.alt",
-    image: "/assets/challenges/nameplate/07-grouped-nameplate.webp",
+    image: publicPath("/assets/challenges/nameplate/07-grouped-nameplate.webp"),
     targets: [TUTORIAL_TARGETS.group],
   },
 ];

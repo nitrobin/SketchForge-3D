@@ -1,0 +1,20 @@
+{
+  "desktop.tray.open": "Ouvrir SketchForge",
+  "desktop.tray.checkForUpdates": "Rechercher des mises à jour",
+  "desktop.tray.quit": "Quitter SketchForge",
+  "desktop.tray.downloadingUpdate": "SketchForge — téléchargement de la mise à jour : {percent} %",
+  "desktop.tray.updateReady": "SketchForge {version} est prêt à être installé",
+  "desktop.updates.title": "Mises à jour de SketchForge",
+  "desktop.updates.availableTitle": "Mise à jour de SketchForge",
+  "desktop.updates.available": "SketchForge {version} est disponible.",
+  "desktop.updates.availableDetail": "Ouvrez « Paramètres » et cliquez sur « Mettre à jour » pour l’installer.",
+  "desktop.updates.upToDate": "SketchForge est à jour.",
+  "desktop.updates.devBuild": "Les mises à jour automatiques se testent depuis l’application SketchForge installée.",
+  "desktop.updates.packagedOnly": "Les mises à jour ne peuvent être installées que depuis l’application SketchForge installée.",
+  "desktop.updates.checkFailed": "Impossible de rechercher des mises à jour",
+  "desktop.updates.installFailed": "Impossible de mettre à jour SketchForge",
+  "desktop.startup.failed": "Impossible de démarrer SketchForge",
+  "desktop.startup.webProcessExited": "Le processus web interne de SketchForge s’est arrêté avec le code {code}.",
+  "desktop.startup.webProcessTimeout": "SketchForge n’a pas pu démarrer à temps son processus web local.",
+  "desktop.startup.webBundleMissing": "Fichiers de l’interface web introuvables : {path}"
+}

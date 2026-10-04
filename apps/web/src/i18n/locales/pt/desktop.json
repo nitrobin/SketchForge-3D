@@ -1,0 +1,20 @@
+{
+  "desktop.tray.open": "Abrir o SketchForge",
+  "desktop.tray.checkForUpdates": "Verificar atualizações",
+  "desktop.tray.quit": "Sair do SketchForge",
+  "desktop.tray.downloadingUpdate": "SketchForge — baixando atualização: {percent}%",
+  "desktop.tray.updateReady": "SketchForge {version} pronto para instalar",
+  "desktop.updates.title": "Atualizações do SketchForge",
+  "desktop.updates.availableTitle": "Atualização do SketchForge",
+  "desktop.updates.available": "O SketchForge {version} está disponível.",
+  "desktop.updates.availableDetail": "Abra “Configurações” e clique em “Atualizar” para instalar.",
+  "desktop.updates.upToDate": "O SketchForge está atualizado.",
+  "desktop.updates.devBuild": "As atualizações automáticas são testadas a partir do aplicativo SketchForge instalado.",
+  "desktop.updates.packagedOnly": "As atualizações só podem ser instaladas pelo aplicativo SketchForge instalado.",
+  "desktop.updates.checkFailed": "Não foi possível verificar se há atualizações",
+  "desktop.updates.installFailed": "Não foi possível atualizar o SketchForge",
+  "desktop.startup.failed": "Não foi possível iniciar o SketchForge",
+  "desktop.startup.webProcessExited": "O processo web do SketchForge foi encerrado com o código {code}.",
+  "desktop.startup.webProcessTimeout": "O SketchForge não iniciou seu processo web local a tempo.",
+  "desktop.startup.webBundleMissing": "Os arquivos web do aplicativo para computador estão faltando: {path}"
+}

@@ -1,0 +1,20 @@
+{
+  "desktop.tray.open": "Otevřít SketchForge",
+  "desktop.tray.checkForUpdates": "Zkontrolovat aktualizace",
+  "desktop.tray.quit": "Ukončit SketchForge",
+  "desktop.tray.downloadingUpdate": "SketchForge – stahování aktualizace {percent} %",
+  "desktop.tray.updateReady": "SketchForge {version} je připraven k instalaci",
+  "desktop.updates.title": "Aktualizace SketchForge",
+  "desktop.updates.availableTitle": "Aktualizace SketchForge",
+  "desktop.updates.available": "Je k dispozici SketchForge {version}.",
+  "desktop.updates.availableDetail": "Chcete-li ji nainstalovat, otevřete „Nastavení“ a klikněte na „Aktualizovat“.",
+  "desktop.updates.upToDate": "SketchForge je aktuální.",
+  "desktop.updates.devBuild": "Automatické aktualizace lze vyzkoušet jen v nainstalované aplikaci SketchForge.",
+  "desktop.updates.packagedOnly": "Aktualizace lze instalovat jen v nainstalované aplikaci SketchForge.",
+  "desktop.updates.checkFailed": "Nepodařilo se zkontrolovat aktualizace",
+  "desktop.updates.installFailed": "SketchForge se nepodařilo aktualizovat",
+  "desktop.startup.failed": "SketchForge se nepodařilo spustit",
+  "desktop.startup.webProcessExited": "Webový proces SketchForge skončil s kódem {code}.",
+  "desktop.startup.webProcessTimeout": "SketchForge nespustil svůj místní webový proces včas.",
+  "desktop.startup.webBundleMissing": "Chybí soubory webové části aplikace: {path}"
+}

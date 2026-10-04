@@ -37,8 +37,12 @@ describe("message formatting", () => {
 describe("language preference", () => {
   it("resolves the system language by its base subtag", () => {
     expect(resolveLocale("system", ["ru-RU", "en-US"])).toBe("ru");
-    expect(resolveLocale("system", ["de-DE", "ru"])).toBe("ru");
-    expect(resolveLocale("system", ["de-DE"])).toBe("en");
+    expect(resolveLocale("system", ["ja-JP", "ru"])).toBe("ru");
+    expect(resolveLocale("system", ["ja-JP"])).toBe("en");
+    // Brazilian Portuguese is the one Portuguese catalog, also for Portugal.
+    expect(resolveLocale("system", ["pt-BR"])).toBe("pt");
+    expect(resolveLocale("system", ["pt-PT"])).toBe("pt");
+    expect(resolveLocale("system", ["de-AT", "en"])).toBe("de");
     expect(resolveLocale("system", [])).toBe("en");
     expect(resolveLocale("en", ["ru-RU"])).toBe("en");
   });

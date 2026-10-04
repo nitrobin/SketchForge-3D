@@ -20,6 +20,13 @@ type LocaleDefinition = {
  */
 export const LOCALES = [
   { code: "en", nativeName: "English", complete: true, load: async () => ({ default: en }) },
+  { code: "cs", nativeName: "Čeština", complete: true, load: () => import("./locales/cs") },
+  { code: "de", nativeName: "Deutsch", complete: true, load: () => import("./locales/de") },
+  { code: "es", nativeName: "Español", complete: true, load: () => import("./locales/es") },
+  { code: "fr", nativeName: "Français", complete: true, load: () => import("./locales/fr") },
+  { code: "pl", nativeName: "Polski", complete: true, load: () => import("./locales/pl") },
+  // Brazilian Portuguese under the plain code: the desktop app and system-language matching use base codes.
+  { code: "pt", nativeName: "Português (Brasil)", complete: true, load: () => import("./locales/pt") },
   { code: "ru", nativeName: "Русский", complete: true, load: () => import("./locales/ru") },
 ] as const satisfies readonly LocaleDefinition[];
 

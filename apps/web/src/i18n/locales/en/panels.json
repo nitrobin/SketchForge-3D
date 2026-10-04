@@ -241,6 +241,6 @@
   "panels.nameplate.center.alt": "Red ALEX text centered on the blue nameplate base",
   "panels.nameplate.center.callout": "The locked base stays fixed as your alignment reference.",
   "panels.nameplate.group.title": "Group the Nameplate",
-  "panels.nameplate.group.body": "Select the base and the Text object: hold Shift and click both, or drag a frame around them. Press Group in the Combine section at the top to make one finished printable model.",
+  "panels.nameplate.group.body": "Select the base and the Text object: hold Shift and click both, or drag a frame around them. Press Group in the Combine section at the top to make one finished printable model. If Group stays grey, the base is still locked: unlock it with the padlock in the shape panel first.",
   "panels.nameplate.group.alt": "Finished grouped blue ALEX nameplate"
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronLeft, ChevronRight, Home, Minus, MousePointer2, PanelsTopLeft, Plus, Ruler, X } from "lucide-react";
+import { ChevronLeft, ChevronRight, Home, Minus, MousePointer2, Plus, Ruler, X } from "lucide-react";
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type Dispatch, type DragEvent, type MutableRefObject, type PointerEvent as ReactPointerEvent, type SetStateAction, type WheelEvent as ReactWheelEvent } from "react";
 import * as THREE from "three";
 import { Brush, Evaluator, HOLLOW_INTERSECTION } from "three-bvh-csg";
@@ -70,6 +70,7 @@ import {
 import type { AlignAxis, AlignHandleStatus, AlignTarget, GridSize, MeasurementAccuracy, ShapeAsset, WorkplaneShape, WorkplaneWorkspaceSettings } from "@/types/sketchforge";
 import type { CadModifierEdge } from "@/lib/cadModifierTypes";
 import { useT } from "@/i18n";
+import { OrthographicViewIcon, PerspectiveViewIcon, PlaceWorkplaneIcon } from "@/components/icons";
 import { easeInOutCubic, orthographicFocusZoom, perspectiveFocusDistance } from "@/lib/cameraFocus";
 
 const WORKPLANE_WIDTH = 200;
@@ -2413,6 +2414,7 @@ export function WorkplaneViewport({
   const [rulerMoveMode, setRulerMoveMode] = useState(false);
   const [rulerToolsOpen, setRulerToolsOpen] = useState(false);
   const [cameraControlsCollapsed, setCameraControlsCollapsed] = useState(false);
+  const [orthographic, setOrthographic] = useState(false);
   const [rulerModel, setRulerModel] = useState<RulerModel>({ points: [], segments: [], startPointId: null, hover: null });
   const [rulerOverlay, setRulerOverlay] = useState<RulerOverlayState | null>(null);
   const [moveDimensionOverlay, setMoveDimensionOverlay] = useState<MoveDimensionOverlayState | null>(null);
@@ -4829,6 +4831,7 @@ export function WorkplaneViewport({
       return;
     }
     toggleCameraProjection(state);
+    setOrthographic(state.camera instanceof THREE.OrthographicCamera);
   }, []);
 
   const togglePlacementWorkplane = useCallback(() => {
@@ -5098,6 +5101,15 @@ export function WorkplaneViewport({
             <button aria-label={t("workspace.camera.zoomOut")} onClick={() => zoomCamera(1.35)}>
               <Minus size={28} strokeWidth={2.15} />
             </button>
+            <button
+              className={orthographic ? "active" : ""}
+              aria-label={t("workspace.camera.orthographic")}
+              title={t("workspace.shortcutHint", { label: t(orthographic ? "workspace.camera.toPerspective" : "workspace.camera.toOrthographic"), key: "O" })}
+              aria-pressed={orthographic}
+              onClick={toggleProjection}
+            >
+              {orthographic ? <OrthographicViewIcon size={25} strokeWidth={2.1} /> : <PerspectiveViewIcon size={25} strokeWidth={2.1} />}
+            </button>
             <div className="workplane-control-group">
               <button
                 className={workplaneMode ? "active" : ""}
@@ -5106,7 +5118,7 @@ export function WorkplaneViewport({
                 aria-pressed={workplaneMode}
                 onClick={togglePlacementWorkplane}
               >
-                <PanelsTopLeft size={25} strokeWidth={2.1} aria-hidden="true" />
+                <PlaceWorkplaneIcon size={25} strokeWidth={2.1} />
               </button>
             </div>
             <div className="ruler-control-group">

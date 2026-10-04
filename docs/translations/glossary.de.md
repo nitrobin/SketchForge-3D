@@ -103,6 +103,7 @@ Binding for the German catalogs. General rules and audience: [../TRANSLATIONS.md
 | shape panel / shape settings (inspector) | Formeinstellungen | the panel's header shows the shape name |
 | rename | umbenennen | |
 | home view (camera) | Startansicht | Tinkercad |
+| orthographic / perspective view | orthogonale / perspektivische Ansicht | as Fusion „Orthogonal“ / „Perspektive“ |
 | view cube; faces | Ansichtswürfel; OBEN / UNTEN / VORNE / HINTEN / RECHTS / LINKS | Autodesk German ViewCube |
 | top / front … view | Ansicht von oben / von vorne … | not „Draufsicht“, „Vorderansicht“: drawing terms |
 | wireframe | Drahtmodell | |

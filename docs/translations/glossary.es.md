@@ -87,6 +87,7 @@ Binding for the Spanish catalogs. General rules and audience: [../TRANSLATIONS.m
 | Objects (panel listing every object of the design) | objetos; the list in it — lista de objetos | not «escena», «árbol», «esquema» |
 | rename | cambiar nombre | as Microsoft / Google |
 | home view (camera) | vista inicial | |
+| orthographic / perspective view | vista ortográfica / vista en perspectiva | as Fusion |
 | view cube faces | SUP. / INF. / FRONTAL / TRASERA / DERECHA / IZQ. | as the Autodesk ViewCube, shortened where the word does not fit the 54 px inside a face at 10 px («SUPERIOR», «INFERIOR», «IZQUIERDA», «POSTERIOR»); tooltips and screen readers get the full view names — vista superior, …, vista lateral izquierda |
 | wireframe | estructura alámbrica | as Fusion |
 | units | unidades | in / ft keep their symbols; in words — pulgadas / pies |

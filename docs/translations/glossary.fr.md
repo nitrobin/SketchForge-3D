@@ -99,6 +99,7 @@ PrusaSlicer / Cura; standards: ISO 1122-1 (gears), French technical drawing (vue
 | Objects (panel listing every object of the design) | objets; the list in it — liste des objets | not «scène», «arborescence»: unclear to the audience |
 | rename | renommer | |
 | home view (camera) | vue initiale | «Accueil» is the dashboard |
+| orthographic / perspective view | vue orthographique / vue en perspective | as Fusion |
 | view cube | cube d’orientation; faces HAUT, BAS, AVANT, ARRIÈRE, DROITE, GAUCHE | Tinkercad, AutoCAD ViewCube |
 | top / bottom / front / back / right / left view | vue de dessus / de dessous / de face / arrière / de droite / de gauche | technical drawing |
 | wireframe | filaire | Fusion |

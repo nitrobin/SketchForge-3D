@@ -73,6 +73,7 @@ Binding for the Russian catalogs. General rules and audience: [../TRANSLATIONS.m
 | Objects (panel listing every object of the design) | объекты; the list in it — список объектов | not «сцена», «структура», «аутлайнер», «дерево сцены»: unclear to the audience; matches «выделенные объекты» |
 | rename | переименовать | |
 | home view (camera) | исходный вид | «главный вид» is the front view in GOST 2.305 |
+| orthographic / perspective view | ортогональный вид / вид в перспективе | as Fusion «Ортогональный» / «Перспектива» |
 | wireframe | каркас | |
 | units | единицы измерения | |
 | box | параллелепипед | not «куб» |

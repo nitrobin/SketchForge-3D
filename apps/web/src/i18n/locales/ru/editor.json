@@ -243,6 +243,7 @@
   "editor.toolbar.visibilityHelpAll": "все",
   "editor.toolbar.combine": "Группировка",
   "editor.toolbar.group": "Сгруппировать",
+  "editor.toolbar.groupBlockedByLock": "«Сгруппировать» недоступна: одна из выбранных фигур заблокирована. Снимите блокировку значком замка на панели фигуры.",
   "editor.toolbar.ungroup": "Разгруппировать",
   "editor.toolbar.intersection": "Пересечение",
   "editor.toolbar.modify": "Изменение",

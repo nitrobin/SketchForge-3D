@@ -5,6 +5,9 @@ import { zUpToSketchForge } from "@/lib/meshCoordinates";
 import type { WorkplaneShape } from "@/types/sketchforge";
 
 const stlLoader = new STLLoader();
+// A binary STL starts with an 80-byte header and a 4-byte triangle count, and an ASCII facet is longer than that, so a
+// smaller file holds no triangles. STLLoader reads the count at byte 80 regardless and throws a RangeError on it.
+const STL_MIN_GEOMETRY_BYTES = 84;
 const SUPPORTED_IMPORT_EXTENSIONS = new Set(["stl", "svg"]);
 
 function fileExtension(fileName: string) {
@@ -120,6 +123,8 @@ export function importExtensionSupported(fileName: string) {
 }
 
 export function importedShapeFromStl(fileName: string, buffer: ArrayBuffer): WorkplaneShape {
+  // Throws the regular empty-geometry error.
+  if (buffer.byteLength < STL_MIN_GEOMETRY_BYTES) return importedShapeFromTriangleSoup(fileName, [], undefined);
   const rawGeometry = stlLoader.parse(buffer);
   const geometry = rawGeometry.index ? rawGeometry.toNonIndexed() : rawGeometry.clone();
   const position = geometry.getAttribute("position");

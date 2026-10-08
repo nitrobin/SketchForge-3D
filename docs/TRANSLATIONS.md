@@ -86,9 +86,14 @@ terms, with the surrounding text saying what they do.
 | Text with markup | `t.rich("ns.key", { b: (chunks) => <strong>{chunks}</strong> })` |
 | Error shown to the user | throw `new LocalizedError("errors.…", params)`; display with `errorText(t, error, "ns.fallback")` |
 | Error from a worker | post `localizedErrorPayload(error)`, rebuild with `errorFromPayload(payload)` |
+| Error from an API route | `errorResponse("errors.…", status)` (`lib/apiErrors.ts`); the page rebuilds it with `errorFromResponse(payload)` |
+| Editor status line | `setNotice(notice((t) => t("editor.…", params)))`: shown in the current language, read by MCP in English |
 | Unit symbol | `unitLabel(t, "mm")` |
 | Date or number | `Intl.*Format(formattingLocale(t.locale), …)` — keeps the system's regional format |
 
 English (`locales/en`) is the source: keys are type-checked against it, and a key missing in another language falls back
 to English at runtime. Default names of created objects and projects (`Box`, `Key Tag`) stay in English because they
 are saved into project files.
+
+MCP stays English whatever the interface language: command results and errors, and the status line text an agent
+reads (`englishNotice`). API routes keep their English `error` text and add `errorKey` for the interface.

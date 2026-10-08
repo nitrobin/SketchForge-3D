@@ -123,3 +123,4 @@ Binding for the Polish catalogs. General rules and audience: [../TRANSLATIONS.md
 | sort: recent | ostatnio zmienione | |
 | shape defaults | ustawienia nowych kształtów | not „domyślne kształty”: reads as a default set of shapes |
 | Geometry (editor tab, next to Sketch) | Model 3D | not „Geometria”: reads as the school subject; pairs with „Szkic” as 3D vs 2D |
+| MCP (connection an AI agent uses to drive the editor) | MCP | name kept; notices about the agent's actions start with „MCP: ” |

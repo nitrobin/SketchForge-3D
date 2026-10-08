@@ -96,3 +96,4 @@ Binding for the Russian catalogs. General rules and audience: [../TRANSLATIONS.m
 | sort: recent | по дате изменения | not «по дате»: unclear which date and order |
 | shape defaults | параметры новых фигур | not «фигуры по умолчанию»: reads as a default set of shapes |
 | Geometry (editor tab, next to Sketch) | 3D-модель | not «Геометрия»: reads as the school subject; pairs with «Эскиз» as 3D vs 2D |
+| MCP (connection an AI agent uses to drive the editor) | MCP | name kept; notices about the agent's actions start with «MCP: » |

@@ -133,3 +133,4 @@ Binding for the Czech catalogs. General rules and audience: [../TRANSLATIONS.md]
 | Geometry (editor tab, next to Sketch) | 3D model | pairs with „Náčrt“ as 3D vs 2D |
 | theme / light / dark | motiv / světlý / tmavý | Microsoft CZ |
 | click / drag / hold | kliknout (na) / přetáhnout, táhnout / podržet; keys — stisknout | |
+| MCP (connection an AI agent uses to drive the editor) | MCP | name kept; notices about the agent's actions start with „MCP: “ |

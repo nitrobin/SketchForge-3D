@@ -4,7 +4,7 @@ import { ChevronUp, CornerDownRight, Home, Link, Link2Off, LockKeyhole, LockKeyh
 import { useEffect, useMemo, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent, type WheelEvent as ReactWheelEvent } from "react";
 import { SnapGridControl } from "@/components/workplane/ShapeInspector";
 import { SketchRevolvePreview } from "@/components/SketchRevolvePreview";
-import { unitLabel, useT } from "@/i18n";
+import { notice, unitLabel, useT, type Notice } from "@/i18n";
 import { parseMeasurementInput } from "@/lib/measurementUnits";
 import { WORKPLANE_MAJOR_GRID_INTERVAL } from "@/lib/workplaneGrid";
 import { closestPointOnSketchSegment, type SketchSegmentPlacement } from "@/lib/sketchPointRefinement";
@@ -42,12 +42,12 @@ type SketchWorkspaceProps = {
   onSelectSegment: (id: string) => void;
   onSelectMany: (pointIds: string[], segmentIds: string[], imageIds: string[]) => void;
   onSelectImage: (id: string) => void;
-  onUpdateImage: (id: string, patch: Partial<SketchImage>, message?: string) => void;
+  onUpdateImage: (id: string, patch: Partial<SketchImage>, message?: Notice) => void;
   onDeleteImage: (id: string) => void;
   onDeletePoint: (id: string) => void;
   onDeleteSegment: (id: string) => void;
   onMovePoint: (id: string, point: { x: number; z: number }) => void;
-  onTransformPoints: (points: SketchPoint[], message?: string) => void;
+  onTransformPoints: (points: SketchPoint[], message?: Notice) => void;
   onMoveHandle: (id: string, handle: "in" | "out", point: { x: number; z: number }) => void;
   onInsertPoint: (segmentId: string, point: { x: number; z: number }, amount: number) => void;
   onSetPointMode: (id: string, mode: "corner" | "smooth" | "split") => void;
@@ -718,10 +718,10 @@ export function SketchWorkspace({
     } else if (action.kind === "move-selection") {
       onTransformPoints(
         translateSketchPoints(action.startPoints, action.current.x - action.origin.x, action.current.z - action.origin.z),
-        t("workspace.sketch.notice.shapeMoved"),
+        notice((t) => t("workspace.sketch.notice.shapeMoved")),
       );
     } else if (action.kind === "resize-selection") {
-      onTransformPoints(resizeSketchPoints(action.startPoints, action.bounds, action.handle, action.current), t("workspace.sketch.notice.shapeResized"));
+      onTransformPoints(resizeSketchPoints(action.startPoints, action.bounds, action.handle, action.current), notice((t) => t("workspace.sketch.notice.shapeResized")));
     } else if (action.kind === "move-point") {
       onMovePoint(action.pointId, action.current);
     } else if (action.kind === "move-handle") {
@@ -730,9 +730,9 @@ export function SketchWorkspace({
       onUpdateImage(action.imageId, {
         x: action.start.x + action.current.x - action.origin.x,
         z: action.start.z + action.current.z - action.origin.z,
-      }, t("workspace.sketch.notice.imageMoved"));
+      }, notice((t) => t("workspace.sketch.notice.imageMoved")));
     } else if (action.kind === "resize-image") {
-      onUpdateImage(action.imageId, resizeSketchImage(action.start, action.handle, action.current), t("workspace.sketch.notice.imageResized"));
+      onUpdateImage(action.imageId, resizeSketchImage(action.start, action.handle, action.current), notice((t) => t("workspace.sketch.notice.imageResized")));
     }
     setPointerAction(null);
   };
@@ -1217,7 +1217,7 @@ function SketchImageInspector({
   image: SketchImage;
   accuracy: 1 | 2 | 3;
   onClose: () => void;
-  onUpdate: (patch: Partial<SketchImage>, message?: string) => void;
+  onUpdate: (patch: Partial<SketchImage>, message?: Notice) => void;
   onDelete: () => void;
 }) {
   const t = useT();
@@ -1225,11 +1225,11 @@ function SketchImageInspector({
   const updateWidth = (width: number) => onUpdate({
     width,
     ...(image.lockAspect !== false ? { depth: Math.max(0.5, width / aspect) } : {}),
-  }, t("workspace.sketch.notice.imageWidthUpdated"));
+  }, notice((t) => t("workspace.sketch.notice.imageWidthUpdated")));
   const updateDepth = (depth: number) => onUpdate({
     depth,
     ...(image.lockAspect !== false ? { width: Math.max(0.5, depth * aspect) } : {}),
-  }, t("workspace.sketch.notice.imageHeightUpdated"));
+  }, notice((t) => t("workspace.sketch.notice.imageHeightUpdated")));
 
   return (
     <aside className="shape-inspector sketch-image-inspector" aria-label={t("workspace.sketch.image.settings", { name: shapeDisplayName(t, image.name) })} onPointerDown={(event) => event.stopPropagation()}>
@@ -1244,7 +1244,7 @@ function SketchImageInspector({
             type="button"
             aria-label={image.locked ? t("workspace.sketch.image.unlockLabel") : t("workspace.sketch.image.lockLabel")}
             title={t("workspace.shortcutHint", { label: image.locked ? t("workspace.sketch.image.unlock") : t("workspace.sketch.image.lock"), key: "L" })}
-            onClick={() => onUpdate({ locked: !image.locked }, image.locked ? t("workspace.sketch.notice.imageUnlocked") : t("workspace.sketch.notice.imageLocked"))}
+            onClick={() => onUpdate({ locked: !image.locked }, notice((t) => image.locked ? t("workspace.sketch.notice.imageUnlocked") : t("workspace.sketch.notice.imageLocked")))}
           >
             {image.locked ? <LockKeyhole size={25} strokeWidth={2.2} /> : <LockKeyholeOpen size={25} strokeWidth={2.2} />}
           </button>
@@ -1262,10 +1262,10 @@ function SketchImageInspector({
         <div className="property-list">
           <SketchImageRange label={t("workspace.dimension.width")} value={image.width} min={0.5} max={200} accuracy={accuracy} disabled={image.locked} onChange={updateWidth} />
           <SketchImageRange label={t("workspace.dimension.height")} value={image.depth} min={0.5} max={200} accuracy={accuracy} disabled={image.locked} onChange={updateDepth} />
-          <SketchImageRange label={t("workspace.sketch.image.opacity")} value={(image.opacity ?? 0.55) * 100} min={5} max={100} accuracy={1} suffix="%" disabled={image.locked} onChange={(opacity) => onUpdate({ opacity: opacity / 100 }, t("workspace.sketch.notice.imageOpacityUpdated"))} />
-          <SketchImagePositionField label={t("workspace.sketch.image.positionX")} value={image.x} accuracy={accuracy} disabled={image.locked} onChange={(x) => onUpdate({ x }, t("workspace.sketch.notice.imageMoved"))} />
-          <SketchImagePositionField label={t("workspace.sketch.image.positionY")} value={image.z} accuracy={accuracy} disabled={image.locked} onChange={(z) => onUpdate({ z }, t("workspace.sketch.notice.imageMoved"))} />
-          <button className={`sketch-image-aspect-toggle ${image.lockAspect !== false ? "active" : ""}`} type="button" disabled={image.locked} onClick={() => onUpdate({ lockAspect: image.lockAspect === false }, t("workspace.sketch.notice.imageAspectUpdated"))}>
+          <SketchImageRange label={t("workspace.sketch.image.opacity")} value={(image.opacity ?? 0.55) * 100} min={5} max={100} accuracy={1} suffix="%" disabled={image.locked} onChange={(opacity) => onUpdate({ opacity: opacity / 100 }, notice((t) => t("workspace.sketch.notice.imageOpacityUpdated")))} />
+          <SketchImagePositionField label={t("workspace.sketch.image.positionX")} value={image.x} accuracy={accuracy} disabled={image.locked} onChange={(x) => onUpdate({ x }, notice((t) => t("workspace.sketch.notice.imageMoved")))} />
+          <SketchImagePositionField label={t("workspace.sketch.image.positionY")} value={image.z} accuracy={accuracy} disabled={image.locked} onChange={(z) => onUpdate({ z }, notice((t) => t("workspace.sketch.notice.imageMoved")))} />
+          <button className={`sketch-image-aspect-toggle ${image.lockAspect !== false ? "active" : ""}`} type="button" disabled={image.locked} onClick={() => onUpdate({ lockAspect: image.lockAspect === false }, notice((t) => t("workspace.sketch.notice.imageAspectUpdated")))}>
             {image.lockAspect !== false ? <Link size={17} /> : <Link2Off size={17} />}
             <span>{image.lockAspect !== false ? t("workspace.sketch.image.aspectLocked") : t("workspace.sketch.image.aspectUnlocked")}</span>
           </button>

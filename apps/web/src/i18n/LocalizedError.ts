@@ -36,3 +36,17 @@ export function errorFromPayload(payload: LocalizedErrorPayload): Error {
   if (payload.errorKey && isErrorKey(payload.errorKey)) return new LocalizedError(payload.errorKey, payload.errorParams);
   return new Error(payload.message);
 }
+
+/** Error fields of an API response: `error` stays English (other clients, logs), the UI translates `errorKey`. */
+export type ErrorResponseFields = { error: string; errorKey?: ErrorKey; errorParams?: MessageParams };
+
+export function errorResponseFields(error: unknown): ErrorResponseFields {
+  const { message, errorKey, errorParams } = localizedErrorPayload(error);
+  return { error: message, errorKey, errorParams };
+}
+
+/** The error an API response body reports, or null when it reports none. */
+export function errorFromResponse(body: Partial<ErrorResponseFields> | null | undefined): Error | null {
+  if (!body?.error) return null;
+  return errorFromPayload({ message: body.error, errorKey: body.errorKey, errorParams: body.errorParams });
+}

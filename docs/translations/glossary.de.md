@@ -148,3 +148,4 @@ Binding for the German catalogs. General rules and audience: [../TRANSLATIONS.md
 | shape defaults | Startwerte für Formen | not „Standardformen“: reads as a default set of shapes |
 | Geometry (editor tab, next to Sketch) | 3D-Modell | not „Geometrie“: reads as the school subject; pairs with „Skizze“ as 3D vs 2D |
 | slicer | Slicer (Programm zur Druckvorbereitung) | the established 3D-printing term; explain on first use |
+| MCP (connection an AI agent uses to drive the editor) | MCP | name kept; notices about the agent's actions start with „MCP: “ |

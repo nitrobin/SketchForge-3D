@@ -119,3 +119,4 @@ Binding for the Spanish catalogs. General rules and audience: [../TRANSLATIONS.m
 | sort: recent | fecha de modificación | not «reciente»: unclear which date and order |
 | shape defaults | valores de las formas nuevas | not «formas predeterminadas»: reads as a default set of shapes |
 | Geometry (editor tab, next to Sketch) | modelo 3D | not «geometría»: reads as the school subject; pairs with «Boceto» as 3D vs 2D |
+| MCP (connection an AI agent uses to drive the editor) | MCP | name kept; notices about the agent's actions start with «MCP: » |

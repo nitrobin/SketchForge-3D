@@ -6,15 +6,20 @@ import { SketchForgeEditor, importedShapeFromObj, importedShapeFromStl, imported
 import ChallengesDashboard from "@/components/official/ChallengesDashboard";
 import {
   LANGUAGE_PREFERENCE_OPTIONS,
+  LocalizedError,
   currentTranslator,
+  errorFromPayload,
+  errorFromResponse,
   errorText,
   formattingLocale,
   initLanguage,
   languagePreferenceLabel,
   normalizeLanguagePreference,
+  notice,
   translate,
   useLanguagePreference,
   useT,
+  type ErrorResponseFields,
   type Translator,
 } from "@/i18n";
 import { applyAppTheme, readStoredAppTheme, resolveAppTheme, storeAppTheme, type AppThemePreference, type ResolvedAppTheme } from "@/lib/appTheme";
@@ -387,7 +392,7 @@ async function deleteProjectShapes(projectId: string) {
     };
     transaction.onerror = () => {
       database.close();
-      reject(transaction.error ?? new Error("Could not delete project shapes"));
+      reject(transaction.error ?? new Error(translate("dashboard.storage.deleteFailed")));
     };
   });
 }
@@ -550,10 +555,10 @@ export default function Home() {
     setSharedProjectsLoading(true);
     try {
       const response = await fetch("/api/shared-projects", { cache: "no-store" });
-      const payload = await response.json() as { enabled?: boolean; projects?: SharedProject[]; error?: string };
+      const payload = await response.json() as { enabled?: boolean; projects?: SharedProject[] } & Partial<ErrorResponseFields>;
       setSharedProjectsEnabled(Boolean(payload.enabled));
       setSharedProjects(Array.isArray(payload.projects) ? payload.projects : []);
-      if (!response.ok && payload.enabled) setDashboardNotice(payload.error ?? translate("dashboard.shared.loadFailed"));
+      if (!response.ok && payload.enabled) setDashboardNotice(errorText(currentTranslator(), errorFromResponse(payload), "errors.shared.loadFailed"));
     } catch {
       setSharedProjectsEnabled(false);
       setSharedProjects([]);
@@ -828,8 +833,8 @@ export default function Home() {
         signal,
       });
       if (!response.ok) {
-        const payload = await response.json().catch(() => null) as { error?: string } | null;
-        throw new Error(payload?.error ?? "Could not save project thumbnail");
+        const payload = await response.json().catch(() => null) as Partial<ErrorResponseFields> | null;
+        throw errorFromResponse(payload) ?? new LocalizedError("errors.thumbnail.saveFailed");
       }
       const payload = await response.json() as { version?: number };
       if (signal?.aborted) throw new DOMException("Thumbnail upload aborted", "AbortError");
@@ -1009,11 +1014,13 @@ export default function Home() {
       const openedMessage = t("dashboard.open.opened", { fileName: file.name });
       setDashboardNotice(sharedProject ? t("dashboard.shared.openedAutosave", { name: sharedProject.name }) : openedMessage);
       openEditor(project.id, { allowMissingFromStorage: true });
-      return { ok: true, message: sharedProject ? t("dashboard.shared.opened", { name: sharedProject.name }) : openedMessage };
+      return {
+        ok: true,
+        message: notice((t) => sharedProject ? t("dashboard.shared.opened", { name: sharedProject.name }) : t("dashboard.open.opened", { fileName: file.name })),
+      };
     } catch (error) {
-      const message = errorText(t, error, "dashboard.open.failed");
-      setDashboardNotice(message);
-      return { ok: false, message };
+      setDashboardNotice(errorText(t, error, "dashboard.open.failed"));
+      return { ok: false, message: notice((t) => errorText(t, error, "dashboard.open.failed")) };
     }
   }, [projects.length, t]);
 
@@ -1022,8 +1029,8 @@ export default function Home() {
     try {
       const response = await fetch(`/api/shared-projects?fileName=${encodeURIComponent(sharedProject.fileName)}`, { cache: "no-store" });
       if (!response.ok) {
-        const payload = await response.json().catch(() => ({})) as { error?: string };
-        throw new Error(payload.error ?? t("dashboard.shared.downloadFailed"));
+        const payload = await response.json().catch(() => ({})) as Partial<ErrorResponseFields>;
+        throw errorFromResponse(payload) ?? new Error(t("dashboard.shared.downloadFailed"));
       }
       const revision = response.headers.get("etag")?.replace(/^W\//, "").replace(/^"|"$/g, "") || sharedProject.revision;
       const file = new File([await response.blob()], sharedProject.fileName, { type: "application/vnd.sketchforge.project+zip" });
@@ -1041,20 +1048,20 @@ export default function Home() {
         headers: { "If-Match": `"${sharedProject.revision}"` },
       });
       if (!response.ok) {
-        const payload = await response.json().catch(() => ({})) as { error?: string };
-        throw new Error(payload.error ?? t("dashboard.shared.deleteFailed"));
+        const payload = await response.json().catch(() => ({})) as Partial<ErrorResponseFields>;
+        throw errorFromResponse(payload) ?? new LocalizedError("errors.shared.deleteFailed");
       }
       setSharedProjects((current) => current.filter((project) => project.fileName !== sharedProject.fileName));
       setDashboardNotice(t("dashboard.shared.deleted", { name: sharedProject.name }));
     } catch (error) {
-      setDashboardNotice(errorText(t, error, "dashboard.shared.deleteFailed"));
+      setDashboardNotice(errorText(t, error, "errors.shared.deleteFailed"));
       await refreshSharedProjects();
     }
   }, [refreshSharedProjects, t]);
 
   const saveActiveProjectToShared = useCallback(async ({ exportName, bytes, thumbnailDataUrl }: { exportName: string; bytes: Uint8Array; thumbnailDataUrl: string }) => {
     const activeProject = projects.find((project) => project.id === activeProjectId);
-    if (!activeProject) throw new Error(t("dashboard.shared.saveNeedsLocalProject"));
+    if (!activeProject) throw new LocalizedError("errors.shared.saveNeedsLocalProject");
     const normalizedExportName = exportName.trim() || activeProject.name;
     const saveBackToSource = Boolean(activeProject.sharedProject && normalizedExportName === activeProject.name);
     const fileName = saveBackToSource && activeProject.sharedProject
@@ -1066,20 +1073,20 @@ export default function Home() {
     const body = bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength) as ArrayBuffer;
     const thumbnailResponse = await fetch(thumbnailDataUrl);
     const thumbnail = await thumbnailResponse.blob();
-    if (thumbnail.type !== "image/png" || thumbnail.size === 0) throw new Error(t("dashboard.shared.thumbnailFailed"));
+    if (thumbnail.type !== "image/png" || thumbnail.size === 0) throw new LocalizedError("errors.shared.thumbnailPrepareFailed");
     const formData = new FormData();
     formData.append("project", new Blob([body], { type: "application/vnd.sketchforge.project+zip" }), fileName);
     formData.append("thumbnail", thumbnail, `${fileName}.png`);
     const response = await fetch(`/api/shared-projects?fileName=${encodeURIComponent(fileName)}`, { method: "POST", headers, body: formData });
-    const payload = await response.json().catch(() => ({})) as { error?: string; project?: SharedProject };
-    if (!response.ok || !payload.project) throw new Error(payload.error ?? t("dashboard.shared.saveFailed"));
+    const payload = await response.json().catch(() => ({})) as { project?: SharedProject } & Partial<ErrorResponseFields>;
+    if (!response.ok || !payload.project) throw errorFromResponse(payload) ?? new LocalizedError("errors.shared.saveFailed");
     const savedProject = payload.project;
     setProjects((current) => current.map((project) => project.id === activeProject.id
       ? { ...project, sharedProject: { fileName: savedProject.fileName, revision: savedProject.revision } }
       : project));
     await refreshSharedProjects();
-    return t("dashboard.shared.saved", { name: savedProject.name });
-  }, [activeProjectId, projects, refreshSharedProjects, t]);
+    return notice((t) => t("dashboard.shared.saved", { name: savedProject.name }));
+  }, [activeProjectId, projects, refreshSharedProjects]);
 
   const importFilesFromDashboard = useCallback(
     async (files: File[]) => {
@@ -1601,8 +1608,8 @@ function Dashboard({
       }
 
       const response = await fetch(`/api/app-update${force ? "?force=1" : ""}`, { cache: "no-store" });
-      const payload = await response.json() as AppUpdateStatus & { error?: string };
-      if (!response.ok) throw new Error(payload.error || t("dashboard.updates.checkFailed"));
+      const payload = await response.json() as AppUpdateStatus & Partial<ErrorResponseFields>;
+      if (!response.ok) throw errorFromResponse(payload) ?? new LocalizedError("errors.update.checkFailed");
       setUpdateStatus(payload);
       if (payload.updateAvailable && payload.latestVersion) {
         const dismissedVersion = window.localStorage.getItem(DISMISSED_UPDATE_VERSION_STORAGE_KEY);
@@ -1614,7 +1621,7 @@ function Dashboard({
         setUpdateMessage(t("dashboard.updates.upToDate"));
       }
     } catch (error) {
-      setUpdateMessage(errorText(t, error, "dashboard.updates.checkFailed"));
+      setUpdateMessage(errorText(t, error, "errors.update.checkFailed"));
     } finally {
       setUpdateChecking(false);
     }
@@ -1689,8 +1696,8 @@ function Dashboard({
         method: "POST",
         headers: { "x-sketchforge-update-key": updateKey.trim() },
       });
-      const payload = await response.json() as { accepted?: boolean; error?: string; updateUrl?: string; updateMode?: "local" | "server"; restartRequired?: boolean };
-      if (!response.ok || !payload.accepted) throw new Error(payload.error || t("dashboard.updates.startFailed"));
+      const payload = await response.json() as { accepted?: boolean; updateUrl?: string; updateMode?: "local" | "server"; restartRequired?: boolean } & Partial<ErrorResponseFields>;
+      if (!response.ok || !payload.accepted) throw errorFromResponse(payload) ?? new LocalizedError("errors.update.startFailed");
       if (updateStatus.latestVersion) {
         window.localStorage.setItem(DISMISSED_UPDATE_VERSION_STORAGE_KEY, updateStatus.latestVersion);
       }
@@ -1719,7 +1726,7 @@ function Dashboard({
         setUpdateMessage(t("dashboard.updates.serverStarted"));
       }
     } catch (error) {
-      setUpdateMessage(errorText(t, error, "dashboard.updates.startFailed"));
+      setUpdateMessage(errorText(t, error, "errors.update.startFailed"));
     } finally {
       setUpdateStarting(false);
     }
@@ -2144,7 +2151,9 @@ function Dashboard({
             {staticExportBuild ? (
               <span className="dashboard-update-status">{t("dashboard.updates.managed")}</span>
             ) : updateStatus?.checkError ? (
-              <span className="dashboard-update-status error">{updateStatus.checkError}</span>
+              <span className="dashboard-update-status error">
+                {errorText(t, errorFromPayload({ message: updateStatus.checkError, errorKey: updateStatus.checkErrorKey, errorParams: updateStatus.checkErrorParams }), "errors.update.checkFailed")}
+              </span>
             ) : desktopUpdaterConnected && updateStatus?.updateAvailable && updateStatus.latestVersion ? (
               <button
                 className="dashboard-update-available"

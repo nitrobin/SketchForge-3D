@@ -135,3 +135,4 @@ Binding for the French catalogs. General rules and audience: [../TRANSLATIONS.md
 | sort: recent | date de modification | not «récent»: unclear which date and order |
 | shape defaults | paramètres des nouvelles formes | not «formes par défaut»: reads as a default set of shapes |
 | Geometry (editor tab, next to Sketch) | Modèle 3D | not «Géométrie»: reads as the school subject; pairs with «Esquisse» as 3D vs 2D |
+| MCP (connection an AI agent uses to drive the editor) | MCP | name kept; notices about the agent's actions start with « MCP : » |

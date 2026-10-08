@@ -123,3 +123,4 @@ desktop app only supports plain language codes. General rules and audience:
 | shape defaults | parâmetros das novas formas | not “formas padrão”: reads as a default set of shapes |
 | Geometry (editor tab, next to Sketch) | Modelo 3D | not “Geometria”: reads as the school subject; pairs with “Esboço” as 3D vs 2D |
 | key tag / nameplate (challenges) | chaveiro / placa com nome | |
+| MCP (connection an AI agent uses to drive the editor) | MCP | name kept; notices about the agent's actions start with “MCP: ” |

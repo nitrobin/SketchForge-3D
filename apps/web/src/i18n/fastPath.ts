@@ -121,7 +121,9 @@ export function withFastPath(intl: Translator, locale: Locale, messages: Message
 export function messageFallback(messages: Messages) {
   return ({ error, key, namespace }: { error: IntlError; key: string; namespace?: string }): string => {
     const path = namespace ? `${namespace}.${key}` : key;
-    const message = flatten(messages, "", new Map<string, string>(), (text) => text).get(path);
+    const message = path
+      .split(".")
+      .reduce<unknown>((node, part) => (node && typeof node === "object" ? (node as Record<string, unknown>)[part] : undefined), messages);
     if (error.code !== IntlErrorCode.FORMATTING_ERROR || typeof message !== "string") return path;
     return message.replace(/<\/?\w+>/g, "").replace(/''/g, "'");
   };

@@ -286,7 +286,7 @@
     },
     "align": {
       "needTwo": "Sélectionnez au moins deux formes à aligner",
-      "started": "Aligner : choisissez un point, ou cliquez sur une forme sélectionnée pour en faire la référence",
+      "started": "Aligner : choisissez un point ou la forme de référence",
       "cancelled": "Alignement annulé",
       "anchor": "Référence d’alignement : « {name} »",
       "anchorLocked": "Référence d’alignement : « {name} » (verrouillée)",

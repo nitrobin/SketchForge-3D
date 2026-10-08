@@ -286,7 +286,7 @@
     },
     "align": {
       "needTwo": "Wählen Sie mindestens zwei Formen zum Ausrichten aus",
-      "started": "Ausrichten: Wählen Sie einen Punkt oder klicken Sie auf eine ausgewählte Form, um sie als Bezug festzulegen",
+      "started": "Ausrichten: Punkt oder Form als Bezug wählen",
       "cancelled": "Ausrichten abgebrochen",
       "anchor": "Bezug für das Ausrichten: {name}",
       "anchorLocked": "Bezug für das Ausrichten: {name} (gesperrt)",

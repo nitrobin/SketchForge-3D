@@ -286,7 +286,7 @@
     },
     "align": {
       "needTwo": "Pro zarovnání vyberte alespoň dva tvary",
-      "started": "Zarovnání: zvolte bod, nebo klikněte na vybraný tvar, podle kterého se mají ostatní zarovnat",
+      "started": "Zarovnání: zvolte bod nebo tvar pro zarovnání",
       "cancelled": "Zarovnání zrušeno",
       "anchor": "Zarovnání podle tvaru „{name}“",
       "anchorLocked": "Zarovnání podle tvaru „{name}“ (zamčený)",

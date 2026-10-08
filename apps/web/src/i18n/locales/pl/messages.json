@@ -286,7 +286,7 @@
     },
     "align": {
       "needTwo": "Aby wyrównać, zaznacz co najmniej dwa kształty",
-      "started": "Wyrównywanie: wybierz kropkę albo kliknij zaznaczony kształt, do którego mają zostać wyrównane pozostałe",
+      "started": "Wyrównywanie: wybierz kropkę lub kształt odniesienia",
       "cancelled": "Anulowano wyrównywanie",
       "anchor": "Wyrównywanie do kształtu „{name}”",
       "anchorLocked": "Wyrównywanie do kształtu „{name}” (zablokowany)",

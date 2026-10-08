@@ -286,7 +286,7 @@
     },
     "align": {
       "needTwo": "Selecciona al menos dos formas para alinearlas",
-      "started": "Alinear: elige un punto o haz clic en una forma seleccionada para alinear las demás con ella",
+      "started": "Alinear: elige un punto o la forma de referencia",
       "cancelled": "Se canceló la alineación",
       "anchor": "Alinear con la forma «{name}»",
       "anchorLocked": "Alinear con la forma «{name}» (bloqueada)",

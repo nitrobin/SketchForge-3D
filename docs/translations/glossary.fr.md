@@ -2,6 +2,9 @@
 
 Binding for the French catalogs. General rules and audience: [../TRANSLATIONS.md](../TRANSLATIONS.md#translation-requirements).
 
+> **Not proofread by a native speaker.** This guide and the French translation were written with AI models,
+> so some wording may be inaccurate.
+
 ## Typography and address
 
 - Address the user as «vous». Instructions use the imperative: «Sélectionnez», «Cliquez sur…».

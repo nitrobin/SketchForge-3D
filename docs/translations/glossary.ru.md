@@ -2,6 +2,9 @@
 
 Binding for the Russian catalogs. General rules and audience: [../TRANSLATIONS.md](../TRANSLATIONS.md#translation-requirements).
 
+> **Not proofread by a native speaker.** This guide and the Russian translation were written with AI models,
+> so some wording may be inaccurate.
+
 ## Typography and address
 
 - Address the user as «вы» with a lowercase letter, or impersonally.

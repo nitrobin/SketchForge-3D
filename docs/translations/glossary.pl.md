@@ -2,6 +2,9 @@
 
 Binding for the Polish catalogs. General rules and audience: [../TRANSLATIONS.md](../TRANSLATIONS.md#translation-requirements).
 
+> **Not proofread by a native speaker.** This guide and the Polish translation were written with AI models,
+> so some wording may be inaccurate.
+
 ## Typography and address
 
 - Address the user with 2nd person singular verb forms, as Microsoft, Google and Tinkercad Polish UIs do: „Zaznacz kształt”,

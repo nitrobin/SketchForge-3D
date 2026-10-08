@@ -2,6 +2,9 @@
 
 Binding for the Spanish catalogs. General rules and audience: [../TRANSLATIONS.md](../TRANSLATIONS.md#translation-requirements).
 
+> **Not proofread by a native speaker.** This guide and the Spanish translation were written with AI models,
+> so some wording may be inaccurate.
+
 ## Typography and address
 
 - One Spanish for Spain and Latin America: neutral vocabulary, no words that differ by region.

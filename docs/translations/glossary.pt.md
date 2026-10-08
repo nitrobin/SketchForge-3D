@@ -4,6 +4,9 @@ Binding for the `pt` catalogs. The catalogs are **Brazilian Portuguese** (pt-BR)
 desktop app only supports plain language codes. General rules and audience:
 [../TRANSLATIONS.md](../TRANSLATIONS.md#translation-requirements).
 
+> **Not proofread by a native speaker.** This guide and the Brazilian Portuguese translation were written with AI models,
+> so some wording may be inaccurate.
+
 ## Typography and address
 
 - Address the user as “você”, as Brazilian software does, or impersonally. Instructions use the imperative of the

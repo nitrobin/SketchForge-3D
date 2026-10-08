@@ -2,6 +2,9 @@
 
 Binding for the Czech catalogs. General rules and audience: [../TRANSLATIONS.md](../TRANSLATIONS.md#translation-requirements).
 
+> **Not proofread by a native speaker.** This guide and the Czech translation were written with AI models,
+> so some wording may be inaccurate.
+
 ## Typography and address
 
 - Address the user with vykání and a lowercase „vy/váš“, or impersonally, as Microsoft, Google and PrusaSlicer do in

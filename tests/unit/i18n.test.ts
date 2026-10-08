@@ -3,14 +3,48 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it, vi } from "vitest";
 import { formatMessage, messagePlaceholders, type MessageValue } from "@/i18n/format";
 import { LocalizedError, errorFromPayload, localizedErrorPayload, type ErrorKey } from "@/i18n/LocalizedError";
-import { LOCALES, SOURCE_MESSAGES, localeCatalog, type MessageKey } from "@/i18n/locales";
+import { LOCALES, SOURCE_MESSAGES, localeCatalog, type Locale, type MessageKey } from "@/i18n/locales";
 import { normalizeLanguagePreference, readStoredLanguagePreference, resolveLocale, LANGUAGE_STORAGE_KEY } from "@/i18n/store";
 import { createTranslator, errorText, renderRichTemplate } from "@/i18n/translator";
 
 const sourceKeys = Object.keys(SOURCE_MESSAGES).sort();
 const firstErrorKey = sourceKeys.find((key): key is ErrorKey => key.startsWith("errors."));
 const sourceKeySet = new Set(sourceKeys);
-const untranslatedKeys = (catalog: Partial<Record<string, MessageValue>>) => sourceKeys.filter((key) => catalog[key] === undefined);
+
+// Words that read the same in every language: unit symbols, format and product names.
+const NEUTRAL_WORDS = new Set(["mm", "cm", "m", "in", "ft", "CAD", "B-Rep", "STL", "OBJ", "STEP", "SVG", "SKF", "PNG", "SketchForge"]);
+// Words a language spells like English. Any other text identical to English counts as untranslated.
+const SAME_AS_ENGLISH: Partial<Record<Locale, readonly MessageKey[]>> = {
+  cs: ["common.shape.text", "editor.panel.import", "editor.panel.export", "panels.property.text"],
+  de: [
+    "common.shape.text", "common.shape.torus", "common.shape.ring", "common.shape.polygon", "dashboard.projects.sortName",
+    "editor.panel.import", "editor.panel.export", "editor.panel.format", "panels.property.text", "panels.edgeModifier.radius",
+  ],
+  es: ["panels.inspector.color.title"],
+  fr: [
+    "common.shape.tube", "common.shapeName.cube", "common.shapeName.intersection", "editor.sketch.primitive.rectangle",
+    "editor.sketch.primitive.triangle", "editor.panel.format", "panels.edgeModifier.distance", "panels.edgeModifier.angle",
+    "panels.edgeModifier.quality.fine",
+  ],
+  pl: ["common.shape.torus", "editor.panel.import", "editor.panel.format"],
+  pt: ["common.shape.cone"],
+};
+
+const messageForms = (value: MessageValue) => (typeof value === "string" ? [value] : Object.values(value).filter((form): form is string => typeof form === "string"));
+const isLanguageNeutral = (value: MessageValue) => messageForms(value).every((form) =>
+  (form.replace(/\{\w+\}|<\/?\w+>/g, " ").match(/\p{L}[\p{L}-]*/gu) ?? []).every((word) => NEUTRAL_WORDS.has(word)));
+
+/** Keys a language lacks or still has in English; English itself is the source. */
+function untranslatedKeys(catalog: Partial<Record<string, MessageValue>>, code: Locale) {
+  const sameAllowed = new Set<string>(SAME_AS_ENGLISH[code] ?? []);
+  return sourceKeys.filter((key) => {
+    const value = catalog[key];
+    if (value === undefined) return true;
+    if (code === "en" || sameAllowed.has(key)) return false;
+    const source = SOURCE_MESSAGES[key as MessageKey];
+    return JSON.stringify(value) === JSON.stringify(source) && !isLanguageNeutral(source);
+  });
+}
 
 describe("message formatting", () => {
   it("interpolates params and leaves unknown placeholders visible", () => {
@@ -64,11 +98,11 @@ describe.each(LOCALES.map((locale) => [locale.code, localeCatalog(locale.code), 
     expect(Object.keys(catalog).filter((key) => !sourceKeySet.has(key))).toEqual([]);
   });
 
-  // A language being translated (`complete: false` in locales.ts) may lack strings: they show in English.
+  // A language being translated (`complete: false` in locales.ts) may lack strings or still have them in English.
   // They are reported as a todo, which the test summary always counts, instead of a failure.
-  const missing = untranslatedKeys(catalog);
+  const missing = untranslatedKeys(catalog, code);
   if (complete || missing.length === 0) {
-    it("has every English key", () => {
+    it("has every string translated", () => {
       expect(missing).toEqual([]);
     });
   } else {
@@ -123,7 +157,16 @@ describe("rich messages", () => {
 describe("missing translations", () => {
   it("are listed per key", () => {
     const partial = { [sourceKeys[0]]: "x" };
-    expect(untranslatedKeys(partial)).toEqual(sourceKeys.slice(1));
+    expect(untranslatedKeys(partial, "ru")).toEqual(sourceKeys.slice(1));
+  });
+
+  it("include text left in English, but not words the language spells the same or language-neutral text", () => {
+    const ru: Partial<Record<string, MessageValue>> = { ...localeCatalog("ru"), "common.language.label": "Language" };
+    expect(untranslatedKeys(ru, "ru")).toEqual(["common.language.label"]);
+    expect(untranslatedKeys(localeCatalog("de"), "de")).toEqual([]);
+    expect(isLanguageNeutral("{message}; {detail}")).toBe(true);
+    expect(isLanguageNeutral("CAD / B-Rep")).toBe(true);
+    expect(isLanguageNeutral("Import")).toBe(false);
   });
 
   it("show in English", () => {

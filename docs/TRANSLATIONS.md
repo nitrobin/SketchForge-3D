@@ -25,10 +25,13 @@ dashboard or in the editor's Appearance settings. The choice is stored per brows
    new language does not make the app larger for everyone else. English stays built in as the fallback.
 
    While `complete: false`, strings that are not translated yet show in English and `npm test` counts them as one
-   todo instead of failing. Set `complete: true` when the language is done: from then on a missing string fails.
-4. Run `npm test`. `tests/unit/i18n.test.ts` reports missing strings (a todo while the language is in progress; list
-   them with `npx vitest run --config tests/vitest.config.ts tests/unit/i18n.test.ts --reporter=verbose`), and fails
-   on keys English does not have, changed placeholders and missing plural forms.
+   todo instead of failing. Set `complete: true` when the language is done: from then on an untranslated string fails.
+4. Run `npm test`. `tests/unit/i18n.test.ts` reports untranslated strings: missing, or still identical to English (a
+   todo while the language is in progress; list them with
+   `npx vitest run --config tests/vitest.config.ts tests/unit/i18n.test.ts --reporter=verbose`). A word your language
+   spells like English (German „Format“) goes into `SAME_AS_ENGLISH` in that test; placeholders, unit symbols and
+   format names count as translated. It also fails on keys English does not have, changed placeholders and missing
+   plural forms.
 5. Check the layout: `cd tools/i18n-screens && npm install && npm run report -- --languages en,<code>` screenshots
    every screen in both languages and marks clipped text, extra line wraps and untranslated strings
    ([tools/i18n-screens/README.md](../tools/i18n-screens/README.md)).

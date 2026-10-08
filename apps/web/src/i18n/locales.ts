@@ -1,9 +1,15 @@
+import type { MessageKeys, NestedKeyOf } from "use-intl/core";
 import en from "./locales/en";
-import type { MessageValue } from "./format";
 
 /** English is the source catalog: every key must exist here, other locales fall back to it. */
-export type MessageKey = keyof typeof en & string;
-export type MessageCatalog = Partial<Record<MessageKey, MessageValue>>;
+export type Messages = typeof en;
+/** A message's path in the catalogs, e.g. "editor.notice.ready". */
+export type MessageKey = MessageKeys<Messages, NestedKeyOf<Messages>>;
+/** Values for a message's `{placeholders}`; `count` also picks the plural form. */
+export type MessageParams = Record<string, string | number>;
+type DeepPartial<T> = { [K in keyof T]?: T[K] extends string ? T[K] : DeepPartial<T[K]> };
+/** A language's messages; one being translated may lack some, which then show in English. */
+export type MessageCatalog = DeepPartial<Messages>;
 
 type LocaleDefinition = {
   code: string;
@@ -33,7 +39,7 @@ export const LOCALES = [
 export type Locale = (typeof LOCALES)[number]["code"];
 
 export const DEFAULT_LOCALE: Locale = "en";
-export const SOURCE_MESSAGES: Record<MessageKey, MessageValue> = en;
+export const SOURCE_MESSAGES: Messages = en;
 
 const loadedCatalogs = new Map<string, MessageCatalog>([[DEFAULT_LOCALE, SOURCE_MESSAGES]]);
 const pendingLoads = new Map<string, Promise<MessageCatalog>>();

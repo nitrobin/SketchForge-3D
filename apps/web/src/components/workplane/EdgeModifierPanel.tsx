@@ -2,7 +2,7 @@
 
 import { useEffect, useState, type CSSProperties } from "react";
 import { Check, LoaderCircle, Minus, Plus, RotateCcw, X } from "lucide-react";
-import { unitLabel, useT } from "@/i18n";
+import { unitLabel, useTranslations } from "@/i18n";
 import { displayStepFromMillimeters, displayToMillimeters, formatMeasurementNumber, lengthDisplayUnit, millimetersToDisplay, parseMeasurementInput } from "@/lib/measurementUnits";
 import type { CadModifierKind, CadModifierQuality } from "@/lib/cadModifierTypes";
 import { CAD_MODIFIER_MAX_SHARP_ANGLE, edgeModifierSelectionMessage } from "@/lib/cadModifierRuntime";
@@ -51,7 +51,7 @@ function EdgeModifierSlider({
   disabled?: boolean;
   onChange: (value: number) => void;
 }) {
-  const t = useT();
+  const t = useTranslations();
   const safeMin = Number.isFinite(min) ? min : 0;
   const safeMax = Math.max(safeMin, Number.isFinite(max) ? max : safeMin);
   const actualValue = Number.isFinite(value) ? value : safeMin;
@@ -196,7 +196,7 @@ export function EdgeModifierPanel({
   onApply: () => void;
   onCancel: () => void;
 }) {
-  const t = useT();
+  const t = useTranslations();
   const [historyOpen, setHistoryOpen] = useState(false);
   const title = kind === "fillet" ? t("panels.edgeModifier.title.fillet") : t("panels.edgeModifier.title.chamfer");
   const selectionStatus = edgeModifierSelectionMessage(prepared, selectedCount, availableCount);

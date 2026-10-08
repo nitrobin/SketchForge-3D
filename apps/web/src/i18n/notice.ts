@@ -1,4 +1,4 @@
-import { createTranslator, type Translator } from "./translator";
+import { translatorFor, type Translator } from "./translator";
 
 /**
  * A status line message kept untranslated until it is read: the UI renders it in the current language
@@ -14,7 +14,7 @@ export function notice(text: (t: Translator) => string): Notice {
   return { text };
 }
 
-const english = createTranslator("en");
+const english = translatorFor("en");
 
 export function englishNotice(value: Notice): string {
   return value.text(english);

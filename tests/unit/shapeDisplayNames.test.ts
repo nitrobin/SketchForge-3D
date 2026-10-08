@@ -1,10 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { createTranslator } from "@/i18n/translator";
+import { translatorFor } from "@/i18n/translator";
 import { toolbarShapeAssets } from "@/lib/shapeCatalog";
 import { shapeDisplayName } from "@/lib/shapeDisplayNames";
 
-const en = createTranslator("en");
-const ru = createTranslator("ru");
+const en = translatorFor("en");
+const ru = translatorFor("ru");
 const DEFAULT_NAMES = [
   ...toolbarShapeAssets.map((asset) => asset.name),
   "Cube",

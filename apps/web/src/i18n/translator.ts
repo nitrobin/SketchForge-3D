@@ -1,70 +1,70 @@
-import { Fragment, createElement, type ReactNode } from "react";
-import { formatMessage, interpolateMessage, selectMessageTemplate, type MessageParams } from "./format";
+import { createTranslator } from "use-intl/core";
 import { LocalizedError } from "./LocalizedError";
-import { SOURCE_MESSAGES, isLocaleCatalogLoaded, localeCatalog, type Locale, type MessageKey } from "./locales";
+import {
+  DEFAULT_LOCALE,
+  SOURCE_MESSAGES,
+  isLocaleCatalogLoaded,
+  localeCatalog,
+  type Locale,
+  type MessageKey,
+  type MessageParams,
+  type Messages,
+} from "./locales";
 
-export type RichParams = Record<string, string | number | ReactNode | ((chunks: ReactNode) => ReactNode)>;
+/** What `useTranslations()` returns in components; code outside React gets the same from `translatorFor`. */
+export type Translator = ReturnType<typeof createTranslator<Messages>>;
 
-export type Translator = {
-  (key: MessageKey, params?: MessageParams): string;
-  /** Like the call form, but `{name}` may be a React node and `<tag>…</tag>` is rendered by `params.tag(chunks)`. Tags do not nest. */
-  rich: (key: MessageKey, params: RichParams) => ReactNode;
-  locale: Locale;
-};
+type MessageTree = { [key: string]: string | MessageTree };
 
-const RICH_TOKEN_PATTERN = /<(\w+)>([\s\S]*?)<\/\1>|\{(\w+)\}/g;
+/**
+ * English as the fallback for a language that lacks a message. Its `one` form becomes `=1`: the language's own
+ * plural rules apply, and Russian `one` also covers 21, which would read "21 shape".
+ */
+function englishFallback(tree: MessageTree): MessageTree {
+  return Object.fromEntries(Object.entries(tree).map(([key, value]) => [
+    key,
+    typeof value === "string" ? value.replace(/(\{count, plural, )one \{/g, "$1=1 {") : englishFallback(value),
+  ]));
+}
+
+function mergeMessages(base: MessageTree, overrides: MessageTree): MessageTree {
+  const merged: MessageTree = { ...base };
+  for (const [key, value] of Object.entries(overrides)) {
+    const current = merged[key];
+    merged[key] = typeof value === "string" || typeof current !== "object" ? value : mergeMessages(current, value);
+  }
+  return merged;
+}
+
+const messagesByLocale = new Map<Locale, Messages>([[DEFAULT_LOCALE, SOURCE_MESSAGES]]);
+let englishFallbackTree: MessageTree | null = null;
+
+/** Messages of a loaded language, English where it lacks one; English until the language has loaded. */
+export function messagesFor(locale: Locale): Messages {
+  if (!isLocaleCatalogLoaded(locale)) return SOURCE_MESSAGES;
+  let messages = messagesByLocale.get(locale);
+  if (!messages) {
+    englishFallbackTree ??= englishFallback(SOURCE_MESSAGES);
+    messages = mergeMessages(englishFallbackTree, localeCatalog(locale) as MessageTree) as Messages;
+    messagesByLocale.set(locale, messages);
+  }
+  return messages;
+}
+
 const translatorsByLocale = new Map<Locale, Translator>();
 
-function stringParams(params: RichParams): MessageParams {
-  const result: MessageParams = {};
-  for (const [name, value] of Object.entries(params)) {
-    if (typeof value === "string" || typeof value === "number") result[name] = value;
+/**
+ * Translator for code outside React (workers excepted: they use LocalizedError). English until the language has
+ * loaded, so ask for it when translating rather than keeping it across a language switch.
+ */
+export function translatorFor(locale: Locale): Translator {
+  const effective = isLocaleCatalogLoaded(locale) ? locale : DEFAULT_LOCALE;
+  let translator = translatorsByLocale.get(effective);
+  if (!translator) {
+    translator = createTranslator({ locale: effective, messages: messagesFor(effective) });
+    translatorsByLocale.set(effective, translator);
   }
-  return result;
-}
-
-/** Renders a selected template: `{name}` may be a node, `<tag>…</tag>` goes through `params.tag(chunks)`. */
-export function renderRichTemplate(template: string, params: RichParams): ReactNode {
-  const nodes: ReactNode[] = [];
-  const plainParams = stringParams(params);
-  let cursor = 0;
-  for (const match of template.matchAll(RICH_TOKEN_PATTERN)) {
-    const index = match.index ?? 0;
-    if (index > cursor) nodes.push(interpolateMessage(template.slice(cursor, index), plainParams));
-    const [whole, tag, chunks, placeholder] = match;
-    if (tag !== undefined) {
-      const render = params[tag];
-      const content = interpolateMessage(chunks, plainParams);
-      nodes.push(typeof render === "function" ? render(content) : content);
-    } else {
-      nodes.push(placeholder in params ? (params[placeholder] as ReactNode) : whole);
-    }
-    cursor = index + whole.length;
-  }
-  if (cursor < template.length) nodes.push(interpolateMessage(template.slice(cursor), plainParams));
-  return nodes.map((node, index) => createElement(Fragment, { key: index }, node));
-}
-
-export function createTranslator(locale: Locale): Translator {
-  const cached = translatorsByLocale.get(locale);
-  if (cached) return cached;
-  // Read at call time: a translator made before its language finished loading starts translating once it has.
-  const lookup = (key: MessageKey) => {
-    const localized = isLocaleCatalogLoaded(locale) ? localeCatalog(locale)[key] : undefined;
-    return localized !== undefined ? { value: localized, locale } : { value: SOURCE_MESSAGES[key], locale: "en" };
-  };
-  const translate = ((key: MessageKey, params?: MessageParams) => {
-    const { value, locale: valueLocale } = lookup(key);
-    return value === undefined ? key : formatMessage(value, valueLocale, params);
-  }) as Translator;
-  translate.rich = (key, params) => {
-    const { value, locale: valueLocale } = lookup(key);
-    if (value === undefined) return key;
-    return renderRichTemplate(selectMessageTemplate(value, valueLocale, stringParams(params)), params);
-  };
-  translate.locale = locale;
-  translatorsByLocale.set(locale, translate);
-  return translate;
+  return translator;
 }
 
 /**

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { createTranslator } from "@/i18n/translator";
+import { translatorFor } from "@/i18n/translator";
 import {
   CAD_MODIFIER_MAX_SHARP_ANGLE,
   CAD_MODIFIER_MAX_PREPARE_TIMEOUT_MS,
@@ -23,7 +23,7 @@ describe("CAD modifier runtime state", () => {
   it("does not report zero edges before preparation finishes", () => {
     const status = (...args: Parameters<typeof edgeModifierSelectionMessage>) => {
       const { key, params } = edgeModifierSelectionMessage(...args);
-      return createTranslator("en")(key, params);
+      return translatorFor("en")(key, params);
     };
     expect(status(false, 0, 0)).toBe("Preparing edges\u2026");
     expect(status(true, 0, 0)).toBe("0 of 0 sharp edges selected");

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, type CSSProperties, type KeyboardEvent, type PointerEvent } from "react";
-import { useT } from "@/i18n";
+import { useTranslations } from "@/i18n";
 import type { MoveDimensionAxis, MoveDimensionOverlayData } from "@/lib/moveDimensionLines";
 
 export function MoveDimensionOverlay({
@@ -13,7 +13,7 @@ export function MoveDimensionOverlay({
   active: boolean;
   onCommit: (axis: MoveDimensionAxis, value: string) => void;
 }) {
-  const t = useT();
+  const t = useTranslations();
   const [editing, setEditing] = useState<{ axis: MoveDimensionAxis; value: string } | null>(null);
   const nextEditingAxisRef = useRef<MoveDimensionAxis | null>(null);
   const cancelEditRef = useRef(false);

@@ -1,11 +1,11 @@
 "use client";
 
 import { AlignCenter, Box, CircleDotDashed, Group, LockKeyhole, MoveUp, Type } from "lucide-react";
-import { useT } from "@/i18n";
+import { useTranslations } from "@/i18n";
 import type { ChallengeTutorialId } from "@/lib/challenges";
 
 function KeyTagPreview() {
-  const t = useT();
+  const t = useTranslations();
   return (
     <>
       <img
@@ -23,7 +23,7 @@ function KeyTagPreview() {
 }
 
 function NameplatePreview() {
-  const t = useT();
+  const t = useTranslations();
   return (
     <>
       <img
@@ -41,7 +41,7 @@ function NameplatePreview() {
 }
 
 export default function ChallengesDashboard({ onStartChallenge }: { onStartChallenge: (challenge: ChallengeTutorialId) => void }) {
-  const t = useT();
+  const t = useTranslations();
   return (
     <div className="challenge-key-tag-page">
       <div className="challenge-key-tag-rail" aria-hidden="true">

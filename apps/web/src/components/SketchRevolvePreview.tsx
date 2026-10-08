@@ -2,10 +2,10 @@
 
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
-import { useT } from "@/i18n";
+import { useTranslations } from "@/i18n";
 
 export function SketchRevolvePreview({ positions }: { positions: number[] | null }) {
-  const t = useT();
+  const t = useTranslations();
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {

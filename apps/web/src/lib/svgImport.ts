@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import { SVGLoader } from "three/examples/jsm/loaders/SVGLoader.js";
-import type { MessageParams } from "@/i18n/format";
+import type { MessageParams } from "@/i18n/locales";
 import { LocalizedError, type ErrorKey } from "@/i18n/LocalizedError";
 import { createLocalId } from "@/lib/localIds";
 import type { WorkplaneShape } from "@/types/sketchforge";

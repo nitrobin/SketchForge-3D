@@ -22,7 +22,7 @@ describe("desktop main-process i18n", () => {
     expect(i18n.resolveLocale(["pt-BR"])).toBe("pt");
     expect(i18n.resolveLocale(["cs-CZ", "en"])).toBe("cs");
     expect(i18n.setLocale("ru")).toBe(true);
-    expect(i18n.t("desktop.tray.quit")).toBe(ruDesktop["desktop.tray.quit"]);
+    expect(i18n.t("desktop.tray.quit")).toBe(ruDesktop.desktop.tray.quit);
     expect(i18n.t("desktop.updates.available", { version: "2.0.0" })).toContain("2.0.0");
   });
 
@@ -46,7 +46,7 @@ describe("desktop main-process i18n", () => {
   });
 
   it("falls back to English for keys a language lacks", () => {
-    const i18n = createDesktopI18n((locale) => (locale === "en" ? { "a.b": "Hello {name}" } : locale === "xx" ? {} : null));
+    const i18n = createDesktopI18n((locale) => (locale === "en" ? { a: { b: "Hello {name}" } } : locale === "xx" ? {} : null));
     i18n.setLocale("xx");
     expect(i18n.t("a.b", { name: "Ann" })).toBe("Hello Ann");
     expect(i18n.t("missing.key")).toBe("missing.key");

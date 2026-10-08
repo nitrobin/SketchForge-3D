@@ -10,14 +10,14 @@ import { TextGeometry } from "three/examples/jsm/geometries/TextGeometry.js";
 import { RoundedBoxGeometry } from "three/examples/jsm/geometries/RoundedBoxGeometry.js";
 import {
   LocalizedError,
-  createTranslator,
   englishNotice,
   errorFromPayload,
   errorFromResponse,
   errorText,
   notice,
+  translatorFor,
   unitLabel,
-  useT,
+  useTranslations,
   type ErrorResponseFields,
   type MessageKey,
   type MessageParams,
@@ -226,7 +226,7 @@ const SHARED_CLIPBOARD_STORAGE_KEY = "sketchForge.clipboard";
 const SYSTEM_CLIPBOARD_PREFIX = "SKETCHFORGE3D/1\n";
 const STATIC_EXPORT_BUILD = process.env.NEXT_PUBLIC_STATIC_EXPORT === "true";
 /** English texts for the MCP bridge and automation results, which stay English whatever the UI language. */
-const englishText = createTranslator("en");
+const englishText = translatorFor("en");
 /** Status line text while nothing has happened yet; the UI shows it translated. */
 const IDLE_NOTICE = englishText("editor.notice.ready");
 
@@ -5473,7 +5473,7 @@ export function SketchForgeEditor({
   resolvedTheme?: ResolvedAppTheme;
   onThemePreferenceChange?: (preference: AppThemePreference) => void;
 } = {}) {
-  const t = useT();
+  const t = useTranslations();
   const initialSceneRef = useRef<WorkplaneShape[] | null>(null);
   if (initialSceneRef.current === null) {
     initialSceneRef.current = initialShapes.map(canonicalizeShape);
@@ -9573,7 +9573,7 @@ function SecondaryToolbar({
   onTopPanel: (panel: TopPanel) => void;
   onAddShape: (shape: ShapeAsset) => void;
 }) {
-  const t = useT();
+  const t = useTranslations();
   const [shapesOpen, setShapesOpen] = useState(false);
   const [sketchCreateOpen, setSketchCreateOpen] = useState(false);
   const [visibilityOpen, setVisibilityOpen] = useState(false);
@@ -9944,7 +9944,7 @@ function SecondaryToolbar({
                 <span aria-hidden="true">·</span>
                 <span>
                   {t.rich("editor.toolbar.visibilityHelpShortcut", {
-                    keys: <><kbd>Ctrl/Cmd</kbd> + <kbd>Shift</kbd> + <kbd>H</kbd></>,
+                    keys: () => <><kbd>Ctrl/Cmd</kbd> + <kbd>Shift</kbd> + <kbd>H</kbd></>,
                     action: t("editor.toolbar.visibilityHelpAll"),
                   })}
                 </span>
@@ -10198,7 +10198,7 @@ function TopActionPanel({
   onPickProjectFile: () => void;
   onNotice: (message: Notice) => void;
 }) {
-  const t = useT();
+  const t = useTranslations();
   const [exportFormat, setExportFormat] = useState<ExportFormat>("stl");
   const [exportName, setExportName] = useState(projectName);
   const previousProjectNameRef = useRef(projectName);

@@ -2,7 +2,7 @@
 
 import { ArrowUp, ChevronLeft, ChevronRight } from "lucide-react";
 import { useLayoutEffect, useState } from "react";
-import { useT, type MessageKey } from "@/i18n";
+import { useTranslations, type MessageKey } from "@/i18n";
 import { snapGridLabel } from "@/lib/measurementUnits";
 import type { GridSize } from "@/types/sketchforge";
 
@@ -97,7 +97,7 @@ function storedStepIndex() {
 }
 
 function FilletButtonCoachmark() {
-  const t = useT();
+  const t = useTranslations();
   const [position, setPosition] = useState<{ left: number; top: number } | null>(null);
 
   useLayoutEffect(() => {
@@ -146,7 +146,7 @@ export function NameplateTutorialPanel({
   collapsed?: boolean;
   onCollapsedChange?: (collapsed: boolean) => void;
 }) {
-  const t = useT();
+  const t = useTranslations();
   const [stepIndex, setStepIndex] = useState(storedStepIndex);
   const step = STEPS[stepIndex];
   const first = stepIndex === 0;

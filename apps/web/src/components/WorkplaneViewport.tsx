@@ -69,7 +69,7 @@ import {
 } from "@/components/workplane/TransformOverlay";
 import type { AlignAxis, AlignHandleStatus, AlignTarget, GridSize, MeasurementAccuracy, ShapeAsset, WorkplaneShape, WorkplaneWorkspaceSettings } from "@/types/sketchforge";
 import type { CadModifierEdge } from "@/lib/cadModifierTypes";
-import { useT } from "@/i18n";
+import { useTranslations } from "@/i18n";
 
 const WORKPLANE_WIDTH = 200;
 const WORKPLANE_DEPTH = 140;
@@ -1477,7 +1477,7 @@ function RulerOverlay({
   onPointPointerUp: (event: ReactPointerEvent<SVGCircleElement>, pointId: string) => void;
   onSegmentPointerDown: (event: ReactPointerEvent<SVGElement>, segmentId: string) => void;
 }) {
-  const t = useT();
+  const t = useTranslations();
   return (
     <div className={`ruler-overlay ${active ? "active" : ""} ${deleteMode ? "delete-mode" : ""} ${moveMode ? "move-mode" : ""}`} aria-label={t("workspace.ruler.measurements")}>
       <svg className="ruler-guides" width="100%" height="100%" aria-hidden="true">
@@ -2379,7 +2379,7 @@ export function WorkplaneViewport({
   onThemePreferenceChange,
 }: WorkplaneViewportProps) {
   // Used only in the returned JSX; never list it in scene effect deps (a locale change must not rebuild the scene).
-  const t = useT();
+  const t = useTranslations();
   const [snapOpen, setSnapOpen] = useState(false);
   const [snap, setSnap] = useState<GridSize>(() => normalizeSnapGrid(initialSnap, DEFAULT_SNAP_GRID));
   const [settingsOpen, setSettingsOpen] = useState(false);

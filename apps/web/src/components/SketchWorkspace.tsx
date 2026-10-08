@@ -4,7 +4,7 @@ import { ChevronUp, CornerDownRight, Home, Link, Link2Off, LockKeyhole, LockKeyh
 import { useEffect, useMemo, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent, type WheelEvent as ReactWheelEvent } from "react";
 import { SnapGridControl } from "@/components/workplane/ShapeInspector";
 import { SketchRevolvePreview } from "@/components/SketchRevolvePreview";
-import { notice, unitLabel, useT, type Notice } from "@/i18n";
+import { notice, unitLabel, useTranslations, type Notice } from "@/i18n";
 import { parseMeasurementInput } from "@/lib/measurementUnits";
 import { WORKPLANE_MAJOR_GRID_INTERVAL } from "@/lib/workplaneGrid";
 import { closestPointOnSketchSegment, type SketchSegmentPlacement } from "@/lib/sketchPointRefinement";
@@ -496,7 +496,7 @@ export function SketchWorkspace({
   onSetPointMode,
   onClearMeasurement,
 }: SketchWorkspaceProps) {
-  const t = useT();
+  const t = useTranslations();
   const workspace = useMemo(() => normalizeWorkspaceSettings(initialWorkspace, DEFAULT_WORKPLANE_WORKSPACE), [initialWorkspace]);
   const [snap, setSnap] = useState<GridSize>(() => normalizeSnapGrid(initialSnap, DEFAULT_SNAP_GRID));
   const [snapOpen, setSnapOpen] = useState(false);
@@ -1220,7 +1220,7 @@ function SketchImageInspector({
   onUpdate: (patch: Partial<SketchImage>, message?: Notice) => void;
   onDelete: () => void;
 }) {
-  const t = useT();
+  const t = useTranslations();
   const aspect = image.width / Math.max(0.5, image.depth);
   const updateWidth = (width: number) => onUpdate({
     width,
@@ -1294,7 +1294,7 @@ function SketchImageRange({
   disabled?: boolean;
   onChange: (value: number) => void;
 }) {
-  const t = useT();
+  const t = useTranslations();
   const safeValue = clamp(Number.isFinite(value) ? value : min, min, max);
   const [draft, setDraft] = useState(formatDimension(safeValue, accuracy));
   useEffect(() => setDraft(formatDimension(safeValue, accuracy)), [accuracy, safeValue]);

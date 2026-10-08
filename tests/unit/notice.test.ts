@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { createTranslator, englishNotice, errorFromResponse, notice, type MessageKey, type MessageParams } from "@/i18n";
+import { translatorFor, englishNotice, errorFromResponse, notice, type MessageKey, type MessageParams } from "@/i18n";
 
-const ru = createTranslator("ru");
+const ru = translatorFor("ru");
 const english = (key: MessageKey, params?: MessageParams) => englishNotice(notice((t) => t(key, params)));
 
 describe("status line notices", () => {

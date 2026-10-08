@@ -1,10 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { createTranslator } from "@/i18n/translator";
+import { translatorFor } from "@/i18n/translator";
 import { WORKSPACE_UNIT_OPTIONS, scaleOptionsForUnits, snapGridLabel, workspaceScaleLabel, workspaceUnitsLabel } from "@/lib/measurementUnits";
 import type { GridSize } from "@/types/sketchforge";
 
-const en = createTranslator("en");
-const ru = createTranslator("ru");
+const en = translatorFor("en");
+const ru = translatorFor("ru");
 const GRID_SIZES: GridSize[] = ["Off", "0.1 mm", "0.25 mm", "0.5 mm", "1.0 mm", "2.0 mm", "5.0 mm", "Brick"];
 
 describe("measurement labels", () => {

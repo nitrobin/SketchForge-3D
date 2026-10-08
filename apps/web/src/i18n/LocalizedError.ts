@@ -1,23 +1,24 @@
+import { createTranslator } from "use-intl/core";
 import enMessages from "./locales/en/messages.json";
-import { formatMessage, type MessageParams, type MessageValue } from "./format";
+import type { MessageKey, MessageParams } from "./locales";
 
-export type ErrorKey = Extract<keyof typeof enMessages, `errors.${string}`>;
+export type ErrorKey = Extract<MessageKey, `errors.${string}`>;
 
-const ENGLISH_MESSAGES: Record<ErrorKey, MessageValue> = enMessages;
+const english = createTranslator({ locale: "en", messages: enMessages });
 
-const isErrorKey = (key: string): key is ErrorKey => key.startsWith("errors.") && key in ENGLISH_MESSAGES;
+const isErrorKey = (key: string): key is ErrorKey => key.startsWith("errors.") && english.has(key as ErrorKey);
 
 /**
  * An error whose text comes from the `errors.*` messages. `message` stays English (logs, tests,
  * MCP results); the UI translates `key` + `params` through `errorText`.
- * Imports only the English catalog, no translator or React, so it is safe to use inside workers.
+ * Imports only the English web catalog and the use-intl core, no React, so it is safe to use inside workers.
  */
 export class LocalizedError extends Error {
   readonly key: ErrorKey;
   readonly params?: MessageParams;
 
   constructor(key: ErrorKey, params?: MessageParams) {
-    super(formatMessage(ENGLISH_MESSAGES[key], "en", params));
+    super(english(key, params));
     this.name = "LocalizedError";
     this.key = key;
     this.params = params;

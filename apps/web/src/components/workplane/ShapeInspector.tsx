@@ -21,7 +21,7 @@ import {
   normalizeGearType,
   gearToothPitch,
 } from "@/lib/gearGeometry";
-import { unitLabel, useT, type MessageKey, type Translator } from "@/i18n";
+import { unitLabel, useTranslations, type MessageKey, type Translator } from "@/i18n";
 import { shapeDisplayName } from "@/lib/shapeDisplayNames";
 import { displayStepFromMillimeters, displayToMillimeters, formatMeasurementNumber, lengthDisplayUnit, millimetersToDisplay, parseMeasurementInput, snapGridLabel } from "@/lib/measurementUnits";
 import { resizedShapeSize, shapeDepth, shapeHasTaper, shapeOverallFootprintDimensions, shapeTaperDimensions, shapeWidth } from "@/lib/workplaneShapes";
@@ -434,7 +434,7 @@ export function ShapeInspector({
   onSeparateParts?: () => void;
   onInteractionActiveChange?: (active: boolean) => void;
 }) {
-  const t = useT();
+  const t = useTranslations();
   const solidColor = shape.color;
   const locked = Boolean(shape.locked);
   const properties = getShapeProperties(shape, onUpdate, workspace);
@@ -715,7 +715,7 @@ function ShapePropertyRows({
   disabled?: boolean;
   onInteractionActiveChange?: (active: boolean) => void;
 }) {
-  const t = useT();
+  const t = useTranslations();
   return properties.map((property) => {
     const label = t(`panels.property.${property.id}`);
     if (property.type === "text") {
@@ -739,7 +739,7 @@ export function SnapGridControl({
   onSnapChange: Dispatch<SetStateAction<GridSize>>;
   onSnapOpenChange: Dispatch<SetStateAction<boolean>>;
 }) {
-  const t = useT();
+  const t = useTranslations();
   return (
     <div className="snap-row">
       <span>{t("panels.snapGrid.label")}</span>
@@ -779,7 +779,7 @@ function RangeProperty({
   onChange,
   onInteractionActiveChange,
 }: RangePropertyConfig & { label: string; workspace: WorkplaneWorkspaceSettings; disabled?: boolean; onInteractionActiveChange?: (active: boolean) => void }) {
-  const t = useT();
+  const t = useTranslations();
   const allowsAboveSliderMax = ABOVE_SLIDER_MAX_PROPERTIES.includes(id);
   const isLength = propertyUsesLengthUnit(id);
   const accuracy = workspace.accuracy;
@@ -875,7 +875,7 @@ function TextProperty({ label, value, disabled, onChange, onInteractionActiveCha
 }
 
 function SelectProperty({ label, value, options, optionLabel, disabled, onChange }: SelectPropertyConfig & { label: string; disabled?: boolean }) {
-  const t = useT();
+  const t = useTranslations();
   return (
     <label className="select-property">
       <span>{label}</span>
@@ -895,7 +895,7 @@ function GearTypePreview({ type }: { type: GearType }) {
 }
 
 function GearTypeSelector({ value, disabled, onChange }: { value: GearType; disabled?: boolean; onChange: (value: GearType) => void }) {
-  const t = useT();
+  const t = useTranslations();
   return (
     <div className="gear-type-property" role="group" aria-label={t("panels.gearType.label")}>
       <span>{t("panels.inspector.gearType")}</span>

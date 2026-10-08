@@ -1,12 +1,12 @@
 import { describe, expect, it } from "vitest";
 import { LocalizedError } from "@/i18n/LocalizedError";
-import { createTranslator, errorText } from "@/i18n/translator";
+import { translatorFor, errorText } from "@/i18n/translator";
 import { importedShapeFromObj } from "@/lib/objImport";
 import { importSkfProject } from "@/lib/skfProject";
 import { importedShapeFromStl } from "@/lib/stlImport";
 import { validateClosedSolidTriangleSoup } from "@/lib/svgImport";
 
-const ru = createTranslator("ru");
+const ru = translatorFor("ru");
 
 function caught(run: () => unknown): unknown {
   try {
@@ -27,7 +27,7 @@ describe("import errors shown to the user", () => {
     const error = caught(run);
     expect(error).toBeInstanceOf(LocalizedError);
     const localized = error as LocalizedError;
-    expect(localized.message).toBe(createTranslator("en")(localized.key, localized.params));
+    expect(localized.message).toBe(translatorFor("en")(localized.key, localized.params));
     expect(errorText(ru, localized, "common.language.label")).not.toBe(localized.message);
   });
 

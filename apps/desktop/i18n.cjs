@@ -41,8 +41,14 @@ function createDesktopI18n(loadMessages = (locale) => require(`../web/src/i18n/l
     return true;
   }
 
+  /** Message at a dotted path ("desktop.tray.quit") in a nested catalog. */
+  function lookup(messages, key) {
+    const value = key.split(".").reduce((node, part) => (node && typeof node === "object" ? node[part] : undefined), messages);
+    return typeof value === "string" ? value : undefined;
+  }
+
   function t(key, params = {}) {
-    const template = messagesFor(locale)?.[key] ?? messagesFor(DEFAULT_LOCALE)?.[key] ?? key;
+    const template = lookup(messagesFor(locale), key) ?? lookup(messagesFor(DEFAULT_LOCALE), key) ?? key;
     return template.replace(PLACEHOLDER_PATTERN, (match, name) => (name in params ? String(params[name]) : match));
   }
 

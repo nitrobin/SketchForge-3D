@@ -1,7 +1,7 @@
 // Imported by the CAD modifier worker: use only "@/i18n/LocalizedError" here, never "@/i18n" (it pulls React into the worker).
 // Type-only imports from other i18n modules are erased and safe.
 import { LocalizedError } from "@/i18n/LocalizedError";
-import type { MessageParams } from "@/i18n/format";
+import type { MessageParams } from "@/i18n/locales";
 import type { MessageKey } from "@/i18n/locales";
 import type { CadModifierEdge } from "@/lib/cadModifierTypes";
 

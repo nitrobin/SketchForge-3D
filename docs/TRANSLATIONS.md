@@ -1,7 +1,9 @@
 # Translations
 
-The interface text lives in per-language JSON catalogs. English is the source language; the other languages are
-registered in `apps/web/src/i18n/locales.ts`, each with a language guide in `docs/translations/`.
+The interface text lives in per-language JSON catalogs in the [use-intl](https://next-intl.dev/docs/environments/core-library)
+format (the core of next-intl, without its server parts, so the static export keeps working). English is the source
+language; the other languages are registered in `apps/web/src/i18n/locales.ts`, each with a language guide in
+`docs/translations/`.
 
 The language follows the system (browser or OS) by default and can be changed in **Settings → Language** on the
 dashboard or in the editor's Appearance settings. The choice is stored per browser in `localStorage`
@@ -14,7 +16,7 @@ dashboard or in the editor's Appearance settings. The choice is stored per brows
 2. Write the language guide `docs/translations/glossary.<code>.md`: the glossary (start from the English column of an
    existing guide), the typography and the form of address. Then translate every value in `messages.json` (the web
    app) and `desktop.json` (the desktop tray menu and update dialogs) following the guide and the requirements below.
-   Keep keys and `{placeholders}` unchanged.
+   Keep keys, `{placeholders}` and `<tags>` unchanged.
 3. Register it in `apps/web/src/i18n/locales.ts`:
 
    ```ts
@@ -68,31 +70,38 @@ terms, with the surrounding text saying what they do.
 ## Catalog format
 
 - Two files per language: `messages.json` for the web app and `desktop.json`, which the desktop app's main process
-  reads on its own. One flat key per message, prefixed by the part of the interface it belongs to (`dashboard.`,
-  `editor.`, `panels.`, `errors.`…), so related messages stay together in the file.
-- `{name}` is replaced by a parameter.
-- Plurals are objects keyed by [CLDR plural category](https://cldr.unicode.org/index/cldr-spec/plural-rules), chosen by
-  the `count` parameter. Each language lists the categories it needs (English `one`/`other`; others may add `zero`,
-  `two`, `few`, `many`); the test checks them against `Intl.PluralRules`.
+  reads on its own (plain text with `{placeholders}` only). Messages are nested by the part of the interface they
+  belong to (`dashboard`, `editor`, `panels`, `errors`…); code names a message by its path, `editor.notice.ready`.
+- Messages use [ICU syntax](https://formatjs.github.io/docs/core-concepts/icu-syntax). `{name}` is replaced by a
+  parameter.
+- Plurals pick a form by the `count` parameter and the language's
+  [CLDR plural categories](https://cldr.unicode.org/index/cldr-spec/plural-rules) (English `one`/`other`; others may add
+  `zero`, `two`, `few`, `many`); the test checks them against `Intl.PluralRules`. Write the number as `{count}`, not
+  `#`: `#` would format it in the language's style ("0,5"), while the interface shows numbers as typed ("0.5").
 
   ```json
-  "dashboard.project.shapeCount": { "one": "{count} shape", "other": "{count} shapes" }
+  "shapeCount": "{count, plural, one {{count} shape} other {{count} shapes}}"
   ```
 
 - `<tag>…</tag>` marks text the UI wraps in an element (bold, keyboard key). Keep the tags, translate the text inside.
+- An ASCII apostrophe right before `{`, `}` or `<` starts quoted text in ICU, so write it twice there: `''{name}'` prints
+  `'Box'`. Typographic quotes and apostrophes (« », „ “, ’) need nothing.
 
 ## In code
 
 | Need | Use |
 |---|---|
-| Text in a component | `const t = useT();` → `t("ns.key", { count })`; list `t` in hook deps where it is used |
-| Text with markup | `t.rich("ns.key", { b: (chunks) => <strong>{chunks}</strong> })` |
+| Text in a component | `const t = useTranslations();` → `t("ns.key", { count })`; list `t` in hook deps where it is used |
+| Text outside React | `translate("ns.key")`, or `currentTranslator()` / `translatorFor(locale)` for a translator; ask for it when translating |
+| Text with markup | `t.rich("ns.key", { b: (chunks) => <strong>{chunks}</strong> })`; an element in the middle of a message is a tag too, not a parameter |
 | Error shown to the user | throw `new LocalizedError("errors.…", params)`; display with `errorText(t, error, "ns.fallback")` |
 | Error from a worker | post `localizedErrorPayload(error)`, rebuild with `errorFromPayload(payload)` |
 | Error from an API route | `errorResponse("errors.…", status)` (`lib/apiErrors.ts`); the page rebuilds it with `errorFromResponse(payload)` |
 | Editor status line | `setNotice(notice((t) => t("editor.…", params)))`: shown in the current language, read by MCP in English |
 | Unit symbol | `unitLabel(t, "mm")` |
-| Date or number | `Intl.*Format(formattingLocale(t.locale), …)` — keeps the system's regional format |
+| Date or number | `Intl.*Format(formattingLocale(useLocale()), …)` — keeps the system's regional format |
+
+Everything comes from `@/i18n`, which re-exports the use-intl hooks: only `apps/web/src/i18n` imports use-intl.
 
 English (`locales/en`) is the source: keys are type-checked against it, and a key missing in another language falls back
 to English at runtime. Default names of created objects and projects (`Box`, `Key Tag`) stay in English because they

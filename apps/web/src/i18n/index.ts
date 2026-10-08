@@ -1,5 +1,4 @@
-export { formatMessage, type MessageParams, type MessageValue, type PluralForms } from "./format";
-export { LOCALES, DEFAULT_LOCALE, isLocale, type Locale, type MessageKey } from "./locales";
+export { LOCALES, DEFAULT_LOCALE, isLocale, type Locale, type MessageKey, type MessageParams } from "./locales";
 export {
   LocalizedError,
   errorFromPayload,
@@ -22,8 +21,9 @@ export {
   setLanguagePreference,
   translate,
   useLanguagePreference,
-  useT,
   type LanguagePreference,
 } from "./store";
-export { createTranslator, errorText, type RichParams, type Translator } from "./translator";
+export { errorText, translatorFor, type Translator } from "./translator";
 export { unitLabel } from "./units";
+// Components translate with use-intl through this module, so only apps/web/src/i18n depends on it.
+export { useLocale, useTranslations } from "use-intl";

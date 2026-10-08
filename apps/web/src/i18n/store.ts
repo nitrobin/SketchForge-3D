@@ -1,7 +1,6 @@
 import { useCallback, useSyncExternalStore } from "react";
-import type { MessageParams } from "./format";
-import { DEFAULT_LOCALE, LOCALES, isLocale, isLocaleCatalogLoaded, loadLocaleCatalog, type Locale, type MessageKey } from "./locales";
-import { createTranslator, type Translator } from "./translator";
+import { DEFAULT_LOCALE, LOCALES, isLocale, isLocaleCatalogLoaded, loadLocaleCatalog, type Locale, type MessageKey, type MessageParams } from "./locales";
+import { translatorFor, type Translator } from "./translator";
 
 export const LANGUAGE_STORAGE_KEY = "sketchForge.language";
 
@@ -147,12 +146,12 @@ export function formattingLocale(locale: Locale): string {
  * include `t` because re-running them on a language switch has side effects (worker restart, refetch, autosave).
  */
 export function currentTranslator(): Translator {
-  return createTranslator(state.locale);
+  return translatorFor(state.locale);
 }
 
 /** For code outside React (event handlers in plain modules). Not reactive: read at call time. */
 export function translate(key: MessageKey, params?: MessageParams): string {
-  return createTranslator(state.locale)(key, params);
+  return translatorFor(state.locale)(key, params);
 }
 
 function subscribe(listener: () => void) {
@@ -165,10 +164,9 @@ function subscribe(listener: () => void) {
 const getState = () => state;
 const getServerState = () => SERVER_STATE;
 
-/** Translator for the current locale. Its identity changes with the locale, so list it in hook deps. */
-export function useT(): Translator {
-  const { locale } = useSyncExternalStore(subscribe, getState, getServerState);
-  return createTranslator(locale);
+/** Calls `listener` after every language or preference change; returns the unsubscribe function. */
+export function subscribeToLanguage(listener: () => void): () => void {
+  return subscribe(listener);
 }
 
 export function useLanguagePreference(): [LanguagePreference, (preference: LanguagePreference) => void] {

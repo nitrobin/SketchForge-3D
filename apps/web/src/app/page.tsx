@@ -18,8 +18,10 @@ import {
   notice,
   translate,
   useLanguagePreference,
-  useT,
+  useLocale,
+  useTranslations,
   type ErrorResponseFields,
+  type Locale,
   type Translator,
 } from "@/i18n";
 import { applyAppTheme, readStoredAppTheme, resolveAppTheme, storeAppTheme, type AppThemePreference, type ResolvedAppTheme } from "@/lib/appTheme";
@@ -138,17 +140,17 @@ const SOURCE_CODE_URL = process.env.NEXT_PUBLIC_SOURCE_CODE_URL?.trim() || "http
 const EDITOR_SKELETON_MIN_DURATION_MS = 320;
 const knownProjectResourceKeys = new Map<string, Set<string>>();
 
-function formatUpdated(t: Translator, timestamp: number) {
+function formatUpdated(t: Translator, locale: Locale, timestamp: number) {
   const age = Date.now() - timestamp;
   if (age < 60_000) return t("dashboard.time.justNow");
   if (age < 3_600_000) return t("dashboard.time.minutesAgo", { count: Math.max(1, Math.round(age / 60_000)) });
   if (age < 86_400_000) return t("dashboard.time.today");
-  return new Intl.DateTimeFormat(formattingLocale(t.locale), { month: "short", day: "numeric" }).format(new Date(timestamp));
+  return new Intl.DateTimeFormat(formattingLocale(locale), { month: "short", day: "numeric" }).format(new Date(timestamp));
 }
 
-function formatFileSize(t: Translator, bytes: number) {
+function formatFileSize(t: Translator, locale: Locale, bytes: number) {
   const format = (value: number, fractionDigits: number) =>
-    new Intl.NumberFormat(t.locale, { minimumFractionDigits: fractionDigits, maximumFractionDigits: fractionDigits, useGrouping: false }).format(value);
+    new Intl.NumberFormat(locale, { minimumFractionDigits: fractionDigits, maximumFractionDigits: fractionDigits, useGrouping: false }).format(value);
   if (bytes < 1024) return t("dashboard.fileSize.bytes", { size: format(bytes, 0) });
   if (bytes < 1024 * 1024) return t("dashboard.fileSize.kilobytes", { size: format(bytes / 1024, bytes < 10 * 1024 ? 1 : 0) });
   return t("dashboard.fileSize.megabytes", { size: format(bytes / (1024 * 1024), bytes < 10 * 1024 * 1024 ? 1 : 0) });
@@ -516,7 +518,7 @@ function projectNameFromFileName(fileName: string) {
 }
 
 export default function Home() {
-  const t = useT();
+  const t = useTranslations();
   const [mounted, setMounted] = useState(false);
   const [view, setView] = useState<AppView>("dashboard");
   const [editorStarted, setEditorStarted] = useState(false);
@@ -1364,7 +1366,7 @@ export default function Home() {
 }
 
 function EditorLoadingSkeleton() {
-  const t = useT();
+  const t = useTranslations();
   const leftToolbarSections = [
     { className: "home", controls: 1 },
     { className: "clipboard", controls: 4 },
@@ -1504,7 +1506,8 @@ function Dashboard({
   onViewModeChange: (value: ViewMode) => void;
   onWorkspace: () => void;
 }) {
-  const t = useT();
+  const t = useTranslations();
+  const locale = useLocale();
   const [languagePreference, setLanguagePreference] = useLanguagePreference();
   const [openProjectMenuId, setOpenProjectMenuId] = useState<string | null>(null);
   const [openSharedProjectMenuFileName, setOpenSharedProjectMenuFileName] = useState<string | null>(null);
@@ -1817,7 +1820,7 @@ function Dashboard({
                       <button className="project-card-open" type="button" onClick={() => onOpenSharedProject(project)}>
                         <ProjectPreview accent={PROJECT_ACCENTS[index % PROJECT_ACCENTS.length]} thumbnailUrl={project.thumbnailUrl} />
                         <span className="project-card-title">{project.name}</span>
-                        <span className="project-card-meta">{formatUpdated(t, project.updatedAt)} - {formatFileSize(t, project.size)}</span>
+                        <span className="project-card-meta">{formatUpdated(t, locale, project.updatedAt)} - {formatFileSize(t, locale, project.size)}</span>
                       </button>
                       <span className="shared-project-badge">{t("dashboard.shared.badge")}</span>
                       <button
@@ -1919,7 +1922,7 @@ function Dashboard({
                         <ProjectPreview accent={project.accent} thumbnailUrl={project.thumbnailUrl} />
                         <span className="project-card-title">{project.name}</span>
                         <span className="project-card-meta">
-                          {formatUpdated(t, project.updatedAt)} - {t("dashboard.projects.shapeCount", { count: project.shapes })}
+                          {formatUpdated(t, locale, project.updatedAt)} - {t("dashboard.projects.shapeCount", { count: project.shapes })}
                         </span>
                       </button>
                       <button
@@ -1978,7 +1981,7 @@ function Dashboard({
                 <X size={18} />
               </button>
             </header>
-            <p>{t.rich("dashboard.projects.deleteConfirm", { name: <span>{projectPendingDelete.name}</span> })}</p>
+            <p>{t.rich("dashboard.projects.deleteConfirm", { name: projectPendingDelete.name, b: (chunks) => <span>{chunks}</span> })}</p>
             <div className="dashboard-confirm-actions">
               <button className="dashboard-confirm-cancel" type="button" onClick={() => setProjectPendingDeleteId(null)}>
                 {t("dashboard.button.cancel")}
@@ -2000,7 +2003,7 @@ function Dashboard({
                 <X size={18} />
               </button>
             </header>
-            <p>{t.rich("dashboard.shared.deleteConfirm", { name: <span>{sharedProjectPendingDelete.name}</span> })}</p>
+            <p>{t.rich("dashboard.shared.deleteConfirm", { name: sharedProjectPendingDelete.name, b: (chunks) => <span>{chunks}</span> })}</p>
             <div className="dashboard-confirm-actions">
               <button className="dashboard-confirm-cancel" type="button" onClick={() => setSharedProjectPendingDeleteFileName(null)}>
                 {t("dashboard.button.cancel")}
@@ -2201,7 +2204,7 @@ function Dashboard({
 }
 
 function ProjectPreview({ accent, thumbnailUrl }: { accent: DashboardProject["accent"]; thumbnailUrl?: string | null }) {
-  const t = useT();
+  const t = useTranslations();
   const [failedThumbnailUrl, setFailedThumbnailUrl] = useState<string | null>(null);
   const showThumbnail = Boolean(thumbnailUrl && thumbnailUrl !== failedThumbnailUrl);
 

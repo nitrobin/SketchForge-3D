@@ -6,7 +6,7 @@ import {
   type TransformOverlayProps,
   type TransformOverlayState,
 } from "@/components/workplane/transformOverlayTypes";
-import { useT, type MessageKey } from "@/i18n";
+import { useTranslations, type MessageKey } from "@/i18n";
 
 export {
   continuousSnappedWheelRotation,
@@ -69,7 +69,7 @@ export function TransformOverlay({
   onCommitRotationEdit,
   onCancelRotationEdit,
 }: TransformOverlayProps) {
-  const t = useT();
+  const t = useTranslations();
   const marks = measureKey ? (box.dimensions[measureKey] ?? []) : [];
   const visibleMarks = (hideDimensionMarks ? [] : marks).filter((mark) => mark.key !== editingDimension?.key);
   const handleMeasureKey = (handle: TransformOverlayState["handles"][number]) => measureKeyForHandle(handle.kind, handle.key, box);

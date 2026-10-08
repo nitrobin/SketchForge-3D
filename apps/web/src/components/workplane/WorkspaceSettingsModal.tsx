@@ -5,7 +5,15 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { HexColorInput, HexColorPicker } from "react-colorful";
 import { APP_THEME_PREFERENCES, type AppThemePreference } from "@/lib/appTheme";
-import { LANGUAGE_PREFERENCE_OPTIONS, languagePreferenceLabel, normalizeLanguagePreference, useLanguagePreference, useT, type MessageKey, type Translator } from "@/i18n";
+import {
+  LANGUAGE_PREFERENCE_OPTIONS,
+  languagePreferenceLabel,
+  normalizeLanguagePreference,
+  useLanguagePreference,
+  useTranslations,
+  type MessageKey,
+  type Translator,
+} from "@/i18n";
 import { textFontLabel } from "@/components/workplane/ShapeInspector";
 import { gearCenterHoleLimits, gearToothPitch } from "@/lib/gearGeometry";
 import { normalizeScaleForUnits, parseMeasurementInput, scaleOptionsForUnits, snapGridLabel, WORKSPACE_UNIT_OPTIONS, workspaceScaleLabel, workspaceUnitsLabel } from "@/lib/measurementUnits";
@@ -159,7 +167,7 @@ export function WorkspaceSettingsModal({
   onMakeDefault: () => void;
   onClose: () => void;
 }) {
-  const t = useT();
+  const t = useTranslations();
   const [languagePreference, setLanguagePreference] = useLanguagePreference();
   const [defaultSaved, setDefaultSaved] = useState(false);
   const [activeSection, setActiveSection] = useState<WorkspaceSettingsSection>("appearance");
@@ -746,7 +754,7 @@ const GRID_COLOR_PRESETS = [
 ] as const;
 
 function GridColorControl({ color, onChange }: { color: string; onChange: (color: string) => void }) {
-  const t = useT();
+  const t = useTranslations();
   const [open, setOpen] = useState(false);
   const [draftColor, setDraftColor] = useState(color);
   const draftColorRef = useRef(color);

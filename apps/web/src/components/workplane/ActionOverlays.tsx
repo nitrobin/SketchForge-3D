@@ -1,5 +1,5 @@
 import type { CSSProperties } from "react";
-import { useT, type MessageKey } from "@/i18n";
+import { useTranslations, type MessageKey } from "@/i18n";
 import type { AlignAxis, AlignHandleStatus, AlignTarget } from "@/types/sketchforge";
 
 export type AlignOverlayState = {
@@ -29,7 +29,7 @@ export function AlignOverlay({
   onPreview: (axis: AlignAxis, target: AlignTarget) => void;
   onPreviewClear: () => void;
 }) {
-  const t = useT();
+  const t = useTranslations();
   return (
     <div className="align-overlay" aria-label={t("workspace.align.handles")}>
       <svg className="align-guides" width="100%" height="100%" aria-hidden="true">
@@ -79,7 +79,7 @@ export function MirrorOverlay({
   onPreview: (axis: AlignAxis) => void;
   onPreviewClear: () => void;
 }) {
-  const t = useT();
+  const t = useTranslations();
   return (
     <div className="mirror-overlay" aria-label={t("workspace.mirror.handles")}>
       <svg className="mirror-guides" width="100%" height="100%" aria-hidden="true">

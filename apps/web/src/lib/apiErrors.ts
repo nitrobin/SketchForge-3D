@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { LocalizedError, errorResponseFields, type ErrorKey } from "@/i18n/LocalizedError";
-import type { MessageParams } from "@/i18n/format";
+import type { MessageParams } from "@/i18n/locales";
 
 type ExtraFields = Record<string, unknown>;
 

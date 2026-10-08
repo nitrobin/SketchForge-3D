@@ -86,6 +86,8 @@ terms, with the surrounding text saying what they do.
 - `<tag>…</tag>` marks text the UI wraps in an element (bold, keyboard key). Keep the tags, translate the text inside.
 - An ASCII apostrophe right before `{`, `}` or `<` starts quoted text in ICU, so write it twice there: `''{name}'` prints
   `'Box'`. Typographic quotes and apostrophes (« », „ “, ’) need nothing.
+- A long compound word that does not fit a narrow button can take a soft hyphen, `­`, where it may break:
+  `"Schräg­stirnrad"` shows as one word when it fits and as „Schräg-“ / „stirnrad“ when it does not.
 
 ## In code
 

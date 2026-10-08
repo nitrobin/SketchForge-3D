@@ -815,7 +815,7 @@
     "gearType": {
       "label": "Zahnradart",
       "spur": "Stirnrad",
-      "helical": "Schrägstirnrad",
+      "helical": "Schräg\u00adstirnrad",
       "bevel": "Kegelrad"
     },
     "property": {

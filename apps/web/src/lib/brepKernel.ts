@@ -7,8 +7,10 @@
 // loads ./occt-wasm.js relative to its own URL and does not survive bundling.
 // OCCT_INDEX_URL is typed as string (not a literal) so TypeScript treats the
 // dynamic import as runtime-resolved rather than a module to resolve.
-const OCCT_INDEX_URL: string = "/occt/index.js";
-const OCCT_WASM_URL = "/occt/occt-wasm.wasm";
+import { publicPath } from "@/lib/publicPath";
+
+const OCCT_INDEX_URL: string = publicPath("/occt/index.js");
+const OCCT_WASM_URL = publicPath("/occt/occt-wasm.wasm");
 
 export type Brep = typeof import("brepjs");
 export type BrepSolid = ReturnType<Brep["box"]>;

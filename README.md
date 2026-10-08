@@ -362,6 +362,19 @@ Build a static export:
 npm run export
 ```
 
+Build the current commit for the GitHub Pages project site of `origin` (`https://<owner>.github.io/<repository>/`):
+
+```bash
+npm run pages:build                                # build and commit it to the local gh-pages branch
+git push origin gh-pages                           # publish (the script never pushes)
+npm run pages:build -- --no-commit                 # only build out/github-pages
+npm run pages:build -- --base-path /my-site --out ../site
+npm run pages:build -- --squash                    # gh-pages keeps only this commit, no history
+git push --force-with-lease origin gh-pages        # publish a squashed build (rewrites the branch)
+```
+
+The site is built into `out/github-pages` (with `.nojekyll`) and committed to the local `gh-pages` branch on top of `origin/gh-pages`, or with `--squash` as the branch's only commit, so old builds do not pile up in the repository. The build runs in a temporary git worktree of `HEAD`, so commit first. In the static build the server features (shared projects, saving to a folder, updates) are off; projects live in each visitor's browser. The site's "View source code" link points at `origin` (the built commit once it is pushed, else the repository), since the AGPL asks a modified version served over a network to offer its own source; set `NEXT_PUBLIC_SOURCE_CODE_URL` to choose another link.
+
 ## Contributing
 
 Contributions are welcome. Good places to help:

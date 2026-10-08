@@ -114,6 +114,7 @@ import { makeShapeFromAsset, sceneShape, toolbarShapeAssets, type ToolbarShapeAs
 import { shapeDisplayName } from "@/lib/shapeDisplayNames";
 import { renameShapeInTree } from "@/lib/sceneOutline";
 import { DEFAULT_TEXT_FONT, textFont } from "@/lib/textFonts";
+import { publicPath } from "@/lib/publicPath";
 import { importExtensionSupported } from "@/lib/importExtensions";
 import { importedShapeFromStl } from "@/lib/stlImport";
 import { exportMeshesToStl } from "@/lib/stlExport";
@@ -9558,7 +9559,7 @@ function SketchReferenceIcon({ name }: { name: SketchReferenceIconName }) {
       className="sketch-reference-icon"
       data-sketch-icon={name}
       draggable={false}
-      src={`/assets/sketchforge/${sketchReferenceIcons[name]}`}
+      src={publicPath(`/assets/sketchforge/${sketchReferenceIcons[name]}`)}
       alt=""
     />
   );

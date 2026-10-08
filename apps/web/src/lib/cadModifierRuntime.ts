@@ -1,11 +1,12 @@
 // Imported by the CAD modifier worker: use only "@/i18n/LocalizedError" here, never "@/i18n" (it pulls React into the worker).
 // Type-only imports from other i18n modules are erased and safe.
 import { LocalizedError } from "@/i18n/LocalizedError";
+import { publicPath } from "@/lib/publicPath";
 import type { MessageParams } from "@/i18n/locales";
 import type { MessageKey } from "@/i18n/locales";
 import type { CadModifierEdge } from "@/lib/cadModifierTypes";
 
-export const CAD_MODIFIER_RUNTIME_BASE = "/occt";
+export const CAD_MODIFIER_RUNTIME_BASE = publicPath("/occt");
 export const CAD_MODIFIER_REQUEST_TIMEOUT_MS = 30_000;
 export const CAD_MODIFIER_MAX_PREPARE_TIMEOUT_MS = 180_000;
 export const CAD_MODIFIER_MAX_SHARP_ANGLE = 90;

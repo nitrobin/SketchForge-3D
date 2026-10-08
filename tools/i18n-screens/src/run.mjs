@@ -88,6 +88,7 @@ function startDevServer(port) {
     cwd: repoRoot,
     env: { ...process.env, NEXT_TELEMETRY_DISABLED: "1" },
     stdio: ["ignore", "pipe", "pipe"],
+    // Its own process group, so stop() ends both npm and the next dev it starts.
     detached: true,
   });
   let log = "";
@@ -176,12 +177,20 @@ async function main() {
     server = startDevServer(options.port);
   }
 
+  // Chrome contacts Google on its own (component updates, push messaging) even on a local page. It may
+  // resolve only the app's host, so the browser cannot reach anything else.
+  const appHost = new URL(baseUrl).hostname.replace(/^\[|\]$/g, "");
   const browser = await chromium.launch({
     channel: options["executable-path"] ? undefined : options.browser === "chromium" ? undefined : options.browser,
     executablePath: options["executable-path"],
     headless: !options.headed,
-    // WebGL without a GPU, so the 3D view renders in headless mode.
-    args: ["--use-angle=swiftshader", "--enable-unsafe-swiftshader"],
+    args: [
+      // WebGL without a GPU, so the 3D view renders in headless mode. Chrome calls software WebGL "unsafe" for
+      // untrusted sites; this browser opens only the app.
+      "--use-angle=swiftshader",
+      "--enable-unsafe-swiftshader",
+      `--host-resolver-rules=MAP * ~NOTFOUND, EXCLUDE ${appHost}`,
+    ],
   });
 
   try {

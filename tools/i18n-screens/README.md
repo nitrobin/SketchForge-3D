@@ -31,6 +31,16 @@ The report opens from `out/<timestamp>/index.html` (ignored by git).
 
 A full run for two languages takes a few minutes; most of it is the editor loading for each chapter.
 
+## Network
+
+The tool sends nothing anywhere: it talks only to the app at `--base-url` (by default the dev server it starts on
+127.0.0.1) and writes the report to `--out`.
+
+- Chrome runs with a fresh temporary profile and may resolve only the app's host, so its own background requests
+  (component updates, push messaging) cannot leave the machine.
+- The dev server runs with Next.js telemetry off. As with any `npm run dev`, Next.js asks registry.npmjs.org for its
+  latest version, and the dashboard's update check reads `package.json` from raw.githubusercontent.com.
+
 ## What it reports
 
 For every visible piece of text the page records its box, line count and whether it fits. Elements are

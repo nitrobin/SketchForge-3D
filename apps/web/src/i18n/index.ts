@@ -26,4 +26,5 @@ export {
 export { errorText, translatorFor, type Translator } from "./translator";
 export { unitLabel } from "./units";
 // Components translate with use-intl through this module, so only apps/web/src/i18n depends on it.
-export { useLocale, useTranslations } from "use-intl";
+export { useTranslations } from "./useTranslations";
+export { useLocale } from "use-intl";

@@ -1,4 +1,5 @@
 import { createTranslator } from "use-intl/core";
+import { messageFallback, withFastPath } from "./fastPath";
 import { LocalizedError } from "./LocalizedError";
 import {
   DEFAULT_LOCALE,
@@ -61,7 +62,8 @@ export function translatorFor(locale: Locale): Translator {
   const effective = isLocaleCatalogLoaded(locale) ? locale : DEFAULT_LOCALE;
   let translator = translatorsByLocale.get(effective);
   if (!translator) {
-    translator = createTranslator({ locale: effective, messages: messagesFor(effective) });
+    const messages = messagesFor(effective);
+    translator = withFastPath(createTranslator({ locale: effective, messages, getMessageFallback: messageFallback(messages) }), effective, messages);
     translatorsByLocale.set(effective, translator);
   }
   return translator;

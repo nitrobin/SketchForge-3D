@@ -1,7 +1,8 @@
 "use client";
 
-import { startTransition, useEffect, useState, type ReactNode } from "react";
+import { startTransition, useEffect, useMemo, useState, type ReactNode } from "react";
 import { IntlErrorCode, IntlProvider, type IntlError } from "use-intl";
+import { messageFallback } from "./fastPath";
 import { DEFAULT_LOCALE, type Locale } from "./locales";
 import { getLocale, subscribeToLanguage } from "./store";
 import { messagesFor } from "./translator";
@@ -26,8 +27,10 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     sync();
     return unsubscribe;
   }, []);
+  const messages = messagesFor(locale);
+  const getMessageFallback = useMemo(() => messageFallback(messages), [messages]);
   return (
-    <IntlProvider locale={locale} messages={messagesFor(locale)} onError={onIntlError}>
+    <IntlProvider locale={locale} messages={messages} onError={onIntlError} getMessageFallback={getMessageFallback}>
       {children}
     </IntlProvider>
   );

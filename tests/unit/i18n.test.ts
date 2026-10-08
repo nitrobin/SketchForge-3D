@@ -8,6 +8,8 @@ import { LocalizedError, errorFromPayload, localizedErrorPayload, type ErrorKey 
 import { LOCALES, SOURCE_MESSAGES, localeCatalog, type Locale, type MessageKey } from "@/i18n/locales";
 import { normalizeLanguagePreference, readStoredLanguagePreference, resolveLocale, LANGUAGE_STORAGE_KEY } from "@/i18n/store";
 import { errorText, translatorFor } from "@/i18n/translator";
+import { createTranslator } from "use-intl/core";
+import { messagesFor } from "@/i18n/translator";
 
 type MessageTree = { [key: string]: string | MessageTree };
 
@@ -88,6 +90,34 @@ describe("message formatting", () => {
 
   it("prints an apostrophe next to a placeholder", () => {
     expect(new LocalizedError("errors.skf.assetMissing", { path: "a.png" }).message).toBe("Missing asset 'a.png'");
+  });
+});
+
+describe("fast path", () => {
+  it("formats every message exactly as use-intl does", () => {
+    const counts = [0, 1, 2, 3, 5, 11, 21, 22, 101, 1000, 1.5];
+    const mismatches: string[] = [];
+    for (const { code } of LOCALES) {
+      const fast = translatorFor(code) as unknown as (key: string, values?: Record<string, string | number>) => string;
+      const icu = createTranslator({ locale: code, messages: messagesFor(code) }) as unknown as typeof fast;
+      for (const [key, message] of Object.entries(flatten(messagesFor(code)))) {
+        const { names } = messageParts(message);
+        if (names.some((name) => name.startsWith("<"))) continue; // tags are formatted by use-intl itself (t.rich)
+        const base = Object.fromEntries(names.filter((name) => name !== "count").map((name) => [name, `‹${name}›`]));
+        for (const count of names.includes("count") ? counts : [undefined]) {
+          const values = count === undefined ? (names.length ? base : undefined) : { ...base, count };
+          if (fast(key, values) !== icu(key, values)) mismatches.push(`${code} ${key} ${count ?? ""}`);
+        }
+      }
+    }
+    expect(mismatches).toEqual([]);
+  });
+
+  it("keeps an argument the call lacks visible, as before use-intl", () => {
+    const en = translatorFor("en") as unknown as (key: string, values?: Record<string, string | number>) => string;
+    expect(en("dashboard.updates.updateTo")).toBe("Update to {version}");
+    expect(en("dashboard.projects.shapeCount")).toBe("{count} shapes");
+    expect(en("errors.skf.assetMissing")).toBe("Missing asset '{path}'");
   });
 });
 
